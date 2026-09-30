@@ -13,7 +13,7 @@ fi
 git commit -q -m "$MSG"
 
 for i in 1 2 3; do
-  if git pull -q --rebase origin "$BRANCH" && git push -q origin "$BRANCH"; then
+  if git pull -q --rebase --autostash origin "$BRANCH" && git push -q origin "$BRANCH"; then
     echo "Pushed on attempt $i."
     exit 0
   fi
