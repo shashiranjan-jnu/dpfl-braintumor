@@ -110,8 +110,8 @@ Phase 1 produces a frozen, deduplicated, patient-level dataset and a working rep
 - [ ] Add `README.md`, `CHANGELOG.md`, `docs/decisions.md`, `docs/lab_notebook.md`, `docs/kaggle_setup.md`
 - [ ] Add `.gitignore` excluding images, checkpoints, `.env`, and tokens
 - [ ] Create a fine-grained GitHub token scoped to this repository only, with an expiry date
-- [ ] Store the token as Kaggle User Secret `GH_TOKEN` and complete Kaggle phone verification
-- [ ] Write `scripts/push_results.sh` with pull, rebase, push, and a three-attempt retry loop
+- [ ] Store the token as Kaggle User Secret `kaggle_dpfl-braintumor` and complete Kaggle phone verification
+- [ ] Write `scripts/push_results.sh` with pull, rebase with autostash, push, and a three-attempt retry loop, run from a results copy on dev while code runs from a tag checkout
 - [ ] Commit this roadmap as `docs/ROADMAP.md`
 
 **Deliverables.** Repository skeleton, launcher notebook template, push script.
@@ -558,6 +558,10 @@ Every deviation from this roadmap is logged here and mirrored in `CHANGELOG.md`,
 
 | Date | Step | Change | Reason | Approved by |
 | --- | --- | --- | --- | --- |
+| 30 Sep 2026 | 1.1 | Push script uses rebase with autostash | Rebase fails when a crashed run leaves unstaged files |  |
+| 30 Sep 2026 | 1.1 | Launchers use two working copies, code at a tag and results on dev | A tag checkout is detached and cannot push results |  |
+| 30 Sep 2026 | 1.1 | Kaggle secret label is kaggle\_dpfl-braintumor instead of GH\_TOKEN | Label chosen at setup, kept for simplicity |  |
+| 30 Sep 2026 | 1.1 | .gitignore pattern changed from data/ to /data/ | The unanchored pattern silently ignored src/data |  |
 | 30 Sep 2026 | All | Roadmap created | Revision plan for *Intelligent Oncology* |  |
 
 ### Open Questions
