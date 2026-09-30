@@ -78,7 +78,7 @@ All 18 steps are not started, and Week 1 is assumed to begin on Monday 5 October
 
 | Step | Title | Week | Target end | GitHub tag | Status | Reviewed on |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1.1 | Repository and Kaggle setup | 1 | 11 Oct | none | Not started |  |
+| 1.1 | Repository and Kaggle setup | 1 | 11 Oct | Passed | Passed | 2026-09-30 |
 | 1.2 | Literature gap verification | 1 | 11 Oct | none | Not started |  |
 | 1.3 | Data acquisition and provenance | 1 | 11 Oct | none | Not started |  |
 | 1.4 | Deduplication, splits, Kaggle Dataset | 1 | 11 Oct | v0.1-data | Not started |  |
