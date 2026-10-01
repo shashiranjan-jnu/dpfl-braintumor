@@ -5,17 +5,18 @@
   "near_duplicate_pairs_across_splits": 0,
   "figshare_patients_in_multiple_splits": 0,
   "scenario_sums_equal_train_pool": true,
-  "clean_images": 3809,
+  "clean_images": 3845,
   "split_sizes": {
-    "test": 2342,
-    "train": 1102,
-    "val": 365
+    "train": 2663,
+    "test": 788,
+    "val": 394
   },
   "removed": {
-    "removed_duplicate": 3930,
-    "kept": 3809,
-    "removed_label_conflict": 60,
-    "removed_conflict_vs_figshare": 29
+    "removed_duplicate": 3934,
+    "kept": 3845,
+    "removed_label_conflict": 26,
+    "removed_conflict_vs_figshare": 23
   },
-  "largest_unit_share": 0.4986
+  "largest_unit_share": 0.0099,
+  "lookalike_pairs_across_splits_d_le_T_LINK": 161
 }
