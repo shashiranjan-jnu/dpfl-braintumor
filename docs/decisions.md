@@ -20,3 +20,12 @@ D8. SHA256 cannot detect Figshare reuse because Figshare is stored as .mat.
 ## 2026-10-01 Workflow
 
 D0. All work and results are committed directly to main, and dev is retired. One researcher, pull requests caused errors, and tags already pin the code for every run.
+
+## 2026-10-01 Step 1.4 deduplication and splits
+
+D9. Preprocessing is percentile clipping at 0.5 and 99.5, 8-bit scaling, zero padding to square, and box resizing to 128 x 128. Figshare arrays are transposed after reading because MATLAB stores them column-major.
+D10. Near duplicates are pairs within Hamming distance 4 on a 64-bit DCT perceptual hash, and split units link images within distance 6 plus all slices of one Figshare patient.
+D11. Figshare slices are never removed for resembling other Figshare slices. A conflicting label on a copy of a Figshare slice is resolved in favour of Figshare, and other label conflicts remove the whole group. This refines D7.
+D12. Splits are 70, 10, and 20 percent for train, validation, and test, stratified by dominant source and label of each split unit, with seed 2026.
+D13. Label ids are glioma 0, meningioma 1, notumor 2, pituitary 3.
+D14. Dirichlet partitions require at least 20 images per client, and scenario seeds are 2026 plus the scenario index.

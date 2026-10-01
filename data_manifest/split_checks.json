@@ -1,0 +1,21 @@
+{
+  "T_DUP": 4,
+  "T_LINK": 6,
+  "seed": 2026,
+  "near_duplicate_pairs_across_splits": 0,
+  "figshare_patients_in_multiple_splits": 0,
+  "scenario_sums_equal_train_pool": true,
+  "clean_images": 3809,
+  "split_sizes": {
+    "test": 2342,
+    "train": 1102,
+    "val": 365
+  },
+  "removed": {
+    "removed_duplicate": 3930,
+    "kept": 3809,
+    "removed_label_conflict": 60,
+    "removed_conflict_vs_figshare": 29
+  },
+  "largest_unit_share": 0.4986
+}
