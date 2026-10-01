@@ -17,5 +17,5 @@ Check date  2026-09-30 (YYYY-MM-DD)
 
 ## Launcher rules
 - Internet On, notebook Private, secret attached
-- Code copy at a tag, results copy on dev
+- Code copy at a tag, results copy on main
 - Accelerator None for CPU-only work
