@@ -14,3 +14,9 @@ D7. Exact duplicates showed no label conflicts. Any conflict found later by
     perceptual hashing removes the whole group.
 D8. SHA256 cannot detect Figshare reuse because Figshare is stored as .mat.
     Step 1.4 hashes decoded, normalised pixels for all three sources.
+
+
+
+## 2026-10-01 Workflow
+
+D0. All work and results are committed directly to main, and dev is retired. One researcher, pull requests caused errors, and tags already pin the code for every run.
