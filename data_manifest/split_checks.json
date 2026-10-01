@@ -7,9 +7,9 @@
   "scenario_sums_equal_train_pool": true,
   "clean_images": 3845,
   "split_sizes": {
-    "train": 2663,
-    "test": 788,
-    "val": 394
+    "train": 2610,
+    "test": 813,
+    "val": 422
   },
   "removed": {
     "removed_duplicate": 3934,
@@ -17,6 +17,8 @@
     "removed_label_conflict": 26,
     "removed_conflict_vs_figshare": 23
   },
-  "largest_unit_share": 0.0099,
-  "lookalike_pairs_across_splits_d_le_T_LINK": 161
+  "largest_unit_share": 0.0343,
+  "lookalike_pairs_across_splits_d_le_T_LINK": 136,
+  "figshare_shared_slice_patients_across_splits": 0,
+  "figshare_patient_pairs_merged": 48
 }

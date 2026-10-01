@@ -35,3 +35,7 @@ D14. Dirichlet partitions require at least 20 images per client, and scenario se
 D15. Supersedes D10 and D11. The first run used union-find grouping, which chained distinct images, removed 45 Figshare slices, and merged 49.9% of the clean set into one split unit. Deduplication is now greedy. Images are visited in the order Figshare, SARTAJ, Br35H, then path, and an image is removed only if it lies within Hamming distance 4 of an image already kept. A copy whose label differs from a kept Figshare slice is removed and Figshare is kept. Any other label disagreement removes both images.
 D16. Split units are single Figshare patients, plus groups of SARTAJ and Br35H images linked within distance 6 among themselves. Hash links never join Figshare patients, because patient IDs are authoritative. A unit larger than 5% of the clean set stops the pipeline.
 D17. Hamming distances on this hash are always even, because every hash has the same number of set bits.
+
+## 2026-10-01 Step 1.4 deduplication and splits (revision 3)
+
+D18. Figshare patients sharing an identical slice within Hamming distance 4 are merged into one split unit. A shared slice implies a duplicated or misfiled patient identity, which would otherwise leak one person across splits. 48 patient pairs were merged.

@@ -13,3 +13,7 @@
 ## 2026-10-01 Step 1.4 deduplication and splits (revision 2)
 - Clean images 3845, splits {'train': 2663, 'test': 788, 'val': 394}
 - Removed {'removed_duplicate': 3934, 'kept': 3845, 'removed_label_conflict': 26, 'removed_conflict_vs_figshare': 23}
+
+## 2026-10-01 Step 1.4 deduplication and splits (revision 3)
+- Clean images 3845, splits {'train': 2610, 'test': 813, 'val': 422}
+- Removed {'removed_duplicate': 3934, 'kept': 3845, 'removed_label_conflict': 26, 'removed_conflict_vs_figshare': 23}
