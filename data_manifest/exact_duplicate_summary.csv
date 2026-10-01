@@ -1,0 +1,15 @@
+sources,labels,groups
+br35h,annotated_duplicate+tumor_unspecified,801
+br35h,notumor,1
+br35h,notumor+unlabelled,4
+br35h+sartaj,glioma+tumor_unspecified,29
+br35h+sartaj,glioma+tumor_unspecified+unlabelled,2
+br35h+sartaj,glioma+unlabelled,9
+br35h+sartaj,meningioma+tumor_unspecified,36
+br35h+sartaj,meningioma+tumor_unspecified+unlabelled,3
+br35h+sartaj,notumor,114
+br35h+sartaj,notumor+unlabelled,25
+sartaj,glioma,15
+sartaj,meningioma,8
+sartaj,notumor,42
+sartaj,pituitary,39

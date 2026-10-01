@@ -1,0 +1,10 @@
+{
+  "figshare_total_3064": true,
+  "figshare_classes_708_1426_930": true,
+  "figshare_patients": 233,
+  "figshare_every_slice_has_pid": true,
+  "figshare_every_slice_has_mask": true,
+  "no_unknown_labels": true,
+  "exact_duplicate_files": 1274,
+  "versions_and_licences_filled": true
+}
