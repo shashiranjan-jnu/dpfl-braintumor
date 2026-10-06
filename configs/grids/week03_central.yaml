@@ -1,0 +1,14 @@
+# Step 3.1 baselines. Centralised training at the frozen lr 0.02 (D30), reporting seeds 1 to 5.
+# The clip-only regime separates the cost of clipping from the cost of noise (RQ1).
+name: week03_central
+fixed:
+  fl: {mode: central}
+  optim: {lr: 0.02}
+presets:
+  - {}
+  - {dp: {enabled: true, noise_multiplier: 0.0}}
+  - {dp: {enabled: true, target_epsilon: 8.0}}
+  - {dp: {enabled: true, target_epsilon: 3.0}}
+  - {dp: {enabled: true, target_epsilon: 1.0}}
+axes:
+  train.seed: [1, 2, 3, 4, 5]

@@ -2,6 +2,13 @@
 
 Newest entry first.
 
+## 2026-10-06 (night)
+- Step 2.4 tuning ran (06-step2-tune, about 1.4 GPU hours), 17 of 17 runs, no divergence
+- Settings frozen in configs/base.yaml (D30), findings recorded (D31)
+- scripts/select_lr.py implements the seed-0 learning-rate selection protocol
+- Week 3 grids week03_select_fed (40), week03_central (25), week03_local (18), launcher 07-week3-core
+- Tests pin the small CNN offline, new selection test, 25 tests pass
+
 ## 2026-10-06 (evening)
 - Step 2.4 diagnostics ran (05-step2-diag, about 1.8 GPU hours), 23 of 28 runs finished, 5 non-DP frozen-BN ResNet runs diverged
 - Fixes: NaN guard with diverged flag, optional global-norm grad_clip for non-DP runs, cosine schedule, noise_multiplier 0 honoured (D28)

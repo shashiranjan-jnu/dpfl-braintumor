@@ -1,0 +1,13 @@
+# Step 3.1 baselines. Each natural3 client trained alone, showing what federation adds.
+# Client 0 Figshare (3 tumour classes), 1 SARTAJ (4 classes), 2 Br35H (no-tumour only).
+name: week03_local
+fixed:
+  fl: {mode: local}
+  data: {scenario: natural3}
+  optim: {lr: 0.02}
+presets:
+  - {}
+  - {dp: {enabled: true, target_epsilon: 8.0}}
+axes:
+  fl.local_client: [0, 1, 2]
+  train.seed: [1, 2, 3]

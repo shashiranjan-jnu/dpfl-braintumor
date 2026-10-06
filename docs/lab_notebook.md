@@ -41,3 +41,11 @@
 - federated DP epsilon 8, ResNet lr 0.01, natural3 balanced accuracy 0.73 (best round 17), dir0.5_k10 0.62 (best round 14), lr 0.05 unstable
 - federated small CNN without DP, natural3 lr 0.05 keeps all classes (no-tumour sensitivity 0.50, meningioma 0.37), so the earlier no-tumour collapse was largely undertraining
 - decisions D28 and D29
+
+## 2026-10-06 Step 2.4 tuning (code v0.2-rc3, about 1.4 GPU hours, 17 of 17 runs, none diverged)
+- central lr 0.02 balanced accuracy, no DP 0.918, clip-only 0.893, DP epsilon 8 0.849, meningioma sensitivity 0.90, 0.80, 0.62
+- central lr 0.01, no DP 0.908, clip-only 0.861, DP 0.825, lr 0.003 clearly worse under clipping (0.73)
+- federated no DP, natural3 0.848 (lr 0.01), dir0.5_k10 0.888 (lr 0.01)
+- federated DP epsilon 8, natural3 0.806 (lr 0.01, smooth curve), dir0.5_k10 0.714 (lr 0.003) and 0.613 (lr 0.01, best round 14, validation loss rising while balanced accuracy climbs)
+- exit criteria met, central no DP balanced accuracy 0.918 at least 0.85, federated DP natural3 keeps every class sensitivity at least 0.60
+- settings frozen (D30), Week 3 launcher 07-week3-core prepared

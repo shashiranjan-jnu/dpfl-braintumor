@@ -10,7 +10,9 @@ from src.run import main as run_one, resolve, run_id
 
 
 def _cfg(**over):
-    c = {"fl": {"rounds": 3, "local_epochs": 1.0}, "dp": {"sample_rate": 0.25}}
+    # Tests pin the small CNN without pretrained weights, so they run offline on CPU.
+    c = {"fl": {"rounds": 3, "local_epochs": 1.0}, "dp": {"sample_rate": 0.25},
+         "model": {"name": "small_cnn", "pretrained": False}, "optim": {"lr": 0.1}}
     for k, v in over.items():
         c.setdefault(k, {}).update(v)
     return c
@@ -80,7 +82,7 @@ def test_divergence_is_caught_not_crashing(tmp_path):
     """A run whose loss becomes non-finite stops cleanly and is flagged (bug found in Step 2.4)."""
     ddir = write_synthetic(str(tmp_path / "d"), n=80)
     data = load_curated(ddir)
-    rid = run_one(_cfg(optim={"lr": 1e6, "momentum": 0.9}, fl={"rounds": 4}), ddir,
+    rid = run_one(_cfg(optim={"lr": 1e6, "momentum": 0.9, "grad_clip": None}, fl={"rounds": 4}), ddir,
                   str(tmp_path / "r"), data=data, device="cpu")
     m = json.load(open(os.path.join(tmp_path, "r", rid, "metrics.json")))
     assert m["diverged"] is True
@@ -106,3 +108,24 @@ def test_cosine_schedule_and_grad_clip(tmp_path):
     rid = run_one(_cfg(optim={"grad_clip": 1.0, "schedule": "cosine", "momentum": 0.9}),
                   ddir, str(tmp_path / "r"), data=data, device="cpu")
     assert json.load(open(os.path.join(tmp_path, "r", rid, "metrics.json")))["diverged"] is False
+
+
+def test_lr_selection_protocol(tmp_path):
+    """select_lr picks the lowest-validation-loss lr per configuration and emits a seeds grid."""
+    import yaml
+    from scripts.select_lr import select
+    from scripts.run_grid import expand
+    ddir = write_synthetic(str(tmp_path / "d"), n=80)
+    data = load_curated(ddir)
+    out = str(tmp_path / "runs")
+    grid = {"name": "t", "fixed": _cfg(fl={"rounds": 2}),
+            "presets": [{}, {"dp": {"enabled": True, "target_epsilon": 8.0}}],
+            "axes": {"optim.lr": [0.01, 0.1]}}
+    for c in expand(grid):
+        run_one(c, ddir, out, data=data, device="cpu")
+    presets, table = select(grid, out)
+    assert len(presets) == 2 and table.selected.sum() == 2
+    for p in presets:
+        assert p["optim"]["lr"] in (0.01, 0.1)
+    follow = {"presets": presets, "axes": {"train.seed": [1, 2]}}
+    assert len(expand(follow)) == 4

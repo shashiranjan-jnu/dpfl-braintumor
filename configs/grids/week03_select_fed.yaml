@@ -1,0 +1,13 @@
+# Step 3.1 phase 1. FedAvg learning-rate selection at seed 0 (D30).
+# Seed 0 is used for selection only. scripts/select_lr.py turns this into week03_fed_seeds.yaml.
+name: week03_select_fed
+fixed:
+  train: {seed: 0}
+presets:
+  - {}                                            # no DP (global-norm clip 1.0)
+  - {dp: {enabled: true, target_epsilon: 8.0}}
+  - {dp: {enabled: true, target_epsilon: 3.0}}
+  - {dp: {enabled: true, target_epsilon: 1.0}}
+axes:
+  data.scenario: [natural3, iid_k10, dir0.1_k10, dir0.5_k10, dir5.0_k10]
+  optim.lr: [0.003, 0.01]
