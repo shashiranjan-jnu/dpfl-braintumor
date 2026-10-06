@@ -1,0 +1,15 @@
+{
+  "verified_on": "2026-10-06",
+  "n_images": 3845,
+  "rows_match_splits_v1": true,
+  "order_matches_splits_v1": true,
+  "labels_match_splits_v1": true,
+  "array_hash_mismatches": 0,
+  "figshare_masks_nonempty": 3010,
+  "shape": [
+    3845,
+    128,
+    128
+  ],
+  "dtype": "uint8"
+}
