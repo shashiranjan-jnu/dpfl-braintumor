@@ -43,6 +43,7 @@ class Cfg:
     seed: int = 0
     model: str = "small_cnn"
     pretrained: bool = False
+    width: int = 16
     eval_batch: int = 256
 
     @property
@@ -122,7 +123,7 @@ def train(data, clients: list[np.ndarray], cfg: Cfg, log=print) -> dict:
     dev = data.x.device
     torch.manual_seed(cfg.seed)
     np.random.seed(cfg.seed)
-    model = build_model(cfg.model, 4, cfg.pretrained).to(dev)
+    model = build_model(cfg.model, 4, cfg.pretrained, cfg.width).to(dev)
     gparams = _params(model)
     idx_t = [torch.as_tensor(c, device=dev, dtype=torch.long) for c in clients]
     sizes = np.array([len(c) for c in clients], dtype=float)

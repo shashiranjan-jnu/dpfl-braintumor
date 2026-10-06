@@ -2,11 +2,13 @@
 # The run_id is a hash of the fully resolved config, so editing a default here
 # changes the id of every run that relies on it.
 data:
+  version: curated-v1        # part of every run_id, so a new dataset never reuses old results
   scenario: natural3          # natural3 | iid_k10 | dir0.1_k10 | dir0.5_k10 | dir5.0_k10 | dir0.5_k3 | dir0.5_k5 | dir0.5_k15
   hflip: true                 # random left-right flip, applied per example
 model:
-  name: small_cnn             # small_cnn | resnet18_gn
+  name: small_cnn             # small_cnn | resnet18_gn | resnet18_frozenbn
   pretrained: false
+  width: 16                   # small_cnn channels in the first block (16 -> 98k params, 32 -> 390k)
 fl:
   mode: federated             # federated | central | local
   algorithm: fedavg           # fedavg | fedprox | scaffold

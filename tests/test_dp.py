@@ -95,3 +95,31 @@ def test_poisson_rate():
     gen = torch.Generator().manual_seed(0)
     m = dpm.poisson_mask(200_000, 0.1, gen, "cpu")
     assert abs(m.float().mean().item() - 0.1) < 0.003
+
+
+def test_frozen_bn_resnet_is_per_example_and_stats_never_change():
+    """Frozen BatchNorm must act per example, so DP sensitivity holds (D25)."""
+    from src.models.models import ResNet18FrozenBN
+    m = ResNet18FrozenBN(pretrained=False)
+    m.train()
+    assert all(not k.training for k in m.modules() if isinstance(k, torch.nn.BatchNorm2d))
+    x, y = _batch(6, 64)
+    with torch.no_grad():
+        alone = m(x[:1])
+        mixed = m(x)[:1]
+    assert torch.allclose(alone, mixed, atol=1e-5)       # no cross-example mixing
+    before = {k: v.clone() for k, v in m.named_buffers()}
+    dpm.clipped_grad_sum(m, F.cross_entropy, x, y, 1.0, 3)
+    opt = torch.optim.SGD(m.parameters(), lr=0.1)
+    F.cross_entropy(m(x), y).backward()
+    opt.step()
+    for k, v in m.named_buffers():
+        assert torch.equal(v, before[k]), k
+
+
+def test_frozen_bn_resnet_clipping_bound():
+    from src.models.models import ResNet18FrozenBN
+    m = ResNet18FrozenBN(pretrained=False)
+    x, y = _batch(4, 64)
+    _, norms = dpm.clipped_grad_sum(m, F.cross_entropy, x, y, 0.5, 2, return_norms=True)
+    assert norms.max().item() <= 0.5 * (1 + 1e-4)

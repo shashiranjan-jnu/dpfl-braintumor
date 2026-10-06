@@ -2,6 +2,14 @@
 
 Newest entry first.
 
+## 2026-10-06 (afternoon)
+- Step 2.3 pilot completed on Kaggle T4 x2, 28 runs, 0 failures, about 0.5 GPU hours, tables in results/tables/week02_*.csv
+- Added resnet18_frozenbn (pretrained, BatchNorm frozen in eval mode, D25) and small_cnn width option
+- data.version added to base config so run_ids encode the dataset (D26), pilot ids archived
+- Grid files accept presets, aggregator reports clip fraction and per-class sensitivity, sklearn warnings muted
+- scripts/make_launcher.py generates Kaggle launchers, notebooks/kaggle/05-step2-diag.ipynb for Step 2.4
+- Two new tests for frozen BatchNorm (per-example independence, unchanged statistics, clipping bound), 21 tests pass
+
 ## 2026-10-06
 - Step 1.4 passed. brain-mri-curated-v1 verified (curated_checks.json), data_flow.md committed
 - Step 2.1 pipeline added. src/data, src/models (SmallCNN 97,908 params, ResNet-18 GN), src/privacy/dp.py (per-example clipping, Gaussian noise, accounting), src/fl/federated.py (FedAvg, FedProx, SCAFFOLD), src/eval/metrics.py, src/run.py

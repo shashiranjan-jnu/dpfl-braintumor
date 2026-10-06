@@ -1,6 +1,8 @@
 """Classification, calibration, and clinical metrics."""
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 from sklearn.metrics import (balanced_accuracy_score, f1_score, roc_auc_score)
 
@@ -20,6 +22,14 @@ def ece(probs: np.ndarray, y: np.ndarray, n_bins: int = 15) -> float:
 
 
 def classification_report(probs: np.ndarray, y: np.ndarray) -> dict:
+    """Per-source subsets can hold a single class (Br35H is all no-tumour), where
+    AUC is undefined. Those fields become NaN and the sklearn warnings are muted."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        return _report(probs, y)
+
+
+def _report(probs: np.ndarray, y: np.ndarray) -> dict:
     pred = probs.argmax(1)
     k = probs.shape[1]
     onehot = np.eye(k)[y]

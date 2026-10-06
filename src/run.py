@@ -85,7 +85,7 @@ def to_cfg(c: dict, sigma: float) -> Cfg:
                hflip=c["data"]["hflip"], dp=c["dp"]["enabled"], sigma=sigma,
                clip_norm=c["dp"]["clip_norm"], max_physical_batch=c["dp"]["max_physical_batch"],
                seed=c["train"]["seed"], model=c["model"]["name"],
-               pretrained=c["model"]["pretrained"])
+               pretrained=c["model"]["pretrained"], width=c["model"].get("width", 16))
 
 
 def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, force=False) -> str:

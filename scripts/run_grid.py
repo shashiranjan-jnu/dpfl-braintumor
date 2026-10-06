@@ -6,6 +6,9 @@ Grid file format (configs/grids/*.yaml):
     name: week03_fedavg
     fixed:                      # overrides applied to every run
       fl: {rounds: 60}
+    presets:                    # optional list of whole override dicts, crossed with axes
+      - {model: {name: small_cnn, width: 32}}
+      - {model: {name: resnet18_frozenbn, pretrained: true}}
     axes:                       # cartesian product; dotted keys
       data.scenario: [natural3, dir0.5_k10]
       dp.target_epsilon: [null, 8]
@@ -51,16 +54,19 @@ def set_dotted(d: dict, key: str, val):
 
 
 def expand(grid: dict) -> list[dict]:
+    """fixed, then one preset (a whole override dict), then the axes product."""
+    from src.run import deep_update
     axes = grid.get("axes", {}) or {}
     keys = list(axes)
+    presets = grid.get("presets") or [{}]
     out = []
-    for combo in itertools.product(*[axes[k] for k in keys]) if keys else [()]:
-        cfg = copy.deepcopy(grid.get("fixed", {}) or {})
+    for preset, combo in itertools.product(
+            presets, itertools.product(*[axes[k] for k in keys]) if keys else [()]):
+        cfg = deep_update(copy.deepcopy(grid.get("fixed", {}) or {}), preset)
         for k, v in zip(keys, combo):
             set_dotted(cfg, k, v)
             extra = ((grid.get("rules") or {}).get(k) or {}).get(v)
             if extra:
-                from src.run import deep_update
                 cfg = deep_update(cfg, extra)
         out.append(cfg)
     return out

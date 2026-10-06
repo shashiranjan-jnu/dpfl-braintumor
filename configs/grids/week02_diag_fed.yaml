@@ -1,0 +1,15 @@
+# Step 2.4 part B. FedAvg with momentum and more rounds, on mild and extreme skew.
+name: week02_diag_fed
+fixed:
+  fl: {rounds: 100}
+  optim: {momentum: 0.9}
+presets:
+  - {model: {name: small_cnn, width: 32}}
+  - {model: {name: resnet18_frozenbn, pretrained: true}, dp: {max_physical_batch: 32}}
+axes:
+  data.scenario: [dir0.5_k10, natural3]
+  optim.lr: [0.01, 0.05]
+  dp.target_epsilon: [null, 8.0]
+rules:
+  dp.target_epsilon:
+    8.0: {dp: {enabled: true}}

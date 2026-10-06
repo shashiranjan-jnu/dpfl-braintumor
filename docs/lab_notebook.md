@@ -23,3 +23,12 @@
 - pipeline code committed, 19 tests pass on CPU (torch 2.14.1, opacus 1.6.0, dp-accounting 0.6.0)
 - synthetic learnability check after 8 rounds, non-DP test accuracy 0.51, DP at epsilon 8 test accuracy 0.44, chance 0.25
 - next, run notebooks/kaggle/04-step2-pilot on T4 x2 with tag v0.2-rc1
+
+## 2026-10-06 Step 2.3 pilot results (code v0.2-rc1, Kaggle T4 x2, about 0.5 GPU hours)
+- tests 19 of 19 pass on Kaggle (torch 2.11.0), smoke run fine, 28 of 28 pilot runs finished and pushed
+- timing per 60-round run, small CNN 64 s (no DP) and 108 s (DP) on dir0.5_k10, 80 s and 92 s on natural3, ResNet-18 GN 178 s and 440 s
+- DP calibration, sigma 1.756 for epsilon 8 at q 0.1 and 600 steps
+- utility too low, best small CNN without DP test accuracy 0.61 (dir0.5_k10, lr 0.05), train accuracy 0.52 to 0.69, meningioma sensitivity near 0
+- natural3 without DP, no-tumour sensitivity 0 for every model, consistent with FedAvg drift when 78 percent of weight sits on Figshare, which has no normal scans
+- with DP at epsilon 8, best validation round often 7 to 16 of 60, validation loss rises afterwards
+- decision, add Step 2.4 diagnostics before Week 3 (D27)

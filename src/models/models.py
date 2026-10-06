@@ -86,11 +86,52 @@ class ResNet18GN(nn.Module):
         return self.net.layer4
 
 
-def build_model(name: str, n_classes: int = 4, pretrained: bool = False) -> nn.Module:
+class ResNet18FrozenBN(nn.Module):
+    """torchvision ResNet-18 whose BatchNorm layers stay in eval mode forever.
+
+    In eval mode BatchNorm uses fixed running statistics, so it is a per-example
+    affine map and does not mix examples within a batch. Per-example
+    sensitivity, and hence DP-SGD, stay valid. Unlike ResNet18GN, the
+    pretrained ImageNet statistics are kept intact, so the transfer is exact.
+    The BatchNorm affine terms remain trainable, the running statistics never
+    change (decision D25).
+    """
+
+    def __init__(self, n_classes: int = 4, pretrained: bool = True):
+        super().__init__()
+        from torchvision.models import resnet18, ResNet18_Weights
+        net = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1 if pretrained else None)
+        w = net.conv1.weight.detach().sum(1, keepdim=True)
+        net.conv1 = nn.Conv2d(1, 64, 7, 2, 3, bias=False)
+        with torch.no_grad():
+            net.conv1.weight.copy_(w)
+        net.fc = nn.Linear(net.fc.in_features, n_classes)
+        self.net = net
+        self.train()
+
+    def train(self, mode: bool = True):
+        super().train(mode)
+        for m in self.modules():
+            if isinstance(m, nn.BatchNorm2d):
+                m.eval()
+        return self
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.net(x)
+
+    @property
+    def cam_layer(self) -> nn.Module:
+        return self.net.layer4
+
+
+def build_model(name: str, n_classes: int = 4, pretrained: bool = False,
+                width: int = 16) -> nn.Module:
     if name == "small_cnn":
-        return SmallCNN(n_classes)
+        return SmallCNN(n_classes, width)
     if name == "resnet18_gn":
         return ResNet18GN(n_classes, pretrained)
+    if name == "resnet18_frozenbn":
+        return ResNet18FrozenBN(n_classes, pretrained)
     raise ValueError(f"Unknown model {name}")
 
 
