@@ -1,0 +1,29 @@
+data:
+  scenario: dir0.5_k10
+  hflip: true
+model:
+  name: small_cnn
+  pretrained: false
+fl:
+  mode: federated
+  algorithm: fedavg
+  rounds: 60
+  local_epochs: 1.0
+  mu: 0.0
+  local_client: null
+optim:
+  lr: 0.2
+  momentum: 0.0
+  weight_decay: 0.0
+dp:
+  enabled: true
+  target_epsilon: 8.0
+  noise_multiplier: null
+  delta: 1.0e-05
+  clip_norm: 1.0
+  sample_rate: 0.1
+  max_physical_batch: 64
+  accountant: rdp
+train:
+  seed: 0
+  deterministic: true
