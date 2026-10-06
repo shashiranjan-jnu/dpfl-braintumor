@@ -2,6 +2,10 @@
 
 Newest entry first.
 
+## 2026-10-06 (late)
+- Step 1.2 literature check, docs/related_work.csv (43 studies) and docs/gap_statement.md
+- Decision D32, RQ3 narrowed, RQ4 patient-level, source-confound controls, NCC duplicate cross-check, unit-level DP proposed
+
 ## 2026-10-06 (night)
 - Step 2.4 tuning ran (06-step2-tune, about 1.4 GPU hours), 17 of 17 runs, no divergence
 - Settings frozen in configs/base.yaml (D30), findings recorded (D31)
