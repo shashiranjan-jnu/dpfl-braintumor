@@ -7,7 +7,7 @@ Newest entry first.
 - Unit-level (patient-level) DP: `clipped_unit_grad_sum` in `src/privacy/dp.py`, unit sampling in `src/fl/federated.py`, `dp.unit: unit` in configs (D33).
 - Patient-respecting Dirichlet partitions `udir<alpha>_k<K>` computed in `src/data/data.py`.
 - Runs report `units_max_clients`, `unit_epsilon_worst` and `epsilon_if_k_runs` (D33, D34). Record-level run ids unchanged.
-- Grids `week04_unit_central`, `week04_select_udir`, generator `scripts/make_unit_grid.py`. 31 tests pass.
+- Grids `week04_unit_central`, `week04_select_udir`, `week04_select_unit`. Unit-level lr is selected at unit level, `epsilon_if_k_runs` composes over clients and candidates, unit-level DP is refused on iid and dir partitions (after code review). 31 tests pass.
 - Gupta 2026 and Kaissis 2021 read in full, `docs/related_work.csv` and `docs/gap_statement.md` updated, D34.
 
 ## 2026-10-06 (late)

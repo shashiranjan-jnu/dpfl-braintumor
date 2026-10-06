@@ -86,6 +86,7 @@ All 18 steps are not started, and Week 1 is assumed to begin on Monday 5 October
 | 2.2 | DP correctness verification | 2 | 18 Oct | v0.2-pipeline-verified | Not started |  |
 | 2.3 | Timing pilot and budget recalibration | 2 | 18 Oct | none | Not started |  |
 | 3.1 | FedAvg core grid and baselines | 3 | 25 Oct | v0.3-week03 | Not started |  |
+| 3.1b | Patient-level DP regime | 4 | 1 Nov | v0.3-unit-dp | In progress | Code ready, 59 runs, D33 |
 | 3.2 | FedAvg completion and Gate A | 4 | 1 Nov | v0.4-week04 | Not started |  |
 | 3.3 | FedProx and SCAFFOLD grid | 5 | 8 Nov | v0.5-week05 | Not started |  |
 | 3.4 | Client count sweep and ResNet-18 | 6 | 15 Nov | v0.6-week06 | Not started |  |

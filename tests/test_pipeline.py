@@ -129,15 +129,6 @@ def test_lr_selection_protocol(tmp_path):
         assert p["optim"]["lr"] in (0.01, 0.1)
     follow = {"presets": presets, "axes": {"train.seed": [1, 2]}}
     assert len(expand(follow)) == 4
-    # D33: unit-level presets inherit the record-level lr at the same scenario and epsilon
-    from scripts.make_unit_grid import unit_presets
-    grid["fixed"]["train"] = {"seed": 0}
-    for c in expand(grid):
-        run_one(c, ddir, out, data=data, device="cpu")
-    up = unit_presets([grid], out, ["natural3"], [8.0])
-    rec = [p for p in select(grid, out)[0] if p.get("dp", {}).get("enabled")][0]
-    assert len(up) == 1 and up[0]["dp"]["unit"] == "unit"
-    assert up[0]["optim"]["lr"] == rec["optim"]["lr"] and "seed" not in up[0].get("train", {})
 
 
 def test_udir_partition_keeps_units_whole_and_is_fixed(tmp_path):
@@ -167,6 +158,12 @@ def test_unit_level_run_reports_patient_epsilon(tmp_path):
     # synthetic natural3 splits units across clients, so the worst unit composes
     assert mu["units_max_clients"] > 1 and mu["unit_epsilon_worst"] > mu["epsilon"]
     assert mr["epsilon_if_k_runs"]["2"] > mr["epsilon"]
+    # lr-selection cost at unit level composes over clients and candidates together
+    assert mu["epsilon_if_k_runs"]["2"] > mu["unit_epsilon_worst"]
+    import pytest
+    with pytest.raises(ValueError):
+        run_one(_cfg(dp={**base["dp"], "unit": "unit"}, data={"scenario": "dir0.5_k10"}),
+                ddir, out, data=data, device="cpu")
     uc = run_one(_cfg(dp={**base["dp"], "unit": "unit"}, fl={"mode": "central", "rounds": 2}),
                  ddir, out, data=data, device="cpu")
     mc = json.load(open(os.path.join(out, uc, "metrics.json")))["privacy"]

@@ -1,0 +1,13 @@
+# Step 3.1b lr selection at seed 0 for federated patient-level DP (D30 protocol, D33).
+# Selection is repeated at unit level, so the reported unit-level epsilon composed
+# over k = 2 candidates (epsilon_if_k_runs) covers how the lr was chosen.
+# Only partitions that keep patients whole. scripts/select_lr.py turns this into week04_unit_fed.yaml.
+name: week04_select_unit
+fixed:
+  train: {seed: 0}
+presets:
+  - {dp: {enabled: true, target_epsilon: 8.0, unit: unit}}
+  - {dp: {enabled: true, target_epsilon: 3.0, unit: unit}}
+axes:
+  data.scenario: [natural3, udir0.5_k10]
+  optim.lr: [0.003, 0.01]

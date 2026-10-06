@@ -126,6 +126,10 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
     unit = cfg["dp"].get("unit", "record")
     if unit not in ("record", "unit"):
         raise ValueError(f"dp.unit must be record or unit, got {unit}")
+    scen = cfg["data"]["scenario"]
+    if unit == "unit" and cfg["dp"]["enabled"] and mode == "federated" and scen.startswith(("iid", "dir")):
+        raise ValueError(f"Unit-level DP is not allowed on {scen}, whose stored partition splits "
+                         "patients across clients (D33). Use natural3 or a udir partition.")
     client_units = [data.units_of(k) for k in clients] if unit == "unit" else None
     # A unit split across m clients is released by m mechanisms, so its
     # privacy loss composes over m clients (same sigma, q, steps).
@@ -155,7 +159,8 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
     if cfg["dp"]["enabled"] and sigma > 0:
         extra["unit_epsilon_worst"] = (dpm.epsilon_opacus(sigma, q, steps * m_max, delta, acc)
                                        if unit == "unit" else None)
-        extra["epsilon_if_k_runs"] = {str(k): dpm.epsilon_opacus(sigma, q, steps * k, delta, acc)
+        m_eff = m_max if unit == "unit" else 1
+        extra["epsilon_if_k_runs"] = {str(k): dpm.epsilon_opacus(sigma, q, steps * m_eff * k, delta, acc)
                                       for k in (2, 3)}
 
     yaml.safe_dump(cfg, open(os.path.join(rdir, "config.yaml"), "w"), sort_keys=False)
