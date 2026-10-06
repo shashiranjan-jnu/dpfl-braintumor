@@ -1,0 +1,13 @@
+18:51:51 run dfbe35272991 mode central algo fedavg clients [2610] steps/client 1000 sigma 2.1793 eps 7.964
+18:51:59 round   1 val_loss 1.8159 val_acc 0.4265 bal_acc 0.2500 batch 269.1 7.76s
+18:53:07 round  10 val_loss 0.8103 val_acc 0.7536 bal_acc 0.6760 batch 266.7 7.69s
+18:54:23 round  20 val_loss 0.7115 val_acc 0.7962 bal_acc 0.7399 batch 259.6 7.57s
+18:55:39 round  30 val_loss 0.7259 val_acc 0.8270 bal_acc 0.7888 batch 267.0 7.77s
+18:56:54 round  40 val_loss 0.7885 val_acc 0.8175 bal_acc 0.7766 batch 249.8 7.33s
+18:58:11 round  50 val_loss 0.6964 val_acc 0.8531 bal_acc 0.8226 batch 263.6 7.72s
+18:59:26 round  60 val_loss 0.7128 val_acc 0.8460 bal_acc 0.8117 batch 261.1 7.61s
+19:00:42 round  70 val_loss 0.7491 val_acc 0.8460 bal_acc 0.8129 batch 266.6 7.76s
+19:01:59 round  80 val_loss 0.7469 val_acc 0.8507 bal_acc 0.8176 batch 260.7 7.64s
+19:03:16 round  90 val_loss 0.7351 val_acc 0.8531 bal_acc 0.8202 batch 257.6 7.52s
+19:04:32 round 100 val_loss 0.7349 val_acc 0.8531 bal_acc 0.8202 batch 258.9 7.58s
+19:04:33 done dfbe35272991 best_round 19 test_acc 0.8204 bal_acc 0.8032 ece 0.1249 train_acc 0.8253 762.2s
