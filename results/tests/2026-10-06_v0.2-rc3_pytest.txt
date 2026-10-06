@@ -4,4 +4,4 @@ torch 2.11.0+cu128
 returncode 0
 
 ........................                                                 [100%]
-24 passed in 37.98s
+24 passed in 42.62s
