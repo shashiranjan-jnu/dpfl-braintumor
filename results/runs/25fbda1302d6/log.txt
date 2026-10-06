@@ -1,0 +1,13 @@
+20:16:09 run 25fbda1302d6 mode local algo fedavg clients [230] steps/client 1000 sigma 2.1793 eps 7.964
+20:16:10 round   1 val_loss 14.2582 val_acc 0.1493 bal_acc 0.2500 batch 22.8 0.9s
+20:16:18 round  10 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 22.1 0.84s
+20:16:26 round  20 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 23.9 0.87s
+20:16:35 round  30 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 22.5 0.84s
+20:16:44 round  40 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 23.3 0.86s
+20:16:52 round  50 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 22.7 0.84s
+20:17:01 round  60 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 21.3 0.82s
+20:17:09 round  70 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 23.1 0.86s
+20:17:18 round  80 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 25.6 0.91s
+20:17:27 round  90 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 26.5 0.93s
+20:17:36 round 100 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 23.5 0.87s
+20:17:36 done 25fbda1302d6 best_round 1 test_acc 0.1538 bal_acc 0.2500 ece 0.8462 train_acc 1.0000 87.4s
