@@ -1,0 +1,21 @@
+date 2026-10-06
+code v0.2-rc1 48d9cfd75fa57d363fbc41fd6703b1112e801021
+torch 2.11.0+cu128
+returncode 0
+
+...................                                                      [100%]
+=============================== warnings summary ===============================
+tests/test_pipeline.py::test_end_to_end_runs_write_complete_folders
+tests/test_pipeline.py::test_end_to_end_runs_write_complete_folders
+tests/test_pipeline.py::test_end_to_end_runs_write_complete_folders
+tests/test_pipeline.py::test_end_to_end_runs_write_complete_folders
+tests/test_pipeline.py::test_end_to_end_runs_write_complete_folders
+  /usr/local/lib/python3.13/dist-packages/sklearn/metrics/_classification.py:2524: UserWarning: y_pred contains classes not in y_true
+    warnings.warn("y_pred contains classes not in y_true")
+
+tests/test_pipeline.py: 24 warnings
+  /usr/local/lib/python3.13/dist-packages/sklearn/metrics/_ranking.py:379: UndefinedMetricWarning: Only one class is present in y_true. ROC AUC score is not defined in that case.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+19 passed, 29 warnings in 33.30s
