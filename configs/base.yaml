@@ -1,0 +1,32 @@
+# Defaults for every run. Experiment and grid files override only what changes.
+# The run_id is a hash of the fully resolved config, so editing a default here
+# changes the id of every run that relies on it.
+data:
+  scenario: natural3          # natural3 | iid_k10 | dir0.1_k10 | dir0.5_k10 | dir5.0_k10 | dir0.5_k3 | dir0.5_k5 | dir0.5_k15
+  hflip: true                 # random left-right flip, applied per example
+model:
+  name: small_cnn             # small_cnn | resnet18_gn
+  pretrained: false
+fl:
+  mode: federated             # federated | central | local
+  algorithm: fedavg           # fedavg | fedprox | scaffold
+  rounds: 60
+  local_epochs: 1.0           # local steps per round = round(local_epochs / sample_rate)
+  mu: 0.0                     # FedProx proximal weight
+  local_client: null          # client index for mode: local
+optim:
+  lr: 0.1
+  momentum: 0.0
+  weight_decay: 0.0
+dp:
+  enabled: false
+  target_epsilon: null        # sigma is calibrated to this when noise_multiplier is null
+  noise_multiplier: null
+  delta: 1.0e-5               # below 1 / n_train for every scenario
+  clip_norm: 1.0
+  sample_rate: 0.1            # q, Poisson sampling rate, fixed for every client
+  max_physical_batch: 64
+  accountant: rdp
+train:
+  seed: 0
+  deterministic: true

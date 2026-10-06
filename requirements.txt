@@ -1,0 +1,6 @@
+# Kaggle images already provide torch, torchvision, numpy, pandas, scikit-learn, scipy.
+# Install the rest with:  pip install -q -r requirements.txt
+opacus==1.6.0
+dp-accounting==0.6.0
+pyyaml>=6.0
+pytest>=8.0

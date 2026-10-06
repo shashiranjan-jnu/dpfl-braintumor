@@ -39,3 +39,12 @@ D17. Hamming distances on this hash are always even, because every hash has the 
 ## 2026-10-01 Step 1.4 deduplication and splits (revision 3)
 
 D18. Figshare patients sharing an identical slice within Hamming distance 4 are merged into one split unit. A shared slice implies a duplicated or misfiled patient identity, which would otherwise leak one person across splits. 48 patient pairs were merged.
+
+## 2026-10-06 Step 2.1 pipeline
+
+D19. Threat model. The protected unit is a single training image at each client (record-level DP). The adversary is an honest-but-curious server, or anyone who sees any released global model. Client dataset sizes and the server-held validation split are treated as public. Client-level DP is not used, because with 3 to 15 clients the noise it requires would destroy utility. delta is 1e-5, below 1/n for the 2,610-image training pool.
+D20. ResNet-18 uses GroupNorm instead of BatchNorm, because BatchNorm mixes examples within a batch and breaks per-example sensitivity. Pretrained ImageNet weights are loaded, the RGB stem is summed to one channel, and BatchNorm affine terms are copied into GroupNorm. Running statistics are discarded, so this is an initialisation, not an exact transfer.
+D21. Every client uses Poisson sampling with a fixed rate q = 0.1 and runs round(local_epochs / q) local steps per round. The noisy gradient sum is divided by the expected batch size q * n_j, never by the realised batch size. With a fixed q, every client spends the same epsilon. Hypothesis H5 is restated accordingly. A smaller client has a smaller expected batch, so the noise standard deviation in its averaged gradient, sigma * C / (q * n_j), grows as n_j shrinks.
+D22. The reported model is the round with the lowest validation loss on the central validation split. Epsilon is reported for all T rounds, because every round's global model is released to the server. Learning-rate tuning on validation data is disclosed as a limitation and its privacy cost is not accounted.
+D23. FedProx proximal terms and SCAFFOLD corrections are added after privatisation, which is post-processing and costs no privacy. Local momentum defaults to 0, so SCAFFOLD option II (Karimireddy et al., 2020) holds exactly.
+D24. Per-example gradients are computed with torch.func (vmap over grad) in chunks of max_physical_batch. Opacus is used only for RDP accounting and noise calibration, cross-checked against Google dp-accounting in tests (RDP agreement within 5 percent, PLD never above RDP).

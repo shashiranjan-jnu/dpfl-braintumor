@@ -1,0 +1,4 @@
+# Two-round run used to confirm a fresh Kaggle session works end to end.
+data: {scenario: dir0.5_k10}
+fl: {rounds: 2}
+dp: {enabled: true, target_epsilon: 8.0}

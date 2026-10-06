@@ -2,6 +2,15 @@
 
 Newest entry first.
 
+## 2026-10-06
+- Step 1.4 passed. brain-mri-curated-v1 verified (curated_checks.json), data_flow.md committed
+- Step 2.1 pipeline added. src/data, src/models (SmallCNN 97,908 params, ResNet-18 GN), src/privacy/dp.py (per-example clipping, Gaussian noise, accounting), src/fl/federated.py (FedAvg, FedProx, SCAFFOLD), src/eval/metrics.py, src/run.py
+- scripts/run_grid.py shards grids across GPUs, skips finished runs, pushes each run with a file lock, token read from GIT_PUSH_URL
+- scripts/aggregate.py builds summary tables, push_results.sh now honours GIT_PUSH_URL
+- tests/ adds 19 tests covering clipping bound, sensitivity, zero-noise equivalence, micro-batching, noise scale, accountant agreement, calibration, partitions, determinism, and end-to-end runs
+- configs/base.yaml plus Step 2.3 grids week02_lr, week02_pilot, week02_resnet, and notebooks/kaggle/04-step2-pilot.ipynb
+- Decisions D19 to D24 recorded
+
 ## 2026-10-01
 - Single-branch workflow adopted, all work and results committed directly to main, dev retired
 - Step 1.3 manifests committed, namely raw_index.csv, sources.csv, acquisition_checks.json, exact_duplicate_summary.csv

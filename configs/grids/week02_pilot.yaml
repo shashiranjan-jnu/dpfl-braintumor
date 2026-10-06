@@ -1,0 +1,15 @@
+# Step 2.3 part B. Timing pilot, three algorithms with and without DP, three seeds.
+# Also supplies the Step 2.2 memorisation evidence (train accuracy at epsilon 8).
+name: week02_pilot
+fixed:
+  data: {scenario: natural3}
+  fl: {rounds: 60}
+axes:
+  fl.algorithm: [fedavg, fedprox, scaffold]
+  dp.target_epsilon: [null, 8.0]
+  train.seed: [0, 1, 2]
+rules:
+  fl.algorithm:
+    fedprox: {fl: {mu: 0.01}}
+  dp.target_epsilon:
+    8.0: {dp: {enabled: true}}

@@ -1,0 +1,13 @@
+# Step 2.3 part C. Timing and memory check for pretrained ResNet-18 (GroupNorm).
+name: week02_resnet
+fixed:
+  data: {scenario: natural3}
+  model: {name: resnet18_gn, pretrained: true}
+  fl: {rounds: 60}
+  dp: {max_physical_batch: 32}
+  optim: {lr: 0.05}
+axes:
+  dp.target_epsilon: [null, 8.0]
+rules:
+  dp.target_epsilon:
+    8.0: {dp: {enabled: true}}

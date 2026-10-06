@@ -17,5 +17,5 @@ Check date  2026-09-30 (YYYY-MM-DD)
 
 ## Launcher rules
 - Internet On, notebook Private, secret attached
-- Code copy at a tag, results copy on main
+- Code copy at a tag in /tmp/code, results copy of main in /tmp/results, token only in the GIT_PUSH_URL environment variable
 - Accelerator None for CPU-only work

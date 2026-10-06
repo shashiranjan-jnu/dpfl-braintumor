@@ -1,0 +1,12 @@
+# Step 2.3 part A. Learning-rate sweep for the small CNN, with and without DP.
+# Uses validation loss only. Tuning on private data is a disclosed limitation (roadmap 4.2).
+name: week02_lr
+fixed:
+  data: {scenario: dir0.5_k10}
+  fl: {rounds: 60}
+axes:
+  optim.lr: [0.05, 0.1, 0.2, 0.5]
+  dp.target_epsilon: [null, 8.0]
+rules:
+  dp.target_epsilon:
+    8.0: {dp: {enabled: true}}
