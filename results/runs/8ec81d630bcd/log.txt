@@ -1,0 +1,13 @@
+06:51:11 run 8ec81d630bcd mode federated algo fedprox clients [2029, 351, 230] steps/client 600 sigma 0.0000 eps inf
+06:51:12 round   1 val_loss 1.3114 val_acc 0.4265 bal_acc 0.2500 batch 86.9 1.33s
+06:51:19 round   6 val_loss 1.2616 val_acc 0.4289 bal_acc 0.2560 batch 86.2 1.32s
+06:51:27 round  12 val_loss 1.1515 val_acc 0.5379 bal_acc 0.3838 batch 89.6 1.38s
+06:51:35 round  18 val_loss 1.1839 val_acc 0.5000 bal_acc 0.4212 batch 86.1 1.33s
+06:51:43 round  24 val_loss 1.1502 val_acc 0.4810 bal_acc 0.3832 batch 83.0 1.29s
+06:51:51 round  30 val_loss 1.0918 val_acc 0.5664 bal_acc 0.4208 batch 86.5 1.35s
+06:51:59 round  36 val_loss 1.1302 val_acc 0.5450 bal_acc 0.4252 batch 86.8 1.34s
+06:52:07 round  42 val_loss 1.1877 val_acc 0.5450 bal_acc 0.4669 batch 86.9 1.36s
+06:52:15 round  48 val_loss 1.0979 val_acc 0.5024 bal_acc 0.3763 batch 87.1 1.34s
+06:52:23 round  54 val_loss 1.0893 val_acc 0.5213 bal_acc 0.3604 batch 87.6 1.35s
+06:52:31 round  60 val_loss 1.0093 val_acc 0.5829 bal_acc 0.4402 batch 89.9 1.38s
+06:52:32 done 8ec81d630bcd best_round 60 test_acc 0.5375 bal_acc 0.4412 ece 0.0866 train_acc 0.5678 81.4s
