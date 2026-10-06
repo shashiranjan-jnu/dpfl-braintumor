@@ -1,0 +1,13 @@
+20:32:35 run 5d4b4a4491cc mode local algo fedavg clients [230] steps/client 1000 sigma 2.1793 eps 7.964
+20:32:36 round   1 val_loss 22.3151 val_acc 0.1493 bal_acc 0.2500 batch 24.1 0.96s
+20:32:44 round  10 val_loss 23.7024 val_acc 0.1422 bal_acc 0.2293 batch 22.5 0.86s
+20:32:53 round  20 val_loss 23.6370 val_acc 0.1445 bal_acc 0.2412 batch 22.6 0.87s
+20:33:02 round  30 val_loss 23.4405 val_acc 0.1517 bal_acc 0.2455 batch 22.0 0.86s
+20:33:10 round  40 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 22.4 0.88s
+20:33:19 round  50 val_loss 23.8334 val_acc 0.1374 bal_acc 0.2249 batch 25.0 0.91s
+20:33:28 round  60 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 22.8 0.87s
+20:33:37 round  70 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 21.4 0.84s
+20:33:46 round  80 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 24.1 0.9s
+20:33:55 round  90 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 22.1 0.87s
+20:34:03 round 100 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 21.5 0.85s
+20:34:04 done 5d4b4a4491cc best_round 1 test_acc 0.1538 bal_acc 0.2500 ece 0.8462 train_acc 1.0000 89.6s
