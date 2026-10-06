@@ -1,0 +1,13 @@
+20:15:39 run 1d1ac243fded mode local algo fedavg clients [351] steps/client 1000 sigma 0.0000 eps inf
+20:15:40 round   1 val_loss 1.7339 val_acc 0.2441 bal_acc 0.3642 batch 34.2 0.65s
+20:15:45 round  10 val_loss 3.4560 val_acc 0.2322 bal_acc 0.2947 batch 32.2 0.56s
+20:15:51 round  20 val_loss 2.5424 val_acc 0.3602 bal_acc 0.4869 batch 34.0 0.57s
+20:15:57 round  30 val_loss 3.1574 val_acc 0.4289 bal_acc 0.5437 batch 36.7 0.6s
+20:16:03 round  40 val_loss 3.7106 val_acc 0.4028 bal_acc 0.5208 batch 33.3 0.57s
+20:16:09 round  50 val_loss 3.8332 val_acc 0.4147 bal_acc 0.5352 batch 36.0 0.6s
+20:16:15 round  60 val_loss 3.8621 val_acc 0.4147 bal_acc 0.5363 batch 34.7 0.58s
+20:16:21 round  70 val_loss 3.9082 val_acc 0.4076 bal_acc 0.5310 batch 32.9 0.57s
+20:16:27 round  80 val_loss 3.9003 val_acc 0.4076 bal_acc 0.5305 batch 32.2 0.55s
+20:16:32 round  90 val_loss 3.9103 val_acc 0.4076 bal_acc 0.5305 batch 36.4 0.59s
+20:16:38 round 100 val_loss 3.9087 val_acc 0.4076 bal_acc 0.5305 batch 35.2 0.59s
+20:16:39 done 1d1ac243fded best_round 5 test_acc 0.4711 bal_acc 0.5251 ece 0.2193 train_acc 0.8376 59.9s
