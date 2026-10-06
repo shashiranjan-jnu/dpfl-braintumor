@@ -45,7 +45,11 @@ run(["git", "config", "user.email", EMAIL], cwd=RES)
 COMMIT = run(["git", "rev-parse", "HEAD"], cwd=CODE).strip()
 print(run([sys.executable, "-m", "pip", "install", "-q", "-r", f"{{CODE}}/requirements.txt"])[-500:])
 
-DATA = os.path.dirname(glob.glob("/kaggle/input/**/brain_mri_curated_v1.npz", recursive=True)[0])
+hits = glob.glob("/kaggle/input/**/brain_mri_curated_v1.npz", recursive=True)
+if not hits:
+    raise SystemExit("Dataset not attached. In the right panel use Add Input, Your Datasets, "
+                     "brain-mri-curated-v1, wait for it to mount, then rerun this cell.")
+DATA = os.path.dirname(hits[0])
 import torch
 print("code", CODE_REF, COMMIT[:10], "| data", DATA)
 print("torch", torch.__version__, "| GPUs", [torch.cuda.get_device_name(i) for i in range(torch.cuda.device_count())])
