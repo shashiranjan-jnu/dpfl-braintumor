@@ -1,0 +1,13 @@
+06:52:54 run f89af54ead3e mode federated algo fedprox clients [2029, 351, 230] steps/client 600 sigma 0.0000 eps inf
+06:52:55 round   1 val_loss 1.3832 val_acc 0.2322 bal_acc 0.2500 batch 85.9 1.29s
+06:53:02 round   6 val_loss 1.2773 val_acc 0.5592 bal_acc 0.4196 batch 87.4 1.3s
+06:53:10 round  12 val_loss 1.2441 val_acc 0.4408 bal_acc 0.2688 batch 87.5 1.31s
+06:53:17 round  18 val_loss 1.1350 val_acc 0.5190 bal_acc 0.3611 batch 87.5 1.31s
+06:53:25 round  24 val_loss 1.1920 val_acc 0.5071 bal_acc 0.4295 batch 88.5 1.33s
+06:53:33 round  30 val_loss 1.1339 val_acc 0.5616 bal_acc 0.4175 batch 86.0 1.28s
+06:53:41 round  36 val_loss 1.1591 val_acc 0.5569 bal_acc 0.4077 batch 83.7 1.27s
+06:53:49 round  42 val_loss 1.1477 val_acc 0.5592 bal_acc 0.4242 batch 85.3 1.28s
+06:53:57 round  48 val_loss 1.1919 val_acc 0.5592 bal_acc 0.4445 batch 84.7 1.27s
+06:54:04 round  54 val_loss 1.1604 val_acc 0.5735 bal_acc 0.4291 batch 86.5 1.3s
+06:54:12 round  60 val_loss 1.0984 val_acc 0.5640 bal_acc 0.4345 batch 86.9 1.3s
+06:54:13 done f89af54ead3e best_round 51 test_acc 0.5117 bal_acc 0.4187 ece 0.0639 train_acc 0.5479 79.0s
