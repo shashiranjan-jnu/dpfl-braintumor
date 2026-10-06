@@ -85,7 +85,8 @@ def to_cfg(c: dict, sigma: float) -> Cfg:
                hflip=c["data"]["hflip"], dp=c["dp"]["enabled"], sigma=sigma,
                clip_norm=c["dp"]["clip_norm"], max_physical_batch=c["dp"]["max_physical_batch"],
                seed=c["train"]["seed"], model=c["model"]["name"],
-               pretrained=c["model"]["pretrained"], width=c["model"].get("width", 16))
+               pretrained=c["model"]["pretrained"], width=c["model"].get("width", 16),
+               grad_clip=c["optim"].get("grad_clip"), schedule=c["optim"].get("schedule", "none"))
 
 
 def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, force=False) -> str:
@@ -124,7 +125,8 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
     q, delta = cfg["dp"]["sample_rate"], cfg["dp"]["delta"]
     sigma, eps = 0.0, float("inf")
     if cfg["dp"]["enabled"]:
-        sigma = cfg["dp"]["noise_multiplier"] or dpm.calibrate_sigma(
+        nm = cfg["dp"]["noise_multiplier"]
+        sigma = nm if nm is not None else dpm.calibrate_sigma(
             cfg["dp"]["target_epsilon"], q, steps, delta, cfg["dp"]["accountant"])
         eps = dpm.epsilon_opacus(sigma, q, steps, delta, cfg["dp"]["accountant"])
     c = to_cfg(cfg, sigma)
@@ -154,7 +156,7 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
     pred.to_csv(os.path.join(rdir, "predictions.csv"), index=False)
     torch.save(res["model_state_best"], os.path.join(rdir, "model_best.pt"))
 
-    metrics = {"run_id": rid, "best_round": res["best_round"],
+    metrics = {"run_id": rid, "best_round": res["best_round"], "diverged": res["diverged"],
                "train_acc_best": res["train_acc_best"],
                "test_best": res["test_best"], "test_last": res["test_last"],
                "test_best_by_source": res["test_best_by_source"],

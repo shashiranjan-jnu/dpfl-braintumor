@@ -39,6 +39,7 @@ def collect(runs_dir: str, only_ids: set | None = None) -> pd.DataFrame:
         row.update({f"cfg.{k}": v for k, v in flatten(cfg).items()})
         row.update({"epsilon": m["privacy"]["epsilon"], "sigma": m["privacy"]["sigma"],
                     "steps": m["privacy"]["steps"], "best_round": m["best_round"],
+                    "diverged": m.get("diverged", False),
                     "train_acc": m["train_acc_best"], "train_seconds": m["train_seconds"],
                     "best_val_loss": min(h["val_loss"] for h in m["history"]),
                     "clip_frac": (sum(h["clip_frac"] for h in m["history"] if h.get("clip_frac") is not None)
@@ -68,7 +69,7 @@ def main():
                             "test.sens_notumor": "sN", "test.sens_pituitary": "sP"})
     cols = [c for c in ["run_id", "cfg.model.name", "cfg.model.width", "cfg.fl.mode",
                         "cfg.data.scenario", "cfg.fl.algorithm", "cfg.optim.lr", "cfg.train.seed",
-                        "epsilon", "sigma", "clip_frac", "best_round", "best_val_loss", "train_acc",
+                        "cfg.optim.grad_clip", "epsilon", "sigma", "clip_frac", "diverged", "best_round", "best_val_loss", "train_acc",
                         "test.accuracy", "test.balanced_accuracy", "sG", "sM", "sN", "sP",
                         "test.ece", "train_seconds"] if c in df]
     with pd.option_context("display.width", 200, "display.max_columns", 30):

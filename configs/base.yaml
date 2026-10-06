@@ -20,10 +20,12 @@ optim:
   lr: 0.1
   momentum: 0.0
   weight_decay: 0.0
+  grad_clip: null             # global-norm gradient clip, non-DP path only (D28)
+  schedule: none              # none | cosine, decays lr across rounds
 dp:
   enabled: false
   target_epsilon: null        # sigma is calibrated to this when noise_multiplier is null
-  noise_multiplier: null
+  noise_multiplier: null      # 0 gives clipping without noise (clip-only ablation)
   delta: 1.0e-5               # below 1 / n_train for every scenario
   clip_norm: 1.0
   sample_rate: 0.1            # q, Poisson sampling rate, fixed for every client

@@ -74,3 +74,35 @@ def test_same_seed_same_result(tmp_path):
     pa = open(os.path.join(tmp_path, "a", a, "predictions.csv")).read()
     pb = open(os.path.join(tmp_path, "b", b, "predictions.csv")).read()
     assert pa == pb
+
+
+def test_divergence_is_caught_not_crashing(tmp_path):
+    """A run whose loss becomes non-finite stops cleanly and is flagged (bug found in Step 2.4)."""
+    ddir = write_synthetic(str(tmp_path / "d"), n=80)
+    data = load_curated(ddir)
+    rid = run_one(_cfg(optim={"lr": 1e6, "momentum": 0.9}, fl={"rounds": 4}), ddir,
+                  str(tmp_path / "r"), data=data, device="cpu")
+    m = json.load(open(os.path.join(tmp_path, "r", rid, "metrics.json")))
+    assert m["diverged"] is True
+    assert len(m["history"]) <= 4
+
+
+def test_zero_noise_multiplier_is_honoured(tmp_path):
+    ddir = write_synthetic(str(tmp_path / "d"), n=80)
+    data = load_curated(ddir)
+    rid = run_one(_cfg(dp={"enabled": True, "noise_multiplier": 0.0, "target_epsilon": 8.0}),
+                  ddir, str(tmp_path / "r"), data=data, device="cpu")
+    m = json.load(open(os.path.join(tmp_path, "r", rid, "metrics.json")))
+    assert m["privacy"]["sigma"] == 0.0 and m["privacy"]["epsilon"] == "inf"
+
+
+def test_cosine_schedule_and_grad_clip(tmp_path):
+    from src.fl.federated import Cfg, round_lr
+    c = Cfg(lr=0.1, rounds=10, schedule="cosine")
+    assert abs(round_lr(c, 0) - 0.1) < 1e-12 and round_lr(c, 5) < 0.06 and round_lr(c, 9) < 0.01
+    assert round_lr(Cfg(lr=0.1), 7) == 0.1
+    ddir = write_synthetic(str(tmp_path / "d"), n=80)
+    data = load_curated(ddir)
+    rid = run_one(_cfg(optim={"grad_clip": 1.0, "schedule": "cosine", "momentum": 0.9}),
+                  ddir, str(tmp_path / "r"), data=data, device="cpu")
+    assert json.load(open(os.path.join(tmp_path, "r", rid, "metrics.json")))["diverged"] is False

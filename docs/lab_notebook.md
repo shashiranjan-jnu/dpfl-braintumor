@@ -32,3 +32,12 @@
 - natural3 without DP, no-tumour sensitivity 0 for every model, consistent with FedAvg drift when 78 percent of weight sits on Figshare, which has no normal scans
 - with DP at epsilon 8, best validation round often 7 to 16 of 60, validation loss rises afterwards
 - decision, add Step 2.4 diagnostics before Week 3 (D27)
+
+## 2026-10-06 Step 2.4 diagnostics (code v0.2-rc2, about 1.8 GPU hours)
+- first background attempt failed on a Kaggle dataset mount error, rerun succeeded, 23 of 28 runs finished
+- all five non-DP resnet18_frozenbn runs failed, four NaN from round 1, one collapsed to a single class (balanced accuracy 0.25), DP runs of the same model trained normally
+- centralised DP epsilon 8, ResNet frozen-BN lr 0.01, balanced accuracy 0.851, test accuracy 0.862, sensitivities glioma 0.92, meningioma 0.64, no tumour 0.86, pituitary 0.97, best round 100
+- centralised small CNN, no DP best balanced accuracy 0.73, DP best 0.57, meningioma sensitivity at most 0.22
+- federated DP epsilon 8, ResNet lr 0.01, natural3 balanced accuracy 0.73 (best round 17), dir0.5_k10 0.62 (best round 14), lr 0.05 unstable
+- federated small CNN without DP, natural3 lr 0.05 keeps all classes (no-tumour sensitivity 0.50, meningioma 0.37), so the earlier no-tumour collapse was largely undertraining
+- decisions D28 and D29

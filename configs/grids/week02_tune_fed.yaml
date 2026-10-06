@@ -1,0 +1,13 @@
+# Step 2.4 part D. Federated ResNet-18 (frozen BatchNorm), non-DP and epsilon 8.
+name: week02_tune_fed
+fixed:
+  model: {name: resnet18_frozenbn, pretrained: true}
+  fl: {rounds: 100}
+  optim: {momentum: 0.9, schedule: cosine}
+  dp: {max_physical_batch: 32}
+presets:
+  - {optim: {grad_clip: 1.0}}
+  - {dp: {enabled: true, target_epsilon: 8.0}}
+axes:
+  data.scenario: [natural3, dir0.5_k10]
+  optim.lr: [0.003, 0.01]

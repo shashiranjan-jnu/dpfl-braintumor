@@ -1,0 +1,14 @@
+# Step 2.4 part C. Centralised ResNet-18 (frozen BatchNorm), three privacy regimes.
+# non-DP uses global-norm clipping (D28), clip-only isolates clipping bias from noise.
+name: week02_tune_central
+fixed:
+  model: {name: resnet18_frozenbn, pretrained: true}
+  fl: {mode: central, rounds: 100}
+  optim: {momentum: 0.9, schedule: cosine}
+  dp: {max_physical_batch: 32}
+presets:
+  - {optim: {grad_clip: 1.0}}
+  - {dp: {enabled: true, noise_multiplier: 0.0}}
+  - {dp: {enabled: true, target_epsilon: 8.0}}
+axes:
+  optim.lr: [0.003, 0.01, 0.02]

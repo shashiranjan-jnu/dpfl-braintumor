@@ -2,6 +2,13 @@
 
 Newest entry first.
 
+## 2026-10-06 (evening)
+- Step 2.4 diagnostics ran (05-step2-diag, about 1.8 GPU hours), 23 of 28 runs finished, 5 non-DP frozen-BN ResNet runs diverged
+- Fixes: NaN guard with diverged flag, optional global-norm grad_clip for non-DP runs, cosine schedule, noise_multiplier 0 honoured (D28)
+- Gate A: resnet18_frozenbn promoted to primary model (D29)
+- New grids week02_tune_central (9 runs, includes clip-only ablation) and week02_tune_fed (8 runs), launcher 06-step2-tune
+- 24 tests pass
+
 ## 2026-10-06 (afternoon)
 - Step 2.3 pilot completed on Kaggle T4 x2, 28 runs, 0 failures, about 0.5 GPU hours, tables in results/tables/week02_*.csv
 - Added resnet18_frozenbn (pretrained, BatchNorm frozen in eval mode, D25) and small_cnn width option
