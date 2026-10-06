@@ -17,6 +17,38 @@ import torch
 CLASSES = ["glioma", "meningioma", "notumor", "pituitary"]  # label ids 0..3 (D13)
 SCENARIOS = ["natural3", "iid_k10", "dir0.1_k10", "dir0.5_k10", "dir5.0_k10",
              "dir0.5_k3", "dir0.5_k5", "dir0.5_k15"]
+# Patient-respecting Dirichlet partitions, computed in code from the split units
+# (decision D33), named udir<alpha>_k<K>, e.g. udir0.5_k10. No unit crosses clients.
+UDIR_SEED = 20261006
+
+
+def udir_partition(units: np.ndarray, labels: np.ndarray, alpha: float, k: int,
+                   seed: int = UDIR_SEED, min_images: int = 20, max_tries: int = 1000) -> np.ndarray:
+    """Client id per row, assigning whole units with per-class Dirichlet proportions.
+
+    Each unit takes its majority label. For every class the units of that class
+    are shuffled and cut into K consecutive blocks whose unit counts follow
+    p ~ Dirichlet(alpha * 1_K). Draws repeat until every client holds at least
+    min_images images. The seed is fixed, so the partition is the same for every
+    training seed, as for the stored partitions.
+    """
+    df = pd.DataFrame({"unit": units, "label": labels})
+    maj = df.groupby("unit").label.agg(lambda v: v.value_counts().index[0])
+    size = df.groupby("unit").size()
+    rng = np.random.default_rng(seed)
+    for _ in range(max_tries):
+        owner = {}
+        for c in sorted(maj.unique()):
+            us = np.array(sorted(maj.index[maj.values == c]))
+            rng.shuffle(us)
+            p = rng.dirichlet(alpha * np.ones(k))
+            cuts = (np.cumsum(p) * len(us)).round().astype(int)[:-1]
+            for j, block in enumerate(np.split(us, cuts)):
+                owner.update({u: j for u in block})
+        load = np.bincount([owner[u] for u in size.index], weights=size.values, minlength=k)
+        if load.min() >= min_images:
+            return np.array([owner[u] for u in units])
+    raise ValueError(f"No udir partition with {min_images} images per client after {max_tries} draws")
 
 
 def find_file(root: str, name: str) -> str:
@@ -45,13 +77,26 @@ class Curated:
         """Indices (into the full arrays) of each client's training images."""
         if scenario == "central":
             return [self.idx("train")]
-        col = self.splits[scenario]
         tr = self.idx("train")
+        if scenario.startswith("udir"):
+            alpha, k = scenario[4:].split("_k")
+            assign = udir_partition(self.splits.unit.values[tr], self.splits.label_id.values[tr],
+                                    float(alpha), int(k))
+            return [tr[assign == j] for j in range(int(k))]
+        col = self.splits[scenario]
         assign = col.values[tr]
         if pd.isna(assign).any():
             raise ValueError(f"Scenario {scenario} has unassigned training rows")
         assign = assign.astype(int)
         return [tr[assign == k] for k in range(assign.max() + 1)]
+
+    def units_of(self, idx: np.ndarray) -> list[np.ndarray]:
+        """Group image indices by split unit, units in sorted order (unit-level DP)."""
+        u = self.splits.unit.values[idx]
+        order = np.argsort(u, kind="stable")
+        idx, u = np.asarray(idx)[order], u[order]
+        cut = np.flatnonzero(np.diff(u)) + 1
+        return np.split(idx, cut)
 
 
 def load_curated(data_dir: str, device: str | torch.device = "cpu",
@@ -76,7 +121,8 @@ def load_curated(data_dir: str, device: str | torch.device = "cpu",
     return Curated(x=x, y=y, masks=d["masks"], splits=sp, mean=mean, std=std)
 
 
-def make_synthetic(n: int = 160, size: int = 128, seed: int = 0) -> tuple[dict, pd.DataFrame]:
+def make_synthetic(n: int = 160, size: int = 128, seed: int = 0,
+                   unit_size: int = 1) -> tuple[dict, pd.DataFrame]:
     """Tiny fake archive with the real schema, for CPU tests and smoke runs."""
     rng = np.random.default_rng(seed)
     labels = rng.integers(0, 4, n)
@@ -91,7 +137,7 @@ def make_synthetic(n: int = 160, size: int = 128, seed: int = 0) -> tuple[dict, 
     sp = pd.DataFrame({
         "image_id": [f"syn:{k}" for k in range(n)], "source": source,
         "relpath": [f"{k}.png" for k in range(n)], "label": [CLASSES[c] for c in labels],
-        "label_id": labels, "patient_id": "", "unit": np.arange(n), "split": split})
+        "label_id": labels, "patient_id": "", "unit": np.arange(n) // unit_size, "split": split})
     tr = np.where(split == "train")[0]
     for k, s in enumerate(SCENARIOS):
         col = np.full(n, np.nan)

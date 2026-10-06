@@ -123,3 +123,55 @@ def test_frozen_bn_resnet_clipping_bound():
     x, y = _batch(4, 64)
     _, norms = dpm.clipped_grad_sum(m, F.cross_entropy, x, y, 0.5, 2, return_norms=True)
     assert norms.max().item() <= 0.5 * (1 + 1e-4)
+
+
+# ------------------------------------------------ unit-level DP (decision D33)
+def _gnorm(a, b):
+    return math.sqrt(sum((a[k] - b[k]).pow(2).sum().item() for k in a))
+
+
+def test_unit_sum_with_singletons_equals_record_sum():
+    m = SmallCNN()
+    x, y = _batch(9)
+    a = dpm.clipped_grad_sum(m, F.cross_entropy, x, y, 0.4, 4)
+    b = dpm.clipped_unit_grad_sum(m, F.cross_entropy, x, y, [1] * 9, 0.4, 4)
+    for k in a:
+        assert torch.allclose(a[k], b[k], atol=1e-6), k
+
+
+def test_unit_gradient_is_clipped_mean_and_chunking_is_exact():
+    """A unit contributes its mean gradient, clipped once, wherever chunks cut it."""
+    m = SmallCNN()
+    x, y = _batch(10)
+    sizes = [3, 1, 6]
+    C = 0.05
+    ref = {k: torch.zeros_like(p) for k, p in m.named_parameters()}
+    s = 0
+    for sz in sizes:
+        m.zero_grad()
+        F.cross_entropy(m(x[s:s + sz]), y[s:s + sz]).backward()
+        g = {k: p.grad.clone() for k, p in m.named_parameters()}
+        f = min(1.0, C / (math.sqrt(sum(v.pow(2).sum().item() for v in g.values())) + 1e-6))
+        for k in ref:
+            ref[k] += f * g[k]
+        s += sz
+    for mpb in (10, 4, 2, 1):
+        got, norms = dpm.clipped_unit_grad_sum(m, F.cross_entropy, x, y, sizes, C, mpb, return_norms=True)
+        assert len(norms) == 3 and norms.max().item() <= C * (1 + 1e-4)
+        for k in ref:
+            assert torch.allclose(got[k], ref[k], atol=1e-6, rtol=1e-4), (mpb, k)
+
+
+def test_unit_sensitivity_is_clip_norm_whatever_the_unit_size():
+    """Removing a whole 5-image unit changes the sum by at most C."""
+    m = SmallCNN()
+    x, y = _batch(9)
+    C = 0.3
+    full = dpm.clipped_unit_grad_sum(m, F.cross_entropy, x, y, [2, 5, 2], C, 3)
+    keep = torch.tensor([0, 1, 7, 8])
+    drop = dpm.clipped_unit_grad_sum(m, F.cross_entropy, x[keep], y[keep], [2, 2], C, 3)
+    assert _gnorm(full, drop) <= C * (1 + 1e-4)
+    # record-level clipping of the same batch gives no such bound for the unit
+    rec_full = dpm.clipped_grad_sum(m, F.cross_entropy, x, y, C)
+    rec_drop = dpm.clipped_grad_sum(m, F.cross_entropy, x[keep], y[keep], C)
+    assert _gnorm(rec_full, rec_drop) > C

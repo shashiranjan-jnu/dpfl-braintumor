@@ -129,3 +129,50 @@ def test_lr_selection_protocol(tmp_path):
         assert p["optim"]["lr"] in (0.01, 0.1)
     follow = {"presets": presets, "axes": {"train.seed": [1, 2]}}
     assert len(expand(follow)) == 4
+    # D33: unit-level presets inherit the record-level lr at the same scenario and epsilon
+    from scripts.make_unit_grid import unit_presets
+    grid["fixed"]["train"] = {"seed": 0}
+    for c in expand(grid):
+        run_one(c, ddir, out, data=data, device="cpu")
+    up = unit_presets([grid], out, ["natural3"], [8.0])
+    rec = [p for p in select(grid, out)[0] if p.get("dp", {}).get("enabled")][0]
+    assert len(up) == 1 and up[0]["dp"]["unit"] == "unit"
+    assert up[0]["optim"]["lr"] == rec["optim"]["lr"] and "seed" not in up[0].get("train", {})
+
+
+def test_udir_partition_keeps_units_whole_and_is_fixed(tmp_path):
+    d = load_curated(write_synthetic(str(tmp_path / "d"), n=200, unit_size=4))
+    a, b = d.clients("udir0.5_k3"), d.clients("udir0.5_k3")
+    assert all((x == y).all() for x, y in zip(a, b))
+    tr = d.idx("train")
+    assert sorted(np.concatenate(a).tolist()) == sorted(tr.tolist())
+    owner = {}
+    for j, part in enumerate(a):
+        for u in d.splits.unit.values[part]:
+            assert owner.setdefault(u, j) == j
+
+
+def test_unit_level_run_reports_patient_epsilon(tmp_path):
+    ddir = write_synthetic(str(tmp_path / "d"), n=160, unit_size=4)
+    data = load_curated(ddir)
+    out = str(tmp_path / "runs")
+    base = {"dp": {"enabled": True, "target_epsilon": 8.0, "sample_rate": 0.25}}
+    rec = run_one(_cfg(**base), ddir, out, data=data, device="cpu")
+    uni = run_one(_cfg(dp={**base["dp"], "unit": "unit"}), ddir, out, data=data, device="cpu")
+    assert rec != uni
+    mr = json.load(open(os.path.join(out, rec, "metrics.json")))["privacy"]
+    mu = json.load(open(os.path.join(out, uni, "metrics.json")))["privacy"]
+    assert mr["unit"] == "record" and mu["unit"] == "unit"
+    assert abs(mr["epsilon"] - mu["epsilon"]) < 1e-9          # same sigma, q, steps
+    # synthetic natural3 splits units across clients, so the worst unit composes
+    assert mu["units_max_clients"] > 1 and mu["unit_epsilon_worst"] > mu["epsilon"]
+    assert mr["epsilon_if_k_runs"]["2"] > mr["epsilon"]
+    uc = run_one(_cfg(dp={**base["dp"], "unit": "unit"}, fl={"mode": "central", "rounds": 2}),
+                 ddir, out, data=data, device="cpu")
+    mc = json.load(open(os.path.join(out, uc, "metrics.json")))["privacy"]
+    assert mc["units_max_clients"] == 1 and abs(mc["unit_epsilon_worst"] - mc["epsilon"]) < 1e-9
+
+
+def test_record_level_run_id_unchanged_by_unit_key():
+    """dp.unit is optional and absent from base.yaml, so old run ids survive."""
+    assert "unit" not in resolve(_cfg())["dp"]

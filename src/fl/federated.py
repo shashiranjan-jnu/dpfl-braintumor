@@ -46,6 +46,7 @@ class Cfg:
     pretrained: bool = False
     width: int = 16
     grad_clip: float | None = None   # global-norm clip for the non-DP path only (D28)
+    unit_level: bool = False         # DP over units (patients) instead of images (D33)
     schedule: str = "none"           # none | cosine, learning rate decayed across rounds
     eval_batch: int = 256
 
@@ -79,24 +80,45 @@ def round_lr(cfg: Cfg, t: int) -> float:
     return cfg.lr
 
 
-def local_update(model, gparams, x, y, idx, cfg: Cfg, gen, c_glob=None, c_loc=None, lr=None):
+def _sample(idx, units, cfg: Cfg, gen, dev):
+    """One Poisson batch. Returns image indices and, at unit level, the unit sizes.
+
+    Record level samples images with rate q. Unit level samples units with
+    rate q and takes every image of each sampled unit, in unit order.
+    """
+    if units is None:
+        return idx[dpm.poisson_mask(len(idx), cfg.sample_rate, gen, dev)], None
+    keep = dpm.poisson_mask(len(units), cfg.sample_rate, gen, dev).nonzero().flatten().tolist()
+    if not keep:
+        return idx[:0], []
+    return torch.cat([units[i] for i in keep]), [len(units[i]) for i in keep]
+
+
+def local_update(model, gparams, x, y, idx, cfg: Cfg, gen, c_glob=None, c_loc=None, lr=None,
+                 units=None):
     lr = cfg.lr if lr is None else lr
+    units = units if (cfg.unit_level and cfg.dp) else None
     _load(model, gparams)
     model.train()
     opt = torch.optim.SGD(model.parameters(), lr=lr, momentum=cfg.momentum,
                           weight_decay=cfg.weight_decay)
-    n = len(idx)
-    expected = cfg.sample_rate * n
+    n = len(idx) if units is None else len(units)
+    expected = cfg.sample_rate * n      # q * n_j images, or q * U_j units at unit level
     batch_sizes, clip_frac = [], []
     for _ in range(cfg.local_steps):
-        b = idx[dpm.poisson_mask(n, cfg.sample_rate, gen, x.device)]
+        b, sizes = _sample(idx, units, cfg, gen, x.device)
         xb, yb = x[b], y[b]
         if cfg.hflip and len(b):
             flip = torch.rand(len(b), generator=gen, device=x.device) < 0.5
             xb = torch.where(flip[:, None, None, None], xb.flip(-1), xb)
         batch_sizes.append(len(b))
         if cfg.dp:
-            if len(b):
+            if len(b) and sizes is not None:
+                gsum, norms = dpm.clipped_unit_grad_sum(model, F.cross_entropy, xb, yb, sizes,
+                                                        cfg.clip_norm, cfg.max_physical_batch,
+                                                        return_norms=True)
+                clip_frac.append(float((norms >= cfg.clip_norm * 0.999).float().mean()))
+            elif len(b):
                 gsum, norms = dpm.clipped_grad_sum(model, F.cross_entropy, xb, yb,
                                                    cfg.clip_norm, cfg.max_physical_batch,
                                                    return_norms=True)
@@ -131,7 +153,7 @@ def local_update(model, gparams, x, y, idx, cfg: Cfg, gen, c_glob=None, c_loc=No
     return new, dc, stats
 
 
-def train(data, clients: list[np.ndarray], cfg: Cfg, log=print) -> dict:
+def train(data, clients: list[np.ndarray], cfg: Cfg, log=print, client_units=None) -> dict:
     """Runs federated training and returns history, best/last test reports, predictions."""
     dev = data.x.device
     torch.manual_seed(cfg.seed)
@@ -139,6 +161,11 @@ def train(data, clients: list[np.ndarray], cfg: Cfg, log=print) -> dict:
     model = build_model(cfg.model, 4, cfg.pretrained, cfg.width).to(dev)
     gparams = _params(model)
     idx_t = [torch.as_tensor(c, device=dev, dtype=torch.long) for c in clients]
+    units_t = [None] * len(clients)
+    if cfg.unit_level and cfg.dp:
+        if client_units is None:
+            raise ValueError("unit_level DP needs client_units")
+        units_t = [[torch.as_tensor(u, device=dev, dtype=torch.long) for u in cu] for cu in client_units]
     sizes = np.array([len(c) for c in clients], dtype=float)
     w = sizes / sizes.sum()
     gens = [torch.Generator(device=dev).manual_seed(cfg.seed * 100003 + j) for j in range(len(clients))]
@@ -156,7 +183,7 @@ def train(data, clients: list[np.ndarray], cfg: Cfg, log=print) -> dict:
         news, dcs, st = [], [], []
         for j, idx in enumerate(idx_t):
             p, dc, s = local_update(model, gparams, data.x, data.y, idx, cfg, gens[j],
-                                    c_glob, c_loc[j], lr=round_lr(cfg, t))
+                                    c_glob, c_loc[j], lr=round_lr(cfg, t), units=units_t[j])
             news.append(p); dcs.append(dc); st.append(s)
         gparams = {k: sum(w[j] * news[j][k] for j in range(len(news))) for k in gparams}
         if cfg.algorithm == "scaffold":

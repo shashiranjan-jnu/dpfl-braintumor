@@ -1,0 +1,13 @@
+# Step 3.1b lr selection at seed 0 (D30 protocol) for the patient-respecting
+# Dirichlet partition udir0.5_k10 (D33), where no patient is split across clients.
+# scripts/select_lr.py turns this into week04_udir_seeds.yaml.
+name: week04_select_udir
+fixed:
+  train: {seed: 0}
+  data: {scenario: udir0.5_k10}
+presets:
+  - {}
+  - {dp: {enabled: true, target_epsilon: 8.0}}
+  - {dp: {enabled: true, target_epsilon: 3.0}}
+axes:
+  optim.lr: [0.003, 0.01]

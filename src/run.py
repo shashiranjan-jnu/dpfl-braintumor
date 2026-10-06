@@ -86,7 +86,8 @@ def to_cfg(c: dict, sigma: float) -> Cfg:
                clip_norm=c["dp"]["clip_norm"], max_physical_batch=c["dp"]["max_physical_batch"],
                seed=c["train"]["seed"], model=c["model"]["name"],
                pretrained=c["model"]["pretrained"], width=c["model"].get("width", 16),
-               grad_clip=c["optim"].get("grad_clip"), schedule=c["optim"].get("schedule", "none"))
+               grad_clip=c["optim"].get("grad_clip"), schedule=c["optim"].get("schedule", "none"),
+               unit_level=c["dp"].get("unit", "record") == "unit")
 
 
 def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, force=False) -> str:
@@ -120,6 +121,20 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
     else:
         clients = data.clients(cfg["data"]["scenario"])
 
+    # Unit-level DP (D33). The key is optional and absent from base.yaml, so the
+    # run_id of every record-level run stays unchanged.
+    unit = cfg["dp"].get("unit", "record")
+    if unit not in ("record", "unit"):
+        raise ValueError(f"dp.unit must be record or unit, got {unit}")
+    client_units = [data.units_of(k) for k in clients] if unit == "unit" else None
+    # A unit split across m clients is released by m mechanisms, so its
+    # privacy loss composes over m clients (same sigma, q, steps).
+    owners = {}
+    for j, k in enumerate(clients):
+        for u in np.unique(data.splits.unit.values[k]):
+            owners[u] = owners.get(u, 0) + 1
+    m_max = max(owners.values()) if owners else 1
+
     tmp = to_cfg(cfg, 0.0)
     steps = cfg["fl"]["rounds"] * tmp.local_steps
     q, delta = cfg["dp"]["sample_rate"], cfg["dp"]["delta"]
@@ -130,6 +145,18 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
             cfg["dp"]["target_epsilon"], q, steps, delta, cfg["dp"]["accountant"])
         eps = dpm.epsilon_opacus(sigma, q, steps, delta, cfg["dp"]["accountant"])
     c = to_cfg(cfg, sigma)
+    acc = cfg["dp"]["accountant"]
+    # Epsilon of the guarantee actually stated in the paper:
+    #  unit_epsilon_worst  unit-level runs, worst unit, composed over the m_max clients holding it
+    #  epsilon_if_k_runs   cost of choosing among k candidate runs on validation data (D33),
+    #                      since every candidate was trained on the same private records
+    extra = {"unit": unit, "units_max_clients": int(m_max),
+             "n_units": [int(len(u)) for u in client_units] if client_units else None}
+    if cfg["dp"]["enabled"] and sigma > 0:
+        extra["unit_epsilon_worst"] = (dpm.epsilon_opacus(sigma, q, steps * m_max, delta, acc)
+                                       if unit == "unit" else None)
+        extra["epsilon_if_k_runs"] = {str(k): dpm.epsilon_opacus(sigma, q, steps * k, delta, acc)
+                                      for k in (2, 3)}
 
     yaml.safe_dump(cfg, open(os.path.join(rdir, "config.yaml"), "w"), sort_keys=False)
     env = {"run_id": rid, "git_commit": git_commit(), "python": platform.python_version(),
@@ -139,12 +166,12 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
            "n_clients": len(clients), "client_sizes": [int(len(k)) for k in clients],
            "local_steps": c.local_steps, "total_steps_per_client": steps,
            "sample_rate": q, "sigma": sigma, "delta": delta, "epsilon_spent": eps,
-           "expected_batch_per_client": [round(q * len(k), 2) for k in clients]}
+           "expected_batch_per_client": [round(q * len(k), 2) for k in clients], **extra}
     log(f"run {rid} mode {mode} algo {c.algorithm} clients {env['client_sizes']} "
-        f"steps/client {steps} sigma {sigma:.4f} eps {eps:.3f}")
+        f"steps/client {steps} sigma {sigma:.4f} eps {eps:.3f} unit {unit} m_max {m_max}")
 
     t0 = time.time()
-    res = train(data, clients, c, log)
+    res = train(data, clients, c, log, client_units=client_units)
     env["train_seconds"] = round(time.time() - t0, 1)
     json.dump(clean(env), open(os.path.join(rdir, "env.json"), "w"), indent=2)
 
@@ -162,7 +189,7 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
                "test_best_by_source": res["test_best_by_source"],
                "privacy": {"enabled": cfg["dp"]["enabled"], "epsilon": eps, "delta": delta,
                            "sigma": sigma, "q": q, "steps": steps,
-                           "clip_norm": cfg["dp"]["clip_norm"]},
+                           "clip_norm": cfg["dp"]["clip_norm"], **extra},
                "history": res["history"], "train_seconds": env["train_seconds"]}
     json.dump(clean(metrics), open(os.path.join(rdir, "metrics.json"), "w"), indent=2)
     tb = res["test_best"]

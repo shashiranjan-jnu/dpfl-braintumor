@@ -2,6 +2,14 @@
 
 Newest entry first.
 
+## 2026-10-06 (patient-level DP)
+
+- Unit-level (patient-level) DP: `clipped_unit_grad_sum` in `src/privacy/dp.py`, unit sampling in `src/fl/federated.py`, `dp.unit: unit` in configs (D33).
+- Patient-respecting Dirichlet partitions `udir<alpha>_k<K>` computed in `src/data/data.py`.
+- Runs report `units_max_clients`, `unit_epsilon_worst` and `epsilon_if_k_runs` (D33, D34). Record-level run ids unchanged.
+- Grids `week04_unit_central`, `week04_select_udir`, generator `scripts/make_unit_grid.py`. 31 tests pass.
+- Gupta 2026 and Kaissis 2021 read in full, `docs/related_work.csv` and `docs/gap_statement.md` updated, D34.
+
 ## 2026-10-06 (late)
 - Step 1.2 literature check, docs/related_work.csv (43 studies) and docs/gap_statement.md
 - Decision D32, RQ3 narrowed, RQ4 patient-level, source-confound controls, NCC duplicate cross-check, unit-level DP proposed

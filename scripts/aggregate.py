@@ -45,6 +45,11 @@ def collect(runs_dir: str, only_ids: set | None = None) -> pd.DataFrame:
                     "clip_frac": (sum(h["clip_frac"] for h in m["history"] if h.get("clip_frac") is not None)
                                   / max(1, sum(1 for h in m["history"] if h.get("clip_frac") is not None)))
                                  if m["privacy"]["enabled"] else None})
+        pv = m["privacy"]
+        row.update({"privacy_unit": pv.get("unit", "record"),
+                    "units_max_clients": pv.get("units_max_clients"),
+                    "unit_epsilon_worst": pv.get("unit_epsilon_worst"),
+                    "epsilon_k2": (pv.get("epsilon_if_k_runs") or {}).get("2")})
         row.update({f"test.{k}": v for k, v in m["test_best"].items()})
         rows.append(row)
     return pd.DataFrame(rows)
@@ -69,7 +74,7 @@ def main():
                             "test.sens_notumor": "sN", "test.sens_pituitary": "sP"})
     cols = [c for c in ["run_id", "cfg.model.name", "cfg.model.width", "cfg.fl.mode",
                         "cfg.data.scenario", "cfg.fl.algorithm", "cfg.optim.lr", "cfg.train.seed",
-                        "cfg.optim.grad_clip", "epsilon", "sigma", "clip_frac", "diverged", "best_round", "best_val_loss", "train_acc",
+                        "cfg.optim.grad_clip", "privacy_unit", "epsilon", "epsilon_k2", "unit_epsilon_worst", "sigma", "clip_frac", "diverged", "best_round", "best_val_loss", "train_acc",
                         "test.accuracy", "test.balanced_accuracy", "sG", "sM", "sN", "sP",
                         "test.ece", "train_seconds"] if c in df]
     with pd.option_context("display.width", 200, "display.max_columns", 30):

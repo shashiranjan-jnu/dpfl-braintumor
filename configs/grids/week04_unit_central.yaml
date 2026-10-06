@@ -1,0 +1,12 @@
+# Step 3.1b patient-level DP (D33). Centralised training, units (Figshare patients,
+# SARTAJ and Br35H look-alike groups) are the privacy unit instead of images.
+# Same lr 0.02 as the record-level central runs, reporting seeds 1 to 5.
+name: week04_unit_central
+fixed:
+  fl: {mode: central}
+  optim: {lr: 0.02}
+presets:
+  - {dp: {enabled: true, target_epsilon: 8.0, unit: unit}}
+  - {dp: {enabled: true, target_epsilon: 3.0, unit: unit}}
+axes:
+  train.seed: [1, 2, 3, 4, 5]
