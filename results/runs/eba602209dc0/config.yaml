@@ -1,0 +1,33 @@
+data:
+  version: curated-v1
+  scenario: dir5.0_k10
+  hflip: true
+model:
+  name: resnet18_frozenbn
+  pretrained: true
+  width: 16
+fl:
+  mode: federated
+  algorithm: fedavg
+  rounds: 100
+  local_epochs: 1.0
+  mu: 0.0
+  local_client: null
+optim:
+  lr: 0.003
+  momentum: 0.9
+  weight_decay: 0.0
+  grad_clip: 1.0
+  schedule: cosine
+dp:
+  enabled: true
+  target_epsilon: 3.0
+  noise_multiplier: null
+  delta: 1.0e-05
+  clip_norm: 1.0
+  sample_rate: 0.1
+  max_physical_batch: 32
+  accountant: rdp
+train:
+  seed: 0
+  deterministic: true
