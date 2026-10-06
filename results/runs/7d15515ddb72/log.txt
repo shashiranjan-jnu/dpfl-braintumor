@@ -1,0 +1,13 @@
+19:42:34 run 7d15515ddb72 mode central algo fedavg clients [2610] steps/client 1000 sigma 12.8848 eps 0.999
+19:42:42 round   1 val_loss 1.3603 val_acc 0.4692 bal_acc 0.2998 batch 261.9 7.64s
+19:43:50 round  10 val_loss 12.9491 val_acc 0.2630 bal_acc 0.2243 batch 251.1 7.23s
+19:45:05 round  20 val_loss 20.1417 val_acc 0.2678 bal_acc 0.2859 batch 263.5 7.53s
+19:46:20 round  30 val_loss 19.8031 val_acc 0.2820 bal_acc 0.2371 batch 263.7 7.54s
+19:47:34 round  40 val_loss 18.0060 val_acc 0.3483 bal_acc 0.2823 batch 259.1 7.39s
+19:48:48 round  50 val_loss 17.4167 val_acc 0.3697 bal_acc 0.2445 batch 259.2 7.4s
+19:50:03 round  60 val_loss 20.0358 val_acc 0.2749 bal_acc 0.2269 batch 261.5 7.52s
+19:51:17 round  70 val_loss 19.7739 val_acc 0.2844 bal_acc 0.2426 batch 267.3 7.62s
+19:52:31 round  80 val_loss 18.7262 val_acc 0.3223 bal_acc 0.3084 batch 274.1 7.79s
+19:53:45 round  90 val_loss 17.8096 val_acc 0.3555 bal_acc 0.3277 batch 264.2 7.51s
+19:54:59 round 100 val_loss 17.9405 val_acc 0.3507 bal_acc 0.3164 batch 252.5 7.21s
+19:55:00 done 7d15515ddb72 best_round 2 test_acc 0.3911 bal_acc 0.2874 ece 0.2448 train_acc 0.3935 745.7s
