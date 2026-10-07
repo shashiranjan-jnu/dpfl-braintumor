@@ -52,6 +52,9 @@ def select(grid: dict, runs_dir: str) -> tuple[list[dict], pd.DataFrame]:
     for _, w in winners.iterrows():
         cfg = json.loads(w.key)
         cfg.setdefault("optim", {})["lr"] = w.lr
+        cfg.get("train", {}).pop("seed", None)      # the follow-up grid sets the reporting seeds
+        if cfg.get("train") == {}:
+            cfg.pop("train")
         presets.append(cfg)
     return presets, df.drop(columns="key")
 

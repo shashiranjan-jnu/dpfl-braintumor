@@ -2,6 +2,14 @@
 
 Newest entry first.
 
+## 2026-10-07 (Week 3 results)
+
+- Week 3 core finished, 83 runs, 6.8 GPU hours, tables pushed by the launcher.
+- `scripts/summarise.py`: seed means with t-based 95% intervals (D34), `results/tables/week03_baselines_summary.{csv,md}`.
+- lr selection done, `configs/grids/week03_fed_seeds_a.yaml` (seeds 1 to 3) and `_b.yaml` (seeds 4 and 5), table `results/tables/week03_lr_selection.csv`.
+- Fix: `expand()` shared nested preset dicts, so axis values leaked between configurations; `select_lr.py` no longer copies the selection seed. Test added, 32 tests pass, Week 3 run ids unchanged.
+- Launchers `08-fed-seeds-a` and `09-fed-seeds-b-unit` for tag `v0.3-unit-dp` (D35).
+
 ## 2026-10-06 (patient-level DP)
 
 - Unit-level (patient-level) DP: `clipped_unit_grad_sum` in `src/privacy/dp.py`, unit sampling in `src/fl/federated.py`, `dp.unit: unit` in configs (D33).

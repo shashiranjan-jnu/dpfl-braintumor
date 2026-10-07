@@ -49,3 +49,14 @@
 - federated DP epsilon 8, natural3 0.806 (lr 0.01, smooth curve), dir0.5_k10 0.714 (lr 0.003) and 0.613 (lr 0.01, best round 14, validation loss rising while balanced accuracy climbs)
 - exit criteria met, central no DP balanced accuracy 0.918 at least 0.85, federated DP natural3 keeps every class sensitivity at least 0.60
 - settings frozen (D30), Week 3 launcher 07-week3-core prepared
+
+## 2026-10-07 Step 3.1 Week 3 core (code v0.2-pipeline-verified, 6.8 GPU hours, 83 of 83 runs, none diverged)
+- central, seeds 1 to 5, balanced accuracy with t-based 95% interval: no DP 0.919 (0.907 to 0.931), clip-only 0.871 (0.850 to 0.891), epsilon 8 0.815 (0.779 to 0.851), epsilon 3 0.686 (0.616 to 0.756), epsilon 1 0.331 (0.269 to 0.393)
+- clipping alone costs 4.8 points and noise at epsilon 8 a further 5.6, the single-seed Step 2.4 estimates (0.893, 0.849) were optimistic
+- meningioma sensitivity falls 0.861, 0.711, 0.520, 0.179, 0.086 across the same regimes, tumour missed as normal stays at or below 0.042
+- epsilon 1 is near collapse, best round 2, macro AUC 0.663
+- local baselines (seeds 1 to 3): Figshare client has no no-tumour images (balanced accuracy capped at 0.75), no DP 0.625, epsilon 8 0.464; SARTAJ client no DP 0.543, epsilon 8 0.245; Br35H client holds one class, so its local model is degenerate by construction (0.250)
+- federated lr selection at seed 0: every non-DP configuration picks 0.01, every DP configuration picks 0.003 except natural3 at epsilon 8 (0.01)
+- seed 0 is selection only, but the pattern is clear: without DP natural3 is the worst partition (0.848 against 0.89 to 0.90 for iid and dir5.0), at epsilon 8 it is the best (0.806 against 0.66 to 0.72), consistent with H5
+- bug caught before any GPU time: expand() shared nested preset dicts, so a generated seeds grid collapsed every configuration to seed 3; the duplicate check in run_grid refused it; fixed with deep copies, test added, all 83 Week 3 run ids unchanged
+- tables results/tables/week03_baselines_summary.{csv,md} and week03_lr_selection.csv, grids week03_fed_seeds_a (seeds 1 to 3, 60 runs) and week03_fed_seeds_b (seeds 4 and 5, 40 runs), decision D35

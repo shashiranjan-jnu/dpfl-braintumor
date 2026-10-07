@@ -173,3 +173,9 @@ def test_unit_level_run_reports_patient_epsilon(tmp_path):
 def test_record_level_run_id_unchanged_by_unit_key():
     """dp.unit is optional and absent from base.yaml, so old run ids survive."""
     assert "unit" not in resolve(_cfg())["dp"]
+
+
+def test_expand_does_not_share_nested_preset_dicts():
+    from scripts.run_grid import expand
+    g = {"presets": [{"train": {"seed": 0}, "optim": {"lr": 0.1}}], "axes": {"train.seed": [1, 2, 3]}}
+    assert [c["train"]["seed"] for c in expand(g)] == [1, 2, 3]

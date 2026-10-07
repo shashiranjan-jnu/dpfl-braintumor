@@ -62,7 +62,8 @@ def expand(grid: dict) -> list[dict]:
     out = []
     for preset, combo in itertools.product(
             presets, itertools.product(*[axes[k] for k in keys]) if keys else [()]):
-        cfg = deep_update(copy.deepcopy(grid.get("fixed", {}) or {}), preset)
+        # deep copies on both sides, so axis values never leak into shared preset dicts
+        cfg = copy.deepcopy(deep_update(copy.deepcopy(grid.get("fixed", {}) or {}), preset))
         for k, v in zip(keys, combo):
             set_dotted(cfg, k, v)
             extra = ((grid.get("rules") or {}).get(k) or {}).get(v)
