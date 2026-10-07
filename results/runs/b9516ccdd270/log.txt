@@ -1,0 +1,13 @@
+10:31:17 run b9516ccdd270 mode federated algo fedavg clients [57, 137, 242, 226, 173, 718, 153, 446, 260, 198] steps/client 1000 sigma 0.0000 eps inf unit record m_max 1
+10:31:23 round   1 val_loss 1.3005 val_acc 0.4763 bal_acc 0.3253 batch 26.2 4.29s
+10:31:56 round  10 val_loss 0.5467 val_acc 0.8104 bal_acc 0.8240 batch 26.9 3.77s
+10:32:32 round  20 val_loss 0.6086 val_acc 0.7820 bal_acc 0.7598 batch 25.6 3.46s
+10:33:08 round  30 val_loss 0.4216 val_acc 0.8555 bal_acc 0.8563 batch 26.3 3.66s
+10:33:44 round  40 val_loss 0.3286 val_acc 0.8744 bal_acc 0.8700 batch 25.9 3.55s
+10:34:19 round  50 val_loss 0.3074 val_acc 0.8910 bal_acc 0.8882 batch 26.6 3.63s
+10:34:55 round  60 val_loss 0.3354 val_acc 0.8934 bal_acc 0.8858 batch 25.6 3.54s
+10:35:31 round  70 val_loss 0.3256 val_acc 0.8815 bal_acc 0.8741 batch 26.1 3.59s
+10:36:07 round  80 val_loss 0.3561 val_acc 0.8791 bal_acc 0.8645 batch 26.1 3.58s
+10:36:42 round  90 val_loss 0.3856 val_acc 0.8791 bal_acc 0.8620 batch 25.3 3.51s
+10:37:19 round 100 val_loss 0.3936 val_acc 0.8791 bal_acc 0.8603 batch 25.9 3.59s
+10:37:20 done b9516ccdd270 best_round 52 test_acc 0.8918 bal_acc 0.8906 ece 0.0449 train_acc 0.9356 362.9s
