@@ -1,0 +1,13 @@
+06:38:28 run af34bd90abdf mode federated algo fedavg clients [503, 247, 291, 533, 181, 82, 203, 287, 134, 149] steps/client 1000 sigma 12.8848 eps 0.999 unit record m_max 10
+06:38:36 round   1 val_loss 1.4904 val_acc 0.2393 bal_acc 0.2697 batch 26.1 8.45s
+06:39:52 round  10 val_loss 1.4045 val_acc 0.3791 bal_acc 0.2901 batch 25.9 8.23s
+06:41:15 round  20 val_loss 2.1795 val_acc 0.3341 bal_acc 0.2221 batch 26.9 8.45s
+06:42:37 round  30 val_loss 3.2132 val_acc 0.4171 bal_acc 0.2545 batch 26.0 8.21s
+06:43:59 round  40 val_loss 4.9470 val_acc 0.3910 bal_acc 0.3028 batch 26.2 8.3s
+06:45:22 round  50 val_loss 5.6448 val_acc 0.4052 bal_acc 0.3118 batch 26.8 8.39s
+06:46:45 round  60 val_loss 6.4105 val_acc 0.3531 bal_acc 0.3388 batch 26.1 8.22s
+06:48:08 round  70 val_loss 4.8100 val_acc 0.4100 bal_acc 0.3854 batch 25.8 8.11s
+06:49:31 round  80 val_loss 5.2578 val_acc 0.4645 bal_acc 0.4263 batch 25.5 8.25s
+06:50:54 round  90 val_loss 4.7883 val_acc 0.4716 bal_acc 0.4395 batch 26.0 8.19s
+06:52:17 round 100 val_loss 4.7968 val_acc 0.4645 bal_acc 0.4306 batch 26.2 8.31s
+06:52:18 done af34bd90abdf best_round 8 test_acc 0.4182 bal_acc 0.3526 ece 0.2126 train_acc 0.4548 830.0s
