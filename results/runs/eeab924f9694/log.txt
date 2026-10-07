@@ -1,0 +1,13 @@
+09:37:20 run eeab924f9694 mode central algo fedavg clients [2610] steps/client 1000 sigma 2.1793 eps 7.964 unit unit m_max 1
+09:37:28 round   1 val_loss 5.3185 val_acc 0.1493 bal_acc 0.2500 batch 246.6 7.79s
+09:38:39 round  10 val_loss 4.5867 val_acc 0.1848 bal_acc 0.2892 batch 246.6 7.7s
+09:40:03 round  20 val_loss 11.0296 val_acc 0.1919 bal_acc 0.2687 batch 295.7 9.05s
+09:41:23 round  30 val_loss 19.7119 val_acc 0.2014 bal_acc 0.2687 batch 243.9 7.69s
+09:42:44 round  40 val_loss 20.8747 val_acc 0.2133 bal_acc 0.2836 batch 242.9 7.65s
+09:44:05 round  50 val_loss 21.2733 val_acc 0.2180 bal_acc 0.3103 batch 263.2 8.15s
+09:45:25 round  60 val_loss 18.3975 val_acc 0.3009 bal_acc 0.3217 batch 287.1 8.75s
+09:46:43 round  70 val_loss 18.4407 val_acc 0.3009 bal_acc 0.3147 batch 229.5 7.16s
+09:48:05 round  80 val_loss 19.2128 val_acc 0.2938 bal_acc 0.3630 batch 250.5 7.73s
+09:49:26 round  90 val_loss 18.3519 val_acc 0.3152 bal_acc 0.3506 batch 261.9 8.04s
+09:50:43 round 100 val_loss 18.1664 val_acc 0.3009 bal_acc 0.3357 batch 229.1 7.15s
+09:50:44 done eeab924f9694 best_round 7 test_acc 0.3370 bal_acc 0.4030 ece 0.3396 train_acc 0.3540 804.5s
