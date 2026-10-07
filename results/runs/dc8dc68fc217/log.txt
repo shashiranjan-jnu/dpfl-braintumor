@@ -1,0 +1,13 @@
+09:56:57 run dc8dc68fc217 mode federated algo fedavg clients [2029, 351, 230] steps/client 1000 sigma 12.8848 eps 0.999 unit record m_max 2
+09:57:04 round   1 val_loss 1.3902 val_acc 0.2986 bal_acc 0.2192 batch 88.7 7.4s
+09:58:10 round  10 val_loss 1.3070 val_acc 0.4597 bal_acc 0.2914 batch 86.7 7.27s
+09:59:23 round  20 val_loss 1.0108 val_acc 0.5972 bal_acc 0.4613 batch 87.6 7.33s
+10:00:35 round  30 val_loss 1.0392 val_acc 0.6659 bal_acc 0.5591 batch 85.8 7.17s
+10:01:48 round  40 val_loss 1.0937 val_acc 0.6611 bal_acc 0.5551 batch 86.6 7.25s
+10:03:01 round  50 val_loss 1.0234 val_acc 0.6848 bal_acc 0.6041 batch 90.2 7.53s
+10:04:15 round  60 val_loss 1.2659 val_acc 0.6872 bal_acc 0.5881 batch 85.8 7.17s
+10:05:27 round  70 val_loss 1.0954 val_acc 0.6896 bal_acc 0.6099 batch 85.3 7.15s
+10:06:40 round  80 val_loss 1.1317 val_acc 0.6801 bal_acc 0.5943 batch 89.6 7.52s
+10:07:53 round  90 val_loss 1.1621 val_acc 0.6872 bal_acc 0.5966 batch 88.2 7.4s
+10:09:06 round 100 val_loss 1.1509 val_acc 0.6896 bal_acc 0.5980 batch 87.8 7.31s
+10:09:07 done dc8dc68fc217 best_round 21 test_acc 0.5904 bal_acc 0.5466 ece 0.0945 train_acc 0.6103 730.3s
