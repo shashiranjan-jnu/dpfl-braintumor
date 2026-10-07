@@ -60,3 +60,12 @@
 - seed 0 is selection only, but the pattern is clear: without DP natural3 is the worst partition (0.848 against 0.89 to 0.90 for iid and dir5.0), at epsilon 8 it is the best (0.806 against 0.66 to 0.72), consistent with H5
 - bug caught before any GPU time: expand() shared nested preset dicts, so a generated seeds grid collapsed every configuration to seed 3; the duplicate check in run_grid refused it; fixed with deep copies, test added, all 83 Week 3 run ids unchanged
 - tables results/tables/week03_baselines_summary.{csv,md} and week03_lr_selection.csv, grids week03_fed_seeds_a (seeds 1 to 3, 60 runs) and week03_fed_seeds_b (seeds 4 and 5, 40 runs), decision D35
+
+## 2026-10-07 Step 3.1 federated seeds (08-fed-seeds-a, code v0.3-unit-dp, 6.2 GPU hours, 60 of 60 runs; seeds 4 and 5 pushed early by 09)
+- all 100 federated seed runs (20 configurations x seeds 1 to 5) are in, none diverged, table results/tables/week03_fed_summary_interim.{csv,md}
+- balanced accuracy, mean over 5 seeds: no DP iid 0.904, dir5.0 0.899, dir0.5 0.878, natural3 0.875, dir0.1 0.843; epsilon 8 natural3 0.808, iid, dir5.0 and dir0.5 0.718 to 0.720, dir0.1 0.677; epsilon 3 natural3 0.714, others 0.623 to 0.639; epsilon 1 natural3 0.537, others 0.322 to 0.348
+- H5 holds with 5 seeds. Without DP label skew matters (dir0.1 3.2 points below natural3, natural3 2.9 below iid). Under DP natural3 beats iid by 8.8, 7.5 and 18.9 points at epsilon 8, 3 and 1 (Welch p at most 0.0022), while iid, dir5.0 and dir0.5 are indistinguishable at epsilon 8
+- the epsilon 3 and epsilon 1 comparisons use the same lr (0.003) for every partition, so the natural3 advantage is not an lr artefact (natural3 at epsilon 8 uses 0.01)
+- mechanism: at a fixed total of N images, FedAvg's aggregated noise standard deviation is sigma C sqrt(K) / (q N), so 3 clients carry about 1.8 times less noise than 10. Client size and client count are the same lever at fixed N; Step 3.4 (dir0.5 with K = 3, 5, 10, 15) isolates it
+- federated natural3 at epsilon 8 (0.808) matches central epsilon 8 (0.815), so federation itself costs almost nothing under DP, whereas without DP it costs 4.4 points (0.875 against 0.919)
+- meningioma sensitivity at epsilon 8 is 0.59 on natural3 and 0.18 to 0.24 elsewhere
