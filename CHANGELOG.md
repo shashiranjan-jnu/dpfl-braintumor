@@ -2,6 +2,11 @@
 
 Newest entry first.
 
+## 2026-10-07 (patient-level results)
+
+- 09 finished, 64 runs, 6.65 GPU hours. `results/tables/week04_unit_central_summary.{csv,md}`, lr selection tables for udir and unit.
+- Grids `week04_udir_seeds` (15), `week04_unit_fed` (10, epsilon 8 only), `week04_unit_central_ext` (20, patient clip-only and epsilon 16, 32, 64). Launcher `10-unit-udir` for tag `v0.3.1-unit-ext` (D36).
+
 ## 2026-10-07 (Week 3 results)
 
 - Week 3 core finished, 83 runs, 6.8 GPU hours, tables pushed by the launcher.

@@ -1,0 +1,15 @@
+# Step 3.1b extension (D36). Patient-level central DP collapsed at epsilon 8 and 3.
+# Patient-level clip-only (zero noise) separates the cost of patient weighting and
+# clipping from the cost of noise. Epsilon 16, 32 and 64 locate where patient-level
+# utility recovers. Exploratory, labelled as such in the paper. Same lr 0.02 as all central runs.
+name: week04_unit_central_ext
+fixed:
+  fl: {mode: central}
+  optim: {lr: 0.02}
+presets:
+  - {dp: {enabled: true, noise_multiplier: 0.0, unit: unit}}
+  - {dp: {enabled: true, target_epsilon: 16.0, unit: unit}}
+  - {dp: {enabled: true, target_epsilon: 32.0, unit: unit}}
+  - {dp: {enabled: true, target_epsilon: 64.0, unit: unit}}
+axes:
+  train.seed: [1, 2, 3, 4, 5]

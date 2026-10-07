@@ -69,3 +69,12 @@
 - mechanism: at a fixed total of N images, FedAvg's aggregated noise standard deviation is sigma C sqrt(K) / (q N), so 3 clients carry about 1.8 times less noise than 10. Client size and client count are the same lever at fixed N; Step 3.4 (dir0.5 with K = 3, 5, 10, 15) isolates it
 - federated natural3 at epsilon 8 (0.808) matches central epsilon 8 (0.815), so federation itself costs almost nothing under DP, whereas without DP it costs 4.4 points (0.875 against 0.919)
 - meningioma sensitivity at epsilon 8 is 0.59 on natural3 and 0.18 to 0.24 elsewhere
+
+## 2026-10-07 Step 3.1b patient-level DP, first results (09-fed-seeds-b-unit, code v0.3-unit-dp, 6.65 GPU hours, 64 of 64 runs, none diverged)
+- patient-level central DP collapses: epsilon 8 balanced accuracy 0.353 (0.293 to 0.413), epsilon 3 0.253 (0.245 to 0.261), against 0.815 and 0.686 at record level with the same sigma, q and steps
+- the collapsed models predict no tumour: no-tumour sensitivity 0.89 (epsilon 8) and 0.99 (epsilon 3), tumours missed as normal 0.54 and 0.98, against 0.025 at record level
+- two causes. (1) Noise: 634 units against 2,610 images, so the noise in the averaged gradient, sigma C / (q U), is 4.1 times larger, which sits between record-level epsilon 3 and epsilon 1. (2) Weighting: each patient gets one vote, and no-tumour units are 58% of units but 17% of images (glioma 14% of units, 38% of images), so the effective class prior shifts towards no tumour
+- federated patient-level lr selection at seed 0 is at or near chance in all 8 runs (balanced accuracy 0.23 to 0.47)
+- udir0.5_k10 record-level selection at seed 0: no DP 0.891 (lr 0.01), epsilon 8 0.729 (lr 0.003), epsilon 3 0.661 (lr 0.003), close to dir0.5_k10, so keeping patients whole does not change the record-level picture at seed 0
+- natural3 patient-level runs report unit_epsilon_worst 11.98 at a target of 8, because 11 look-alike units cross two clients
+- decision D36, launcher 10 (45 runs)
