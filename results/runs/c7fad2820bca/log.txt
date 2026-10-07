@@ -1,0 +1,13 @@
+09:23:32 run c7fad2820bca mode central algo fedavg clients [2610] steps/client 1000 sigma 2.1793 eps 7.964 unit unit m_max 1
+09:23:43 round   1 val_loss 4.6040 val_acc 0.1493 bal_acc 0.2500 batch 296.3 9.74s
+09:24:56 round  10 val_loss 2.9354 val_acc 0.3033 bal_acc 0.3398 batch 253.8 7.77s
+09:26:20 round  20 val_loss 8.5386 val_acc 0.3223 bal_acc 0.3062 batch 280.6 8.56s
+09:27:40 round  30 val_loss 18.6279 val_acc 0.2227 bal_acc 0.2951 batch 256.7 7.98s
+09:28:58 round  40 val_loss 18.9716 val_acc 0.2583 bal_acc 0.2851 batch 252.6 7.84s
+09:30:23 round  50 val_loss 22.0957 val_acc 0.1777 bal_acc 0.2143 batch 259.9 8.23s
+09:31:50 round  60 val_loss 19.3449 val_acc 0.2773 bal_acc 0.3174 batch 258.2 8.07s
+09:33:11 round  70 val_loss 18.8180 val_acc 0.2986 bal_acc 0.3009 batch 262.5 8.08s
+09:34:32 round  80 val_loss 18.6539 val_acc 0.3104 bal_acc 0.2720 batch 297.9 9.14s
+09:35:51 round  90 val_loss 17.7405 val_acc 0.3270 bal_acc 0.3149 batch 265.8 8.17s
+09:37:17 round 100 val_loss 18.0791 val_acc 0.3152 bal_acc 0.3006 batch 252.3 7.79s
+09:37:18 done c7fad2820bca best_round 6 test_acc 0.2817 bal_acc 0.3350 ece 0.4650 train_acc 0.3226 825.9s
