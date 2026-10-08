@@ -1,0 +1,13 @@
+11:02:10 run c50d6962ce6a mode central algo fedavg clients [2610] steps/client 1000 sigma 0.9221 eps 31.899 unit unit m_max 1
+11:02:18 round   1 val_loss 5.3307 val_acc 0.1493 bal_acc 0.2500 batch 246.6 7.72s
+11:03:29 round  10 val_loss 1.0512 val_acc 0.6090 bal_acc 0.6368 batch 246.6 7.7s
+11:04:53 round  20 val_loss 1.3146 val_acc 0.5498 bal_acc 0.6299 batch 295.7 9.13s
+11:06:14 round  30 val_loss 0.9424 val_acc 0.6754 bal_acc 0.6715 batch 243.9 7.74s
+11:07:35 round  40 val_loss 1.1016 val_acc 0.6777 bal_acc 0.6813 batch 242.9 7.69s
+11:08:57 round  50 val_loss 1.3165 val_acc 0.5948 bal_acc 0.6749 batch 263.2 8.24s
+11:10:18 round  60 val_loss 1.0606 val_acc 0.6564 bal_acc 0.6613 batch 287.1 8.89s
+11:11:37 round  70 val_loss 0.9524 val_acc 0.7227 bal_acc 0.7340 batch 229.5 7.28s
+11:13:00 round  80 val_loss 0.8984 val_acc 0.7464 bal_acc 0.7403 batch 250.5 7.86s
+11:14:22 round  90 val_loss 0.9235 val_acc 0.7417 bal_acc 0.7340 batch 261.9 8.14s
+11:15:41 round 100 val_loss 0.9249 val_acc 0.7417 bal_acc 0.7425 batch 229.1 7.25s
+11:15:42 done c50d6962ce6a best_round 13 test_acc 0.7011 bal_acc 0.7028 ece 0.0552 train_acc 0.7027 812.2s
