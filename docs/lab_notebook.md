@@ -78,3 +78,11 @@
 - udir0.5_k10 record-level selection at seed 0: no DP 0.891 (lr 0.01), epsilon 8 0.729 (lr 0.003), epsilon 3 0.661 (lr 0.003), close to dir0.5_k10, so keeping patients whole does not change the record-level picture at seed 0
 - natural3 patient-level runs report unit_epsilon_worst 11.98 at a target of 8, because 11 look-alike units cross two clients
 - decision D36, launcher 10 (45 runs)
+
+## 2026-10-08 Step 3.1b extension and udir seeds (10-unit-udir, code v0.3.1-unit-ext, 4.97 GPU hours, 45 of 45 runs, none diverged)
+- patient-level clip-only (zero noise) reaches 0.884 (0.866 to 0.903), no worse than record-level clip-only (0.871), so one vote per patient and per-patient clipping cost nothing; the D36 class-prior explanation is refuted, the collapse is the noise
+- patient-level central recovery curve: epsilon 3 0.253, epsilon 8 0.353, epsilon 16 0.584, epsilon 32 0.745, epsilon 64 0.836 (0.800 to 0.873); patient-level epsilon 64 matches record-level epsilon 8 (0.815)
+- federated patient-level epsilon 8: natural3 0.403 (worst-unit epsilon 11.98), udir0.5_k10 0.264 (chance, tumours missed 0.50)
+- record-level udir0.5_k10 (patients kept whole): no DP 0.904, epsilon 8 0.715, epsilon 3 0.640, statistically indistinguishable from dir0.5_k10 (0.878, 0.718, 0.626), so image-level partitioning did not distort the record-level results
+- Step 3.2 completed on CPU: FedAvg at epsilon 3 and 1 was already in the Step 3.1 grid, figure figures/fig_privacy_utility.{png,pdf} (scripts/plot_privacy_utility.py), Gate A recorded in D37
+- launcher 11 (client-count sweep, 45 runs) prepared for tag v0.3.2-client-count

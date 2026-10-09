@@ -1,0 +1,14 @@
+# Step 3.4 client-count sweep (D37). Dirichlet alpha 0.5 with K = 3, 5 and 15 clients
+# (K = 10 is already in week03_fed_seeds). Same total of 2,610 training images, so the
+# per-client size falls as 1/K and FedAvg's aggregated noise grows as sqrt(K).
+# Learning rates reuse the dir0.5_k10 selection at the same epsilon (no DP 0.01, DP 0.003),
+# a pre-registered transfer within the dir0.5 family; if lr 0.003 is too small for the
+# larger K = 3 clients this biases against H5, so the test is conservative.
+name: week05_client_count
+presets:
+  - {optim: {lr: 0.01}}
+  - {dp: {enabled: true, target_epsilon: 8.0}, optim: {lr: 0.003}}
+  - {dp: {enabled: true, target_epsilon: 3.0}, optim: {lr: 0.003}}
+axes:
+  data.scenario: [dir0.5_k3, dir0.5_k5, dir0.5_k15]
+  train.seed: [1, 2, 3, 4, 5]

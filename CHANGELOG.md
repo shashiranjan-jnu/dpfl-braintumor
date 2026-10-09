@@ -2,6 +2,12 @@
 
 Newest entry first.
 
+## 2026-10-08 (patient-level extension, Step 3.2)
+
+- 10 finished, 45 runs, 4.97 GPU hours. Tables `week04_privacy_unit_central.{csv,md}`, `week04_fed_all.{csv,md}`.
+- `scripts/plot_privacy_utility.py` and `figures/fig_privacy_utility.{png,pdf}`.
+- Grid `week05_client_count` (45 runs) and launcher `11-client-count` for tag `v0.3.2-client-count` (D37).
+
 ## 2026-10-07 (patient-level results)
 
 - 09 finished, 64 runs, 6.65 GPU hours. `results/tables/week04_unit_central_summary.{csv,md}`, lr selection tables for udir and unit.
