@@ -86,3 +86,8 @@
 - record-level udir0.5_k10 (patients kept whole): no DP 0.904, epsilon 8 0.715, epsilon 3 0.640, statistically indistinguishable from dir0.5_k10 (0.878, 0.718, 0.626), so image-level partitioning did not distort the record-level results
 - Step 3.2 completed on CPU: FedAvg at epsilon 3 and 1 was already in the Step 3.1 grid, figure figures/fig_privacy_utility.{png,pdf} (scripts/plot_privacy_utility.py), Gate A recorded in D37
 - launcher 11 (client-count sweep, 45 runs) prepared for tag v0.3.2-client-count
+
+## 2026-10-09 Step 3.3 preparation
+- SCAFFOLD normaliser corrected for momentum (D38); old formula gave c_i = [-3.10, 1.03, 1.03, 1.03] against the true constant gradient [-0.75, 0.25, 0.25, 0.25] in the new test, the corrected one recovers it
+- select_lr.py generalised with --param (used for fl.mu)
+- grids week06_select_fedprox (30), week06_scaffold_seeds_a (45), week06_scaffold_seeds_b (30); launcher 12 for tag v0.4-step33; 34 tests pass

@@ -2,6 +2,12 @@
 
 Newest entry first.
 
+## 2026-10-09 (Step 3.3 preparation)
+
+- Fix: SCAFFOLD control variates now use the momentum-correct normaliser lr S(K, beta) and count applied steps (D38). Two tests added, 34 pass.
+- `select_lr.py --param` selects any dotted hyperparameter (fl.mu).
+- Grids `week06_select_fedprox`, `week06_scaffold_seeds_a`, `week06_scaffold_seeds_b`; launcher `12-fedprox-select-scaffold-a` for tag `v0.4-step33`.
+
 ## 2026-10-08 (patient-level extension, Step 3.2)
 
 - 10 finished, 45 runs, 4.97 GPU hours. Tables `week04_privacy_unit_central.{csv,md}`, `week04_fed_all.{csv,md}`.

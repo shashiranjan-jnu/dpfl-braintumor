@@ -94,6 +94,19 @@ def _sample(idx, units, cfg: Cfg, gen, dev):
     return torch.cat([units[i] for i in keep]), [len(units[i]) for i in keep]
 
 
+def momentum_step_sum(steps: int, beta: float) -> float:
+    """Total displacement, in units of lr * g, of `steps` heavy-ball SGD steps on a constant gradient g.
+
+    torch SGD (dampening 0, no Nesterov) keeps buf_k = beta * buf_{k-1} + g and steps
+    p -= lr * buf_k, so buf_k = g (1 - beta^k) / (1 - beta) and the displacement after
+    K steps is lr * g * sum_{k=1..K} (1 - beta^k) / (1 - beta). With beta = 0 this is K.
+    The momentum buffer starts at zero every round because the optimiser is rebuilt.
+    """
+    if beta == 0:
+        return float(steps)
+    return float(sum((1 - beta ** k) / (1 - beta) for k in range(1, steps + 1)))
+
+
 def local_update(model, gparams, x, y, idx, cfg: Cfg, gen, c_glob=None, c_loc=None, lr=None,
                  units=None):
     lr = cfg.lr if lr is None else lr
@@ -105,6 +118,7 @@ def local_update(model, gparams, x, y, idx, cfg: Cfg, gen, c_glob=None, c_loc=No
     n = len(idx) if units is None else len(units)
     expected = cfg.sample_rate * n      # q * n_j images, or q * U_j units at unit level
     batch_sizes, clip_frac = [], []
+    taken = 0                           # optimiser steps actually applied (non-DP skips empty batches)
     for _ in range(cfg.local_steps):
         b, sizes = _sample(idx, units, cfg, gen, x.device)
         xb, yb = x[b], y[b]
@@ -142,11 +156,17 @@ def local_update(model, gparams, x, y, idx, cfg: Cfg, gen, c_glob=None, c_loc=No
                 gk = gk + c_glob[k] - c_loc[k]
             p.grad = gk
         opt.step()
+        taken += 1
     new = _params(model)
     dc = None
     if cfg.algorithm == "scaffold":
-        # Option II of Karimireddy et al. (2020): c_i+ = c_i - c + (x - y_i) / (K * lr)
-        scale = 1.0 / (cfg.local_steps * lr)
+        # Option II of Karimireddy et al. (2020): c_i+ = c_i - c + (x - y_i) / (K * lr).
+        # K * lr is the displacement per unit gradient under plain SGD. With heavy-ball
+        # momentum the same gradient moves the weights by lr * S(K, beta) instead
+        # (S = 41.4 for K = 10, beta = 0.9), so K * lr would inflate c_i about 4.1 times
+        # (D38). S is exact for a constant gradient and equals K at beta = 0.
+        denom = lr * momentum_step_sum(taken, cfg.momentum)
+        scale = 1.0 / denom if denom > 0 else 0.0
         dc = {k: (-c_glob[k] + (gparams[k] - new[k]) * scale) for k in new}
     stats = {"mean_batch": float(np.mean(batch_sizes)) if batch_sizes else 0.0,
              "clip_frac": float(np.mean(clip_frac)) if clip_frac else float("nan")}

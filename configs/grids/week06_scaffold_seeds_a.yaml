@@ -1,0 +1,131 @@
+name: week06_scaffold_seeds_a
+note: Step 3.3 (RQ2, D38). Five partitions at no DP, epsilon 8 and epsilon 3; epsilon
+  1 is omitted because FedAvg collapses there. lr per configuration is the FedAvg
+  selection (week03_lr_selection.csv). SCAFFOLD option II with the momentum-corrected
+  normaliser (D38), no extra hyperparameter.
+presets:
+- data:
+    scenario: dir0.1_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: dir0.1_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: dir0.1_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: dir0.5_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: dir0.5_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: dir0.5_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: dir5.0_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: dir5.0_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: dir5.0_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: iid_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: iid_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: iid_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: natural3
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: natural3
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+- data:
+    scenario: natural3
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+axes:
+  train.seed:
+  - 1
+  - 2
+  - 3

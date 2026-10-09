@@ -1,0 +1,133 @@
+name: week06_select_fedprox
+note: Step 3.3 (RQ2, D38). Five partitions at no DP, epsilon 8 and epsilon 3; epsilon
+  1 is omitted because FedAvg collapses there. lr per configuration is the FedAvg
+  selection (week03_lr_selection.csv). FedProx mu chosen from {0.01, 0.1} by validation
+  loss at seed 0 (scripts/select_lr.py --param fl.mu).
+fixed:
+  train:
+    seed: 0
+presets:
+- data:
+    scenario: dir0.1_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: dir0.1_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: dir0.1_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: dir0.5_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: dir0.5_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: dir0.5_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: dir5.0_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: dir5.0_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: dir5.0_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: iid_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: iid_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: iid_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: natural3
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: natural3
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: fedprox
+- data:
+    scenario: natural3
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: fedprox
+axes:
+  fl.mu:
+  - 0.01
+  - 0.1
