@@ -1,0 +1,13 @@
+13:52:18 run db396b30286a mode federated algo fedprox clients [297, 221, 265, 247, 240, 374, 246, 211, 311, 198] steps/client 1000 sigma 4.8324 eps 2.995 unit record m_max 10
+13:52:26 round   1 val_loss 1.5375 val_acc 0.3175 bal_acc 0.3669 batch 26.4 8.41s
+13:53:42 round  10 val_loss 1.0706 val_acc 0.5640 bal_acc 0.4119 batch 26.0 8.28s
+13:55:05 round  20 val_loss 0.9765 val_acc 0.6445 bal_acc 0.5146 batch 25.7 8.26s
+13:56:28 round  30 val_loss 1.1819 val_acc 0.6374 bal_acc 0.5006 batch 25.9 8.27s
+13:57:52 round  40 val_loss 1.2029 val_acc 0.6588 bal_acc 0.5408 batch 26.4 8.43s
+13:59:15 round  50 val_loss 1.2090 val_acc 0.6730 bal_acc 0.5720 batch 25.7 8.28s
+14:00:40 round  60 val_loss 1.1515 val_acc 0.7109 bal_acc 0.6188 batch 27.1 8.56s
+14:02:03 round  70 val_loss 1.1045 val_acc 0.7180 bal_acc 0.6305 batch 26.3 8.4s
+14:03:27 round  80 val_loss 1.1070 val_acc 0.7204 bal_acc 0.6293 batch 26.7 8.46s
+14:04:50 round  90 val_loss 1.0992 val_acc 0.7180 bal_acc 0.6264 batch 25.8 8.23s
+14:06:13 round 100 val_loss 1.1003 val_acc 0.7204 bal_acc 0.6304 batch 26.1 8.31s
+14:06:14 done db396b30286a best_round 19 test_acc 0.6150 bal_acc 0.5348 ece 0.1250 train_acc 0.6161 836.8s
