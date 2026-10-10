@@ -1,0 +1,10 @@
+# Step 3.4 learning-rate sensitivity at epsilon 8 (D39). The client-count sweep reused lr 0.003
+# from dir0.5_k10, but natural3 (also K = 3, large clients) selected lr 0.01 at epsilon 8 and
+# reached 0.808 against 0.717 for dir0.5_k3. This grid reruns every K at epsilon 8 with lr 0.01,
+# so the epsilon 8 trend in K can be reported under both learning rates.
+name: week05_client_count_lr
+presets:
+  - {dp: {enabled: true, target_epsilon: 8.0}, optim: {lr: 0.01}}
+axes:
+  data.scenario: [dir0.5_k3, dir0.5_k5, dir0.5_k10, dir0.5_k15]
+  train.seed: [1, 2, 3, 4, 5]

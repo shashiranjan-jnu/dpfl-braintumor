@@ -2,6 +2,11 @@
 
 Newest entry first.
 
+## 2026-10-10 (Step 3.4 results)
+
+- 11 finished, 45 runs, 4.16 GPU hours. Tables `week05_client_count_all.csv`, `week05_h5_mechanism.csv`; `scripts/plot_h5.py`, `figures/fig_h5_noise.{png,pdf}`.
+- Grid `week05_client_count_lr` (20 runs) added to launcher 12, which now holds 95 runs, about 9.4 GPU hours (D39).
+
 ## 2026-10-09 (Step 3.3 preparation)
 
 - Fix: SCAFFOLD control variates now use the momentum-correct normaliser lr S(K, beta) and count applied steps (D38). Two tests added, 34 pass.

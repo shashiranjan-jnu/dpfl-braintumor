@@ -91,3 +91,9 @@
 - SCAFFOLD normaliser corrected for momentum (D38); old formula gave c_i = [-3.10, 1.03, 1.03, 1.03] against the true constant gradient [-0.75, 0.25, 0.25, 0.25] in the new test, the corrected one recovers it
 - select_lr.py generalised with --param (used for fl.mu)
 - grids week06_select_fedprox (30), week06_scaffold_seeds_a (45), week06_scaffold_seeds_b (30); launcher 12 for tag v0.4-step33; 34 tests pass
+
+## 2026-10-10 Step 3.4 client-count sweep (11-client-count, code v0.3.2-client-count, 4.16 GPU hours, 45 of 45 runs, none diverged)
+- dir0.5 with K = 3, 5, 10, 15 (K = 10 from Step 3.1), balanced accuracy over 5 seeds: no DP 0.868, 0.906, 0.878, 0.903 (no trend, slope per ln K +0.012, p 0.08); epsilon 8 0.717, 0.735, 0.718, 0.696 (slope -0.014, p 0.40); epsilon 3 0.719, 0.708, 0.626, 0.558 (slope -0.10 per ln K, p < 0.0001)
+- meningioma sensitivity at epsilon 3 falls 0.315, 0.171, 0.067, 0.030 as K grows
+- with size-weighted FedAvg the aggregated noise std is sigma C sqrt(K) / (q N) for any client sizes; plotted against it, the epsilon 8 and epsilon 3 points form one curve that is flat to about 0.04 and falls after, figures/fig_h5_noise.{png,pdf}, table results/tables/week05_h5_mechanism.csv
+- at epsilon 3 natural3 (0.714) equals dir0.5_k3 (0.719) under the same lr, so client count explains natural3's advantage there; at epsilon 8 natural3 (0.808, lr 0.01) is far above dir0.5_k3 (0.717, lr 0.003), which is either the lr or the source structure, hence the lr 0.01 check in launcher 12 (D39)
