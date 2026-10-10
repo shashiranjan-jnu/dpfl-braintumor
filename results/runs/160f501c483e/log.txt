@@ -1,0 +1,13 @@
+12:45:03 run 160f501c483e mode federated algo fedprox clients [68, 68, 48, 23, 543, 288, 42, 265, 119, 1146] steps/client 1000 sigma 4.8324 eps 2.995 unit record m_max 6
+12:45:14 round   1 val_loss 1.5926 val_acc 0.3009 bal_acc 0.3615 batch 26.3 10.05s
+12:46:37 round  10 val_loss 1.2116 val_acc 0.5047 bal_acc 0.3435 batch 26.4 9.25s
+12:48:09 round  20 val_loss 1.0725 val_acc 0.6445 bal_acc 0.5110 batch 26.4 9.19s
+12:49:41 round  30 val_loss 1.1964 val_acc 0.6351 bal_acc 0.5010 batch 25.8 9.14s
+12:51:13 round  40 val_loss 1.1282 val_acc 0.6398 bal_acc 0.5356 batch 26.4 9.25s
+12:52:47 round  50 val_loss 1.0801 val_acc 0.6848 bal_acc 0.5846 batch 26.2 9.35s
+12:54:18 round  60 val_loss 1.1190 val_acc 0.6919 bal_acc 0.6076 batch 25.8 9.1s
+12:55:51 round  70 val_loss 1.0898 val_acc 0.7109 bal_acc 0.6377 batch 26.3 9.27s
+12:57:25 round  80 val_loss 1.0162 val_acc 0.7251 bal_acc 0.6507 batch 26.7 9.4s
+12:58:57 round  90 val_loss 1.0688 val_acc 0.7109 bal_acc 0.6338 batch 25.6 9.28s
+13:00:30 round 100 val_loss 1.0561 val_acc 0.7109 bal_acc 0.6338 batch 26.4 9.28s
+13:00:31 done 160f501c483e best_round 19 test_acc 0.6002 bal_acc 0.5267 ece 0.1517 train_acc 0.5992 928.4s
