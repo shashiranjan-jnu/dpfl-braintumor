@@ -1,0 +1,13 @@
+18:57:24 run 8dc8a5a710ed mode federated algo scaffold clients [2029, 351, 230] steps/client 1000 sigma 4.8324 eps 2.995 unit record m_max 2
+18:57:32 round   1 val_loss 1.3027 val_acc 0.4408 bal_acc 0.3320 batch 86.2 7.36s
+18:58:40 round  10 val_loss 2.7104 val_acc 0.1611 bal_acc 0.2644 batch 87.2 7.44s
+18:59:54 round  20 val_loss 2.0653 val_acc 0.2654 bal_acc 0.3355 batch 86.4 7.36s
+19:01:08 round  30 val_loss 1.7607 val_acc 0.3531 bal_acc 0.4190 batch 84.3 7.23s
+19:02:22 round  40 val_loss 1.5548 val_acc 0.3768 bal_acc 0.4117 batch 85.8 7.35s
+19:03:36 round  50 val_loss 1.7038 val_acc 0.3934 bal_acc 0.4410 batch 87.4 7.45s
+19:04:50 round  60 val_loss 1.8377 val_acc 0.3578 bal_acc 0.4190 batch 83.6 7.2s
+19:06:05 round  70 val_loss 1.5572 val_acc 0.4360 bal_acc 0.4529 batch 85.6 7.29s
+19:07:20 round  80 val_loss 1.4188 val_acc 0.4716 bal_acc 0.4812 batch 83.6 7.17s
+19:08:35 round  90 val_loss 1.3934 val_acc 0.5024 bal_acc 0.5054 batch 89.5 7.61s
+19:09:48 round 100 val_loss 1.3781 val_acc 0.5047 bal_acc 0.5077 batch 84.9 7.24s
+19:09:50 done 8dc8a5a710ed best_round 1 test_acc 0.4231 bal_acc 0.3416 ece 0.0573 train_acc 0.4184 745.2s
