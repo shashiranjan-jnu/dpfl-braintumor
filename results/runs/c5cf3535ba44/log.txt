@@ -1,0 +1,13 @@
+19:33:18 run c5cf3535ba44 mode federated algo scaffold clients [2029, 351, 230] steps/client 1000 sigma 2.1793 eps 7.964 unit record m_max 2
+19:33:26 round   1 val_loss 1.4426 val_acc 0.4313 bal_acc 0.2568 batch 86.5 7.71s
+19:34:34 round  10 val_loss 1.4115 val_acc 0.4763 bal_acc 0.4070 batch 86.5 7.51s
+19:35:50 round  20 val_loss 1.1539 val_acc 0.5640 bal_acc 0.5131 batch 89.5 7.78s
+19:37:05 round  30 val_loss 1.3425 val_acc 0.5190 bal_acc 0.5187 batch 88.3 7.58s
+19:38:20 round  40 val_loss 1.6623 val_acc 0.5403 bal_acc 0.4875 batch 84.9 7.38s
+19:39:34 round  50 val_loss 2.1606 val_acc 0.4834 bal_acc 0.4648 batch 86.6 7.47s
+19:40:49 round  60 val_loss 2.4050 val_acc 0.5379 bal_acc 0.4878 batch 87.6 7.56s
+19:42:04 round  70 val_loss 2.4928 val_acc 0.5332 bal_acc 0.5002 batch 87.7 7.54s
+19:43:19 round  80 val_loss 2.5329 val_acc 0.5355 bal_acc 0.5104 batch 90.8 7.78s
+19:44:34 round  90 val_loss 2.3799 val_acc 0.5379 bal_acc 0.5121 batch 87.9 7.58s
+19:45:48 round 100 val_loss 2.3580 val_acc 0.5498 bal_acc 0.5202 batch 84.8 7.3s
+19:45:49 done c5cf3535ba44 best_round 14 test_acc 0.5707 bal_acc 0.5925 ece 0.1073 train_acc 0.5628 750.5s
