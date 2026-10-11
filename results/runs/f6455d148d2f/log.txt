@@ -1,0 +1,13 @@
+13:55:29 run f6455d148d2f mode federated algo scaffold clients [503, 247, 291, 533, 181, 82, 203, 287, 134, 149] steps/client 1000 sigma 4.8324 eps 2.995 unit record m_max 10
+13:55:38 round   1 val_loss 1.1639 val_acc 0.5284 bal_acc 0.4319 batch 25.4 8.38s
+13:56:55 round  10 val_loss 1.0079 val_acc 0.5782 bal_acc 0.4359 batch 26.4 8.66s
+13:58:20 round  20 val_loss 0.9394 val_acc 0.6991 bal_acc 0.5827 batch 26.2 8.5s
+13:59:46 round  30 val_loss 1.0774 val_acc 0.7014 bal_acc 0.5895 batch 26.8 8.78s
+14:01:13 round  40 val_loss 0.9963 val_acc 0.7204 bal_acc 0.6147 batch 25.7 8.37s
+14:02:38 round  50 val_loss 1.1135 val_acc 0.7109 bal_acc 0.6022 batch 25.9 8.49s
+14:04:04 round  60 val_loss 1.2074 val_acc 0.7227 bal_acc 0.6187 batch 26.7 8.65s
+14:05:29 round  70 val_loss 1.1538 val_acc 0.7251 bal_acc 0.6305 batch 25.1 8.3s
+14:06:56 round  80 val_loss 1.0891 val_acc 0.7370 bal_acc 0.6439 batch 26.2 8.57s
+14:08:21 round  90 val_loss 1.1104 val_acc 0.7370 bal_acc 0.6445 batch 25.6 8.43s
+14:09:47 round 100 val_loss 1.1045 val_acc 0.7393 bal_acc 0.6485 batch 25.9 8.55s
+14:09:49 done f6455d148d2f best_round 16 test_acc 0.6617 bal_acc 0.5956 ece 0.1639 train_acc 0.6582 859.2s
