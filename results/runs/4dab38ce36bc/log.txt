@@ -1,0 +1,13 @@
+19:08:47 run 4dab38ce36bc mode federated algo scaffold clients [2029, 351, 230] steps/client 1000 sigma 0.0000 eps inf unit record m_max 2
+19:08:50 round   1 val_loss 1.1125 val_acc 0.6137 bal_acc 0.4738 batch 88.8 2.98s
+19:09:17 round  10 val_loss 0.3979 val_acc 0.8483 bal_acc 0.8080 batch 89.7 3.03s
+19:09:46 round  20 val_loss 0.3057 val_acc 0.9028 bal_acc 0.8729 batch 88.2 2.97s
+19:10:16 round  30 val_loss 0.4220 val_acc 0.8507 bal_acc 0.8009 batch 86.9 2.95s
+19:10:45 round  40 val_loss 0.2786 val_acc 0.9005 bal_acc 0.8808 batch 88.4 2.99s
+19:11:15 round  50 val_loss 0.3592 val_acc 0.9100 bal_acc 0.8875 batch 89.8 3.02s
+19:11:44 round  60 val_loss 0.3736 val_acc 0.9076 bal_acc 0.8977 batch 86.6 2.92s
+19:12:14 round  70 val_loss 0.3181 val_acc 0.9313 bal_acc 0.9204 batch 84.8 2.87s
+19:12:43 round  80 val_loss 0.3120 val_acc 0.9313 bal_acc 0.9195 batch 86.7 2.97s
+19:13:14 round  90 val_loss 0.3160 val_acc 0.9336 bal_acc 0.9235 batch 86.7 3.03s
+19:13:44 round 100 val_loss 0.3192 val_acc 0.9313 bal_acc 0.9204 batch 85.4 2.94s
+19:13:45 done 4dab38ce36bc best_round 25 test_acc 0.9090 bal_acc 0.9101 ece 0.0256 train_acc 0.9521 298.2s
