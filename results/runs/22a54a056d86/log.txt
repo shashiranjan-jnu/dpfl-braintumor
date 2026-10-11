@@ -1,0 +1,13 @@
+19:07:21 run 22a54a056d86 mode federated algo scaffold clients [2029, 351, 230] steps/client 1000 sigma 0.0000 eps inf unit record m_max 2
+19:07:24 round   1 val_loss 1.4217 val_acc 0.6469 bal_acc 0.5584 batch 89.6 3.06s
+19:07:51 round  10 val_loss 0.4815 val_acc 0.8365 bal_acc 0.7905 batch 82.5 2.88s
+19:08:21 round  20 val_loss 0.6045 val_acc 0.7891 bal_acc 0.7126 batch 87.2 3.01s
+19:08:52 round  30 val_loss 0.3541 val_acc 0.8910 bal_acc 0.8678 batch 87.2 3.02s
+19:09:22 round  40 val_loss 0.3564 val_acc 0.9100 bal_acc 0.8931 batch 87.7 3.02s
+19:09:52 round  50 val_loss 0.4162 val_acc 0.8981 bal_acc 0.8750 batch 87.4 3.01s
+19:10:22 round  60 val_loss 0.4569 val_acc 0.9147 bal_acc 0.8989 batch 87.6 3.01s
+19:10:52 round  70 val_loss 0.4404 val_acc 0.9242 bal_acc 0.9148 batch 88.8 3.06s
+19:11:22 round  80 val_loss 0.4535 val_acc 0.9194 bal_acc 0.9074 batch 87.4 3.01s
+19:11:52 round  90 val_loss 0.4564 val_acc 0.9194 bal_acc 0.9091 batch 86.2 2.98s
+19:12:22 round 100 val_loss 0.4556 val_acc 0.9194 bal_acc 0.9091 batch 84.0 2.91s
+19:12:23 done 22a54a056d86 best_round 21 test_acc 0.8954 bal_acc 0.8937 ece 0.0315 train_acc 0.9280 302.1s
