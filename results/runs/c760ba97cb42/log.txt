@@ -1,0 +1,13 @@
+18:24:16 run c760ba97cb42 mode federated algo scaffold clients [2029, 351, 230] steps/client 1000 sigma 2.1793 eps 7.964 unit record m_max 2
+18:24:24 round   1 val_loss 1.3835 val_acc 0.4431 bal_acc 0.2775 batch 86.2 7.56s
+18:25:33 round  10 val_loss 0.9938 val_acc 0.6991 bal_acc 0.5938 batch 87.2 7.6s
+18:26:49 round  20 val_loss 1.0116 val_acc 0.7346 bal_acc 0.6483 batch 86.4 7.5s
+18:28:04 round  30 val_loss 1.0405 val_acc 0.7512 bal_acc 0.6700 batch 84.3 7.36s
+18:29:20 round  40 val_loss 0.8596 val_acc 0.8057 bal_acc 0.7582 batch 85.8 7.48s
+18:30:36 round  50 val_loss 0.8282 val_acc 0.8104 bal_acc 0.7637 batch 87.4 7.67s
+18:31:52 round  60 val_loss 0.8547 val_acc 0.8246 bal_acc 0.7810 batch 83.6 7.32s
+18:33:08 round  70 val_loss 0.8466 val_acc 0.8199 bal_acc 0.7770 batch 85.6 7.44s
+18:34:25 round  80 val_loss 0.8404 val_acc 0.8223 bal_acc 0.7827 batch 83.6 7.31s
+18:35:41 round  90 val_loss 0.8294 val_acc 0.8246 bal_acc 0.7858 batch 89.5 7.75s
+18:36:56 round 100 val_loss 0.8319 val_acc 0.8246 bal_acc 0.7858 batch 84.9 7.4s
+18:36:58 done c760ba97cb42 best_round 34 test_acc 0.8512 bal_acc 0.8385 ece 0.0868 train_acc 0.8065 761.5s
