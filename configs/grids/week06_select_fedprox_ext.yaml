@@ -1,5 +1,5 @@
 name: week06_select_fedprox_ext
-note: Proposed, not yet run (D40). FedProx with mu 0.01 and 0.1 was indistinguishable
+note: Adopted 11 Oct (D40). FedProx with mu 0.01 and 0.1 was indistinguishable
   from FedAvg at seed 0 (max |delta val loss| 0.010). Stronger proximity mu 1 and
   10 at seed 0 decides whether FedProx seeds are worth running.
 fixed:
