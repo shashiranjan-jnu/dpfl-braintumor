@@ -1,0 +1,13 @@
+16:01:12 run aff2830b9ea4 mode federated algo scaffold clients [297, 221, 265, 247, 240, 374, 246, 211, 311, 198] steps/client 1000 sigma 2.1793 eps 7.964 unit record m_max 10
+16:01:21 round   1 val_loss 1.1723 val_acc 0.5118 bal_acc 0.4041 batch 25.3 8.22s
+16:02:36 round  10 val_loss 0.9768 val_acc 0.6137 bal_acc 0.4770 batch 26.4 8.42s
+16:04:00 round  20 val_loss 0.9022 val_acc 0.7370 bal_acc 0.6383 batch 25.6 8.24s
+16:05:24 round  30 val_loss 0.8887 val_acc 0.7512 bal_acc 0.6663 batch 26.5 8.49s
+16:06:48 round  40 val_loss 0.8551 val_acc 0.7607 bal_acc 0.6790 batch 25.6 8.3s
+16:08:13 round  50 val_loss 0.8613 val_acc 0.7607 bal_acc 0.6838 batch 26.1 8.41s
+16:09:37 round  60 val_loss 0.8840 val_acc 0.7607 bal_acc 0.6833 batch 27.0 8.57s
+16:11:00 round  70 val_loss 0.8853 val_acc 0.7630 bal_acc 0.6873 batch 25.0 8.07s
+16:12:25 round  80 val_loss 0.8577 val_acc 0.7678 bal_acc 0.6951 batch 25.8 8.27s
+16:13:49 round  90 val_loss 0.8626 val_acc 0.7678 bal_acc 0.6951 batch 25.5 8.24s
+16:15:14 round 100 val_loss 0.8608 val_acc 0.7678 bal_acc 0.6951 batch 26.3 8.43s
+16:15:15 done aff2830b9ea4 best_round 52 test_acc 0.7245 bal_acc 0.6914 ece 0.2018 train_acc 0.7398 842.3s
