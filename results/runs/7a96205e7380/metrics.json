@@ -1,0 +1,1018 @@
+{
+  "run_id": "7a96205e7380",
+  "best_round": 44,
+  "diverged": false,
+  "train_acc_best": 0.960919540229885,
+  "test_best": {
+    "n": 813,
+    "accuracy": 0.9040590405904059,
+    "balanced_accuracy": 0.909518860838957,
+    "macro_f1": 0.9047314141007828,
+    "nll": 0.27155035734176636,
+    "brier": 0.1419269442421562,
+    "ece": 0.03946869179771392,
+    "macro_auc_ovr": 0.9855377694272663,
+    "sens_glioma": 0.8904109589041096,
+    "spec_glioma": 0.9577735124760077,
+    "sens_meningioma": 0.8085106382978723,
+    "spec_meningioma": 0.9424,
+    "sens_notumor": 0.968,
+    "spec_notumor": 0.9825581395348837,
+    "sens_pituitary": 0.9711538461538461,
+    "spec_pituitary": 0.9867768595041322,
+    "tumour_missed_as_normal": 0.01744186046511628
+  },
+  "test_last": {
+    "n": 813,
+    "accuracy": 0.8966789667896679,
+    "balanced_accuracy": 0.8978886061475686,
+    "macro_f1": 0.8949464251459041,
+    "nll": 0.33300653100013733,
+    "brier": 0.15711759709919498,
+    "ece": 0.05946554637629753,
+    "macro_auc_ovr": 0.9861573848060439,
+    "sens_glioma": 0.9246575342465754,
+    "spec_glioma": 0.9251439539347409,
+    "sens_meningioma": 0.7021276595744681,
+    "spec_meningioma": 0.9648,
+    "sens_notumor": 0.984,
+    "spec_notumor": 0.9811046511627907,
+    "sens_pituitary": 0.9807692307692307,
+    "spec_pituitary": 0.9834710743801653,
+    "tumour_missed_as_normal": 0.0188953488372093
+  },
+  "test_best_by_source": {
+    "br35h": {
+      "n": 66,
+      "accuracy": 1.0,
+      "balanced_accuracy": 1.0,
+      "macro_f1": 0.25,
+      "nll": 0.0037763305008411407,
+      "brier": 0.0002626831980367378,
+      "ece": 0.003694872964512218,
+      "macro_auc_ovr": null,
+      "sens_glioma": null,
+      "spec_glioma": 1.0,
+      "sens_meningioma": null,
+      "spec_meningioma": 1.0,
+      "sens_notumor": 1.0,
+      "spec_notumor": null,
+      "sens_pituitary": null,
+      "spec_pituitary": 1.0,
+      "tumour_missed_as_normal": null
+    },
+    "figshare": {
+      "n": 645,
+      "accuracy": 0.9224806201550387,
+      "balanced_accuracy": 0.9162035269878942,
+      "macro_f1": 0.6872421895504803,
+      "nll": 0.194411963224411,
+      "brier": 0.114302744447128,
+      "ece": 0.02900393073873006,
+      "macro_auc_ovr": null,
+      "sens_glioma": 0.931899641577061,
+      "spec_glioma": 0.9480874316939891,
+      "sens_meningioma": 0.8414634146341463,
+      "spec_meningioma": 0.9501039501039501,
+      "sens_notumor": null,
+      "spec_notumor": 1.0,
+      "sens_pituitary": 0.9752475247524752,
+      "spec_pituitary": 0.9841986455981941,
+      "tumour_missed_as_normal": 0.0
+    },
+    "sartaj": {
+      "n": 102,
+      "accuracy": 0.7254901960784313,
+      "balanced_accuracy": 0.5872175141242938,
+      "macro_f1": 0.5665873015873016,
+      "nll": 0.9326028823852539,
+      "brier": 0.4082744942098532,
+      "ece": 0.17172676704677883,
+      "macro_auc_ovr": 0.88491577799674,
+      "sens_glioma": 0.0,
+      "spec_glioma": 0.9662921348314607,
+      "sens_meningioma": 0.5833333333333334,
+      "spec_meningioma": 0.8461538461538461,
+      "sens_notumor": 0.9322033898305084,
+      "spec_notumor": 0.7209302325581395,
+      "sens_pituitary": 0.8333333333333334,
+      "spec_pituitary": 0.9895833333333334,
+      "tumour_missed_as_normal": 0.27906976744186046
+    }
+  },
+  "privacy": {
+    "enabled": false,
+    "epsilon": "inf",
+    "delta": 1e-05,
+    "sigma": 0.0,
+    "q": 0.1,
+    "steps": 1000,
+    "clip_norm": 1.0,
+    "unit": "record",
+    "units_max_clients": 10,
+    "n_units": null
+  },
+  "history": [
+    {
+      "round": 1,
+      "val_loss": 1.2589085102081299,
+      "val_acc": 0.5023696682464455,
+      "val_bal_acc": 0.35147392290249435,
+      "mean_batch": 25.959999999999997,
+      "clip_frac": null,
+      "secs": 3.7
+    },
+    {
+      "round": 2,
+      "val_loss": 0.7064802050590515,
+      "val_acc": 0.7417061611374408,
+      "val_bal_acc": 0.6646227009322246,
+      "mean_batch": 25.79,
+      "clip_frac": null,
+      "secs": 3.71
+    },
+    {
+      "round": 3,
+      "val_loss": 0.6880717277526855,
+      "val_acc": 0.7440758293838863,
+      "val_bal_acc": 0.6654195011337869,
+      "mean_batch": 26.470000000000006,
+      "clip_frac": null,
+      "secs": 3.77
+    },
+    {
+      "round": 4,
+      "val_loss": 0.5062595009803772,
+      "val_acc": 0.8056872037914692,
+      "val_bal_acc": 0.7644053917863441,
+      "mean_batch": 26.660000000000004,
+      "clip_frac": null,
+      "secs": 3.78
+    },
+    {
+      "round": 5,
+      "val_loss": 0.5443618297576904,
+      "val_acc": 0.7748815165876777,
+      "val_bal_acc": 0.7120685311161501,
+      "mean_batch": 25.669999999999998,
+      "clip_frac": null,
+      "secs": 3.72
+    },
+    {
+      "round": 6,
+      "val_loss": 0.4294566512107849,
+      "val_acc": 0.8270142180094787,
+      "val_bal_acc": 0.7870653817082388,
+      "mean_batch": 27.409999999999997,
+      "clip_frac": null,
+      "secs": 3.86
+    },
+    {
+      "round": 7,
+      "val_loss": 0.48388248682022095,
+      "val_acc": 0.8056872037914692,
+      "val_bal_acc": 0.7522014361300076,
+      "mean_batch": 25.439999999999998,
+      "clip_frac": null,
+      "secs": 3.69
+    },
+    {
+      "round": 8,
+      "val_loss": 0.49638432264328003,
+      "val_acc": 0.7867298578199052,
+      "val_bal_acc": 0.7192523305618543,
+      "mean_batch": 26.320000000000004,
+      "clip_frac": null,
+      "secs": 3.77
+    },
+    {
+      "round": 9,
+      "val_loss": 0.38684317469596863,
+      "val_acc": 0.8341232227488151,
+      "val_bal_acc": 0.8049697656840514,
+      "mean_batch": 26.540000000000003,
+      "clip_frac": null,
+      "secs": 3.78
+    },
+    {
+      "round": 10,
+      "val_loss": 0.456760972738266,
+      "val_acc": 0.8293838862559242,
+      "val_bal_acc": 0.7961608717561098,
+      "mean_batch": 26.54,
+      "clip_frac": null,
+      "secs": 3.78
+    },
+    {
+      "round": 11,
+      "val_loss": 0.350914865732193,
+      "val_acc": 0.8696682464454977,
+      "val_bal_acc": 0.8411533131771227,
+      "mean_batch": 26.73,
+      "clip_frac": null,
+      "secs": 3.81
+    },
+    {
+      "round": 12,
+      "val_loss": 0.3410608470439911,
+      "val_acc": 0.8696682464454977,
+      "val_bal_acc": 0.8453987150415722,
+      "mean_batch": 26.43,
+      "clip_frac": null,
+      "secs": 3.75
+    },
+    {
+      "round": 13,
+      "val_loss": 0.39029914140701294,
+      "val_acc": 0.8459715639810427,
+      "val_bal_acc": 0.801984126984127,
+      "mean_batch": 26.55,
+      "clip_frac": null,
+      "secs": 3.79
+    },
+    {
+      "round": 14,
+      "val_loss": 0.3401215076446533,
+      "val_acc": 0.8696682464454977,
+      "val_bal_acc": 0.8522801713277903,
+      "mean_batch": 25.93,
+      "clip_frac": null,
+      "secs": 3.73
+    },
+    {
+      "round": 15,
+      "val_loss": 0.3483687937259674,
+      "val_acc": 0.8672985781990521,
+      "val_bal_acc": 0.8435657596371882,
+      "mean_batch": 26.129999999999995,
+      "clip_frac": null,
+      "secs": 3.74
+    },
+    {
+      "round": 16,
+      "val_loss": 0.3967133164405823,
+      "val_acc": 0.8459715639810427,
+      "val_bal_acc": 0.8071176618795667,
+      "mean_batch": 25.18,
+      "clip_frac": null,
+      "secs": 3.64
+    },
+    {
+      "round": 17,
+      "val_loss": 0.3958628177642822,
+      "val_acc": 0.8459715639810427,
+      "val_bal_acc": 0.81067649281935,
+      "mean_batch": 26.85,
+      "clip_frac": null,
+      "secs": 3.78
+    },
+    {
+      "round": 18,
+      "val_loss": 0.31321442127227783,
+      "val_acc": 0.9028436018957346,
+      "val_bal_acc": 0.8849993701184178,
+      "mean_batch": 26.15,
+      "clip_frac": null,
+      "secs": 3.74
+    },
+    {
+      "round": 19,
+      "val_loss": 0.3427816331386566,
+      "val_acc": 0.8815165876777251,
+      "val_bal_acc": 0.8635487528344672,
+      "mean_batch": 25.6,
+      "clip_frac": null,
+      "secs": 3.71
+    },
+    {
+      "round": 20,
+      "val_loss": 0.3060011565685272,
+      "val_acc": 0.8909952606635071,
+      "val_bal_acc": 0.8715765936004031,
+      "mean_batch": 26.139999999999997,
+      "clip_frac": null,
+      "secs": 3.74
+    },
+    {
+      "round": 21,
+      "val_loss": 0.30559203028678894,
+      "val_acc": 0.9028436018957346,
+      "val_bal_acc": 0.8883944318468128,
+      "mean_batch": 25.99,
+      "clip_frac": null,
+      "secs": 3.74
+    },
+    {
+      "round": 22,
+      "val_loss": 0.38235926628112793,
+      "val_acc": 0.8696682464454977,
+      "val_bal_acc": 0.8395880574452003,
+      "mean_batch": 26.1,
+      "clip_frac": null,
+      "secs": 3.75
+    },
+    {
+      "round": 23,
+      "val_loss": 0.2813255190849304,
+      "val_acc": 0.9004739336492891,
+      "val_bal_acc": 0.8935153691106072,
+      "mean_batch": 25.56,
+      "clip_frac": null,
+      "secs": 3.68
+    },
+    {
+      "round": 24,
+      "val_loss": 0.30532121658325195,
+      "val_acc": 0.9028436018957346,
+      "val_bal_acc": 0.8792391030486268,
+      "mean_batch": 25.589999999999996,
+      "clip_frac": null,
+      "secs": 3.71
+    },
+    {
+      "round": 25,
+      "val_loss": 0.32648971676826477,
+      "val_acc": 0.9028436018957346,
+      "val_bal_acc": 0.8868606701940035,
+      "mean_batch": 26.73,
+      "clip_frac": null,
+      "secs": 3.81
+    },
+    {
+      "round": 26,
+      "val_loss": 0.3035659193992615,
+      "val_acc": 0.909952606635071,
+      "val_bal_acc": 0.8940696649029982,
+      "mean_batch": 25.830000000000002,
+      "clip_frac": null,
+      "secs": 3.72
+    },
+    {
+      "round": 27,
+      "val_loss": 0.27817362546920776,
+      "val_acc": 0.909952606635071,
+      "val_bal_acc": 0.9013951877047115,
+      "mean_batch": 25.390000000000004,
+      "clip_frac": null,
+      "secs": 3.69
+    },
+    {
+      "round": 28,
+      "val_loss": 0.33277881145477295,
+      "val_acc": 0.9052132701421801,
+      "val_bal_acc": 0.8872700932224742,
+      "mean_batch": 26.169999999999995,
+      "clip_frac": null,
+      "secs": 3.76
+    },
+    {
+      "round": 29,
+      "val_loss": 0.3528412878513336,
+      "val_acc": 0.8909952606635071,
+      "val_bal_acc": 0.867334341143865,
+      "mean_batch": 25.759999999999998,
+      "clip_frac": null,
+      "secs": 3.71
+    },
+    {
+      "round": 30,
+      "val_loss": 0.3252204656600952,
+      "val_acc": 0.9052132701421801,
+      "val_bal_acc": 0.8878054925673974,
+      "mean_batch": 26.040000000000003,
+      "clip_frac": null,
+      "secs": 3.74
+    },
+    {
+      "round": 31,
+      "val_loss": 0.3017509877681732,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.74,
+      "clip_frac": null,
+      "secs": 3.79
+    },
+    {
+      "round": 32,
+      "val_loss": 0.27459171414375305,
+      "val_acc": 0.9123222748815166,
+      "val_bal_acc": 0.9022486772486773,
+      "mean_batch": 25.909999999999997,
+      "clip_frac": null,
+      "secs": 3.74
+    },
+    {
+      "round": 33,
+      "val_loss": 0.2920444905757904,
+      "val_acc": 0.9218009478672986,
+      "val_bal_acc": 0.9078042328042328,
+      "mean_batch": 26.55,
+      "clip_frac": null,
+      "secs": 3.79
+    },
+    {
+      "round": 34,
+      "val_loss": 0.3683081865310669,
+      "val_acc": 0.8909952606635071,
+      "val_bal_acc": 0.8708931720836482,
+      "mean_batch": 25.68,
+      "clip_frac": null,
+      "secs": 3.7
+    },
+    {
+      "round": 35,
+      "val_loss": 0.3041067123413086,
+      "val_acc": 0.9146919431279621,
+      "val_bal_acc": 0.8990803728898966,
+      "mean_batch": 25.71,
+      "clip_frac": null,
+      "secs": 3.71
+    },
+    {
+      "round": 36,
+      "val_loss": 0.3330586552619934,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.9010959939531369,
+      "mean_batch": 25.369999999999997,
+      "clip_frac": null,
+      "secs": 3.69
+    },
+    {
+      "round": 37,
+      "val_loss": 0.3138563930988312,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 27.060000000000002,
+      "clip_frac": null,
+      "secs": 3.84
+    },
+    {
+      "round": 38,
+      "val_loss": 0.30311357975006104,
+      "val_acc": 0.9218009478672986,
+      "val_bal_acc": 0.9078042328042328,
+      "mean_batch": 26.49,
+      "clip_frac": null,
+      "secs": 3.79
+    },
+    {
+      "round": 39,
+      "val_loss": 0.3606262803077698,
+      "val_acc": 0.9123222748815166,
+      "val_bal_acc": 0.8951121189216427,
+      "mean_batch": 26.869999999999997,
+      "clip_frac": null,
+      "secs": 3.84
+    },
+    {
+      "round": 40,
+      "val_loss": 0.3602618873119354,
+      "val_acc": 0.8981042654028436,
+      "val_bal_acc": 0.8817586293776769,
+      "mean_batch": 25.53,
+      "clip_frac": null,
+      "secs": 3.7
+    },
+    {
+      "round": 41,
+      "val_loss": 0.35758715867996216,
+      "val_acc": 0.8981042654028436,
+      "val_bal_acc": 0.8814121945074326,
+      "mean_batch": 26.840000000000003,
+      "clip_frac": null,
+      "secs": 3.82
+    },
+    {
+      "round": 42,
+      "val_loss": 0.2831582725048065,
+      "val_acc": 0.919431279620853,
+      "val_bal_acc": 0.9092750062988159,
+      "mean_batch": 27.119999999999997,
+      "clip_frac": null,
+      "secs": 3.85
+    },
+    {
+      "round": 43,
+      "val_loss": 0.27152854204177856,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.9067239858906526,
+      "mean_batch": 24.989999999999995,
+      "clip_frac": null,
+      "secs": 3.64
+    },
+    {
+      "round": 44,
+      "val_loss": 0.27011823654174805,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.9066326530612245,
+      "mean_batch": 27.0,
+      "clip_frac": null,
+      "secs": 3.84
+    },
+    {
+      "round": 45,
+      "val_loss": 0.3218408524990082,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.8996787603930462,
+      "mean_batch": 26.02,
+      "clip_frac": null,
+      "secs": 3.73
+    },
+    {
+      "round": 46,
+      "val_loss": 0.36206769943237305,
+      "val_acc": 0.909952606635071,
+      "val_bal_acc": 0.8909549004787101,
+      "mean_batch": 26.55,
+      "clip_frac": null,
+      "secs": 3.78
+    },
+    {
+      "round": 47,
+      "val_loss": 0.3503780961036682,
+      "val_acc": 0.909952606635071,
+      "val_bal_acc": 0.8918367346938776,
+      "mean_batch": 25.690000000000005,
+      "clip_frac": null,
+      "secs": 3.71
+    },
+    {
+      "round": 48,
+      "val_loss": 0.3228257894515991,
+      "val_acc": 0.9146919431279621,
+      "val_bal_acc": 0.8971277399848829,
+      "mean_batch": 25.99,
+      "clip_frac": null,
+      "secs": 3.75
+    },
+    {
+      "round": 49,
+      "val_loss": 0.2811533510684967,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.9072593852355757,
+      "mean_batch": 26.49,
+      "clip_frac": null,
+      "secs": 3.79
+    },
+    {
+      "round": 50,
+      "val_loss": 0.37667399644851685,
+      "val_acc": 0.9004739336492891,
+      "val_bal_acc": 0.8812862181909802,
+      "mean_batch": 26.189999999999998,
+      "clip_frac": null,
+      "secs": 3.77
+    },
+    {
+      "round": 51,
+      "val_loss": 0.3339482843875885,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.73,
+      "clip_frac": null,
+      "secs": 3.81
+    },
+    {
+      "round": 52,
+      "val_loss": 0.3306178152561188,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.9034202569916856,
+      "mean_batch": 25.53,
+      "clip_frac": null,
+      "secs": 3.69
+    },
+    {
+      "round": 53,
+      "val_loss": 0.308363139629364,
+      "val_acc": 0.9218009478672986,
+      "val_bal_acc": 0.9078042328042328,
+      "mean_batch": 26.580000000000002,
+      "clip_frac": null,
+      "secs": 3.81
+    },
+    {
+      "round": 54,
+      "val_loss": 0.34522300958633423,
+      "val_acc": 0.9146919431279621,
+      "val_bal_acc": 0.8985449735449735,
+      "mean_batch": 26.01,
+      "clip_frac": null,
+      "secs": 3.75
+    },
+    {
+      "round": 55,
+      "val_loss": 0.3456104099750519,
+      "val_acc": 0.9146919431279621,
+      "val_bal_acc": 0.8980095742000505,
+      "mean_batch": 26.26,
+      "clip_frac": null,
+      "secs": 3.75
+    },
+    {
+      "round": 56,
+      "val_loss": 0.3366934657096863,
+      "val_acc": 0.9123222748815166,
+      "val_bal_acc": 0.8959939531368103,
+      "mean_batch": 26.24,
+      "clip_frac": null,
+      "secs": 3.79
+    },
+    {
+      "round": 57,
+      "val_loss": 0.3341238498687744,
+      "val_acc": 0.9123222748815166,
+      "val_bal_acc": 0.8959939531368103,
+      "mean_batch": 25.82,
+      "clip_frac": null,
+      "secs": 3.73
+    },
+    {
+      "round": 58,
+      "val_loss": 0.34420323371887207,
+      "val_acc": 0.9146919431279621,
+      "val_bal_acc": 0.8985449735449735,
+      "mean_batch": 26.839999999999996,
+      "clip_frac": null,
+      "secs": 3.82
+    },
+    {
+      "round": 59,
+      "val_loss": 0.37120893597602844,
+      "val_acc": 0.9052132701421801,
+      "val_bal_acc": 0.8861992945326278,
+      "mean_batch": 25.75,
+      "clip_frac": null,
+      "secs": 3.72
+    },
+    {
+      "round": 60,
+      "val_loss": 0.3258950114250183,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.24,
+      "clip_frac": null,
+      "secs": 3.77
+    },
+    {
+      "round": 61,
+      "val_loss": 0.3430721163749695,
+      "val_acc": 0.9146919431279621,
+      "val_bal_acc": 0.8990803728898966,
+      "mean_batch": 26.529999999999994,
+      "clip_frac": null,
+      "secs": 3.8
+    },
+    {
+      "round": 62,
+      "val_loss": 0.3554551899433136,
+      "val_acc": 0.9123222748815166,
+      "val_bal_acc": 0.8959939531368103,
+      "mean_batch": 26.879999999999995,
+      "clip_frac": null,
+      "secs": 3.82
+    },
+    {
+      "round": 63,
+      "val_loss": 0.30867907404899597,
+      "val_acc": 0.919431279620853,
+      "val_bal_acc": 0.9075774754346183,
+      "mean_batch": 26.15,
+      "clip_frac": null,
+      "secs": 3.75
+    },
+    {
+      "round": 64,
+      "val_loss": 0.35668331384658813,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.9005605946082137,
+      "mean_batch": 26.28,
+      "clip_frac": null,
+      "secs": 3.76
+    },
+    {
+      "round": 65,
+      "val_loss": 0.31640568375587463,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.9038643235071806,
+      "mean_batch": 26.27,
+      "clip_frac": null,
+      "secs": 3.76
+    },
+    {
+      "round": 66,
+      "val_loss": 0.32179415225982666,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.9038643235071806,
+      "mean_batch": 26.35,
+      "clip_frac": null,
+      "secs": 3.77
+    },
+    {
+      "round": 67,
+      "val_loss": 0.3092544674873352,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.9038643235071806,
+      "mean_batch": 25.72,
+      "clip_frac": null,
+      "secs": 3.72
+    },
+    {
+      "round": 68,
+      "val_loss": 0.3277794420719147,
+      "val_acc": 0.9241706161137441,
+      "val_bal_acc": 0.9103552532123961,
+      "mean_batch": 26.74,
+      "clip_frac": null,
+      "secs": 3.81
+    },
+    {
+      "round": 69,
+      "val_loss": 0.33398541808128357,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 25.57,
+      "clip_frac": null,
+      "secs": 3.7
+    },
+    {
+      "round": 70,
+      "val_loss": 0.3357580006122589,
+      "val_acc": 0.919431279620853,
+      "val_bal_acc": 0.9047178130511464,
+      "mean_batch": 26.070000000000004,
+      "clip_frac": null,
+      "secs": 3.75
+    },
+    {
+      "round": 71,
+      "val_loss": 0.34463226795196533,
+      "val_acc": 0.9218009478672986,
+      "val_bal_acc": 0.9072688334593096,
+      "mean_batch": 26.4,
+      "clip_frac": null,
+      "secs": 3.78
+    },
+    {
+      "round": 72,
+      "val_loss": 0.3400786221027374,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.619999999999994,
+      "clip_frac": null,
+      "secs": 3.78
+    },
+    {
+      "round": 73,
+      "val_loss": 0.32867446541786194,
+      "val_acc": 0.919431279620853,
+      "val_bal_acc": 0.906415343915344,
+      "mean_batch": 26.49,
+      "clip_frac": null,
+      "secs": 3.76
+    },
+    {
+      "round": 74,
+      "val_loss": 0.3213076889514923,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.9038643235071806,
+      "mean_batch": 25.9,
+      "clip_frac": null,
+      "secs": 3.73
+    },
+    {
+      "round": 75,
+      "val_loss": 0.3503091037273407,
+      "val_acc": 0.9218009478672986,
+      "val_bal_acc": 0.9072688334593096,
+      "mean_batch": 25.839999999999996,
+      "clip_frac": null,
+      "secs": 3.72
+    },
+    {
+      "round": 76,
+      "val_loss": 0.3283896744251251,
+      "val_acc": 0.9218009478672986,
+      "val_bal_acc": 0.9089663643235072,
+      "mean_batch": 25.54,
+      "clip_frac": null,
+      "secs": 3.72
+    },
+    {
+      "round": 77,
+      "val_loss": 0.32300180196762085,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.9038643235071806,
+      "mean_batch": 25.53,
+      "clip_frac": null,
+      "secs": 3.69
+    },
+    {
+      "round": 78,
+      "val_loss": 0.3175275921821594,
+      "val_acc": 0.919431279620853,
+      "val_bal_acc": 0.906415343915344,
+      "mean_batch": 25.32,
+      "clip_frac": null,
+      "secs": 3.67
+    },
+    {
+      "round": 79,
+      "val_loss": 0.3259716033935547,
+      "val_acc": 0.9218009478672986,
+      "val_bal_acc": 0.9083396321491559,
+      "mean_batch": 26.02,
+      "clip_frac": null,
+      "secs": 3.75
+    },
+    {
+      "round": 80,
+      "val_loss": 0.3399943709373474,
+      "val_acc": 0.9146919431279621,
+      "val_bal_acc": 0.8996157722348198,
+      "mean_batch": 25.57,
+      "clip_frac": null,
+      "secs": 3.7
+    },
+    {
+      "round": 81,
+      "val_loss": 0.33766791224479675,
+      "val_acc": 0.9218009478672986,
+      "val_bal_acc": 0.9072688334593096,
+      "mean_batch": 26.759999999999998,
+      "clip_frac": null,
+      "secs": 3.81
+    },
+    {
+      "round": 82,
+      "val_loss": 0.34509798884391785,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.45,
+      "clip_frac": null,
+      "secs": 3.77
+    },
+    {
+      "round": 83,
+      "val_loss": 0.3390055000782013,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 25.880000000000003,
+      "clip_frac": null,
+      "secs": 3.73
+    },
+    {
+      "round": 84,
+      "val_loss": 0.33213376998901367,
+      "val_acc": 0.919431279620853,
+      "val_bal_acc": 0.9052532123960695,
+      "mean_batch": 26.110000000000003,
+      "clip_frac": null,
+      "secs": 3.74
+    },
+    {
+      "round": 85,
+      "val_loss": 0.3360902965068817,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.71,
+      "clip_frac": null,
+      "secs": 3.77
+    },
+    {
+      "round": 86,
+      "val_loss": 0.33147290349006653,
+      "val_acc": 0.919431279620853,
+      "val_bal_acc": 0.9052532123960695,
+      "mean_batch": 26.139999999999997,
+      "clip_frac": null,
+      "secs": 3.75
+    },
+    {
+      "round": 87,
+      "val_loss": 0.3357555568218231,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.7,
+      "clip_frac": null,
+      "secs": 3.79
+    },
+    {
+      "round": 88,
+      "val_loss": 0.33564162254333496,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.05,
+      "clip_frac": null,
+      "secs": 3.73
+    },
+    {
+      "round": 89,
+      "val_loss": 0.3451155424118042,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.90163139329806,
+      "mean_batch": 25.95,
+      "clip_frac": null,
+      "secs": 3.71
+    },
+    {
+      "round": 90,
+      "val_loss": 0.3379395008087158,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.169999999999998,
+      "clip_frac": null,
+      "secs": 3.75
+    },
+    {
+      "round": 91,
+      "val_loss": 0.34690946340560913,
+      "val_acc": 0.9146919431279621,
+      "val_bal_acc": 0.8990803728898966,
+      "mean_batch": 26.759999999999998,
+      "clip_frac": null,
+      "secs": 3.83
+    },
+    {
+      "round": 92,
+      "val_loss": 0.34152236580848694,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.639999999999997,
+      "clip_frac": null,
+      "secs": 3.8
+    },
+    {
+      "round": 93,
+      "val_loss": 0.3376699984073639,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.009999999999998,
+      "clip_frac": null,
+      "secs": 3.72
+    },
+    {
+      "round": 94,
+      "val_loss": 0.3358405828475952,
+      "val_acc": 0.919431279620853,
+      "val_bal_acc": 0.9052532123960695,
+      "mean_batch": 25.459999999999997,
+      "clip_frac": null,
+      "secs": 3.68
+    },
+    {
+      "round": 95,
+      "val_loss": 0.33444929122924805,
+      "val_acc": 0.919431279620853,
+      "val_bal_acc": 0.9052532123960695,
+      "mean_batch": 26.0,
+      "clip_frac": null,
+      "secs": 3.73
+    },
+    {
+      "round": 96,
+      "val_loss": 0.3348582983016968,
+      "val_acc": 0.919431279620853,
+      "val_bal_acc": 0.9052532123960695,
+      "mean_batch": 25.509999999999998,
+      "clip_frac": null,
+      "secs": 3.69
+    },
+    {
+      "round": 97,
+      "val_loss": 0.3352793753147125,
+      "val_acc": 0.919431279620853,
+      "val_bal_acc": 0.9052532123960695,
+      "mean_batch": 26.330000000000002,
+      "clip_frac": null,
+      "secs": 3.75
+    },
+    {
+      "round": 98,
+      "val_loss": 0.33756744861602783,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.450000000000006,
+      "clip_frac": null,
+      "secs": 3.78
+    },
+    {
+      "round": 99,
+      "val_loss": 0.3377908170223236,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 26.57,
+      "clip_frac": null,
+      "secs": 3.78
+    },
+    {
+      "round": 100,
+      "val_loss": 0.33778175711631775,
+      "val_acc": 0.9170616113744076,
+      "val_bal_acc": 0.902166792642983,
+      "mean_batch": 25.9,
+      "clip_frac": null,
+      "secs": 3.73
+    }
+  ],
+  "train_seconds": 377.3
+}
