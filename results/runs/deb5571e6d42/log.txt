@@ -1,0 +1,13 @@
+18:33:38 run deb5571e6d42 mode federated algo scaffold clients [2029, 351, 230] steps/client 1000 sigma 2.1793 eps 7.964 unit record m_max 2
+18:33:46 round   1 val_loss 1.3584 val_acc 0.4313 bal_acc 0.2551 batch 88.7 7.66s
+18:34:54 round  10 val_loss 1.1108 val_acc 0.7085 bal_acc 0.6060 batch 86.7 7.5s
+18:36:09 round  20 val_loss 0.7474 val_acc 0.7725 bal_acc 0.7130 batch 87.6 7.56s
+18:37:24 round  30 val_loss 0.7237 val_acc 0.7962 bal_acc 0.7473 batch 85.8 7.45s
+18:38:39 round  40 val_loss 0.6863 val_acc 0.8104 bal_acc 0.7628 batch 86.6 7.53s
+18:39:55 round  50 val_loss 0.6279 val_acc 0.8318 bal_acc 0.7972 batch 90.2 7.78s
+18:41:10 round  60 val_loss 0.6700 val_acc 0.8246 bal_acc 0.7974 batch 85.8 7.42s
+18:42:25 round  70 val_loss 0.6783 val_acc 0.8270 bal_acc 0.7965 batch 85.3 7.36s
+18:43:40 round  80 val_loss 0.6563 val_acc 0.8294 bal_acc 0.8067 batch 89.6 7.73s
+18:44:56 round  90 val_loss 0.6656 val_acc 0.8318 bal_acc 0.8064 batch 88.2 7.76s
+18:46:10 round 100 val_loss 0.6635 val_acc 0.8294 bal_acc 0.8050 batch 87.8 7.53s
+18:46:12 done deb5571e6d42 best_round 32 test_acc 0.8389 bal_acc 0.8250 ece 0.1089 train_acc 0.8061 753.3s
