@@ -87,7 +87,8 @@ def to_cfg(c: dict, sigma: float) -> Cfg:
                seed=c["train"]["seed"], model=c["model"]["name"],
                pretrained=c["model"]["pretrained"], width=c["model"].get("width", 16),
                grad_clip=c["optim"].get("grad_clip"), schedule=c["optim"].get("schedule", "none"),
-               unit_level=c["dp"].get("unit", "record") == "unit")
+               unit_level=c["dp"].get("unit", "record") == "unit",
+               scaffold_c=c["fl"].get("scaffold_c", "uniform"))
 
 
 def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, force=False) -> str:

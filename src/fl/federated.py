@@ -47,6 +47,7 @@ class Cfg:
     width: int = 16
     grad_clip: float | None = None   # global-norm clip for the non-DP path only (D28)
     unit_level: bool = False         # DP over units (patients) instead of images (D33)
+    scaffold_c: str = "uniform"      # uniform (historical runs) | size: weight control variates like the model (D40)
     schedule: str = "none"           # none | cosine, learning rate decayed across rounds
     eval_batch: int = 256
 
@@ -92,6 +93,22 @@ def _sample(idx, units, cfg: Cfg, gen, dev):
     if not keep:
         return idx[:0], []
     return torch.cat([units[i] for i in keep]), [len(units[i]) for i in keep]
+
+
+def control_weights(cfg: Cfg, size_weights: np.ndarray) -> np.ndarray:
+    """Weights for averaging SCAFFOLD control variates into the server's c (D40).
+
+    The server model is a size-weighted average, so it descends sum_j w_j f_j. The
+    server control variate must estimate the gradient of that same objective,
+    c = sum_j w_j c_j. With the original uniform average, every client is pulled
+    towards the unweighted mean gradient, which up-weights small clients. "uniform"
+    is kept only so that runs made before D40 stay reproducible.
+    """
+    if cfg.scaffold_c == "size":
+        return np.asarray(size_weights, dtype=float)
+    if cfg.scaffold_c == "uniform":
+        return np.full(len(size_weights), 1.0 / len(size_weights))
+    raise ValueError(f"scaffold_c must be uniform or size, got {cfg.scaffold_c}")
 
 
 def momentum_step_sum(steps: int, beta: float) -> float:
@@ -210,8 +227,9 @@ def train(data, clients: list[np.ndarray], cfg: Cfg, log=print, client_units=Non
             for j in range(len(clients)):
                 for k in c_loc[j]:
                     c_loc[j][k] += dcs[j][k]
+            cw = control_weights(cfg, w)
             for k in c_glob:
-                c_glob[k] += sum(dcs[j][k] for j in range(len(clients))) / len(clients)
+                c_glob[k] += sum(cw[j] * dcs[j][k] for j in range(len(clients)))
         _load(model, gparams)
         pv = predict(model, xv, cfg.eval_batch)
         rep = classification_report(pv, yv)

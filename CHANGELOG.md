@@ -2,6 +2,12 @@
 
 Newest entry first.
 
+## 2026-10-11 (Step 3.3 first results)
+
+- 12 finished, 95 runs, 9.48 GPU hours.
+- Fix: SCAFFOLD control variates can be size-weighted (`fl.scaffold_c: size`, D40); default `uniform` keeps old run ids. Test added, 35 pass.
+- Grid `week06_scaffold_size` (75 runs), launcher `13-scaffold-size` for tag `v0.4.1-scaffold-size`. Proposed grid `week06_select_fedprox_ext` (mu 1 and 10).
+
 ## 2026-10-10 (Step 3.4 results)
 
 - 11 finished, 45 runs, 4.16 GPU hours. Tables `week05_client_count_all.csv`, `week05_h5_mechanism.csv`; `scripts/plot_h5.py`, `figures/fig_h5_noise.{png,pdf}`.

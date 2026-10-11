@@ -222,3 +222,29 @@ def test_scaffold_control_variate_recovers_constant_gradient():
         # gradient of mean CE at b = 0 for label 0: softmax(0) - onehot = [0.25 - 1, .25, .25, .25]
         expect = torch.tensor([-0.75, 0.25, 0.25, 0.25])
         assert torch.allclose(dc["b"], expect, atol=1e-3), (beta, dc["b"])
+
+
+def test_scaffold_server_control_is_size_weighted(tmp_path):
+    """D40: with scaffold_c = size, c stays equal to sum_j w_j c_j, the gradient of the weighted objective."""
+    import numpy as np
+    from src.fl.federated import Cfg, control_weights
+    w = np.array([0.7, 0.2, 0.1])
+    assert np.allclose(control_weights(Cfg(scaffold_c="size"), w), w)
+    assert np.allclose(control_weights(Cfg(scaffold_c="uniform"), w), 1 / 3)
+    # invariant c = sum_j w_j c_j is preserved by the update c += sum_j w_j dc_j
+    rng = np.random.default_rng(0)
+    c_loc = [np.zeros(4) for _ in w]
+    c = np.zeros(4)
+    for _ in range(5):
+        dcs = [rng.normal(size=4) for _ in w]
+        for j in range(3):
+            c_loc[j] += dcs[j]
+        c += sum(cw * d for cw, d in zip(control_weights(Cfg(scaffold_c="size"), w), dcs))
+        assert np.allclose(c, sum(wj * cj for wj, cj in zip(w, c_loc)))
+    # end to end, and a new key gives a new run id
+    ddir = write_synthetic(str(tmp_path / "d"), n=120)
+    data = load_curated(ddir)
+    base = _cfg(fl={"algorithm": "scaffold", "rounds": 2})
+    new = _cfg(fl={"algorithm": "scaffold", "rounds": 2, "scaffold_c": "size"})
+    assert run_id(resolve(base)) != run_id(resolve(new))
+    run_one(new, ddir, str(tmp_path / "runs"), data=data, device="cpu")

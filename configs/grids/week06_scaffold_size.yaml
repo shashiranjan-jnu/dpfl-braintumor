@@ -1,0 +1,148 @@
+name: week06_scaffold_size
+note: Step 3.3 SCAFFOLD with size-weighted control variates (D40), the consistent
+  choice for size-weighted FedAvg. Supersedes week06_scaffold_seeds_a/b, which used
+  uniform control-variate averaging and are kept as an ablation. lr per configuration
+  from the FedAvg selection.
+presets:
+- data:
+    scenario: dir0.1_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: dir0.1_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: dir0.1_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: dir0.5_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: dir0.5_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: dir0.5_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: dir5.0_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: dir5.0_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: dir5.0_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: iid_k10
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: iid_k10
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: iid_k10
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: natural3
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+  optim:
+    lr: 0.003
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: natural3
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+- data:
+    scenario: natural3
+  optim:
+    lr: 0.01
+  fl:
+    algorithm: scaffold
+    scaffold_c: size
+axes:
+  train.seed:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
