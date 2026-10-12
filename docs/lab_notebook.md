@@ -141,3 +141,4 @@
 - consistency IoU central 0.700 / 0.663 / 0.485 / 0.309 / 0.235 (no DP, clip, eps 8, 3, 1); r 0.79 with accuracy
 - outside-brain chance 0.38 to 0.46, Grad-CAM outside energy at or below it; Steps 4.1 and 4.2 closed (D48)
 - 2026-10-12 NCC cross-check prepared (D49): notebook 17, CPU only, code v0.7-ncc
+- 2026-10-12 NCC check: 66 contaminated test images, mostly mirrored Br35H no-tumour; author chose the clean test set as primary, no retraining (D50, D51)
