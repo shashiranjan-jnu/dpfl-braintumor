@@ -133,3 +133,4 @@
 - probe baselines pretrained 0.871 / 0.783, random 0.846 / 0.776 (tumour Figshare vs SARTAJ / no-tumour SARTAJ vs Br35H)
 - Grad-CAM rim energy 0.17 to 0.19 against chance 0.33, outside-brain energy 0.26 to 0.36; layer-3 Grad-CAM no better
 - logits.npz and cams8.npz not pushed (.gitignore *.npz); summary cell failed on inf logits; fixes and launcher 16 in v0.6.2-audit (D47)
+- 16 first attempt stopped at the audit cell: /kaggle/working/logs did not exist (created only in launcher 15's selection cell); fixed in the notebook generator, code tag v0.6.2-audit unchanged

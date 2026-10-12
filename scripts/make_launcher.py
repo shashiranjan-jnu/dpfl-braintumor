@@ -213,6 +213,7 @@ LIRA_AUDIT = r'''
 # Audit: logits for every target and shadow, border analysis for the explanation set,
 # loss attack and probe for the new targets, probe baselines once. No training.
 AUDIT_TARGETS = OLD_AUDIT + ["week07_wn_select", "week07_wn_seeds"]
+os.makedirs("/kaggle/working/logs", exist_ok=True)
 procs = []
 for shard in (0, 1):
     env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(shard))
