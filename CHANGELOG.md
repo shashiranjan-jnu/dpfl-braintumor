@@ -2,6 +2,10 @@
 
 Newest entry first.
 
+## 2026-10-12 (v0.7-ncc)
+
+- `scripts/ncc_check.py` (curated all-pairs NCC with flips, removed-duplicate re-check from raw sources), `tests/test_ncc.py`, `make_launcher.py --kind ncc`, notebook `17-ncc-dedup-check` (CPU). 51 tests pass. D49.
+
 ## 2026-10-12 (Steps 4.1 and 4.2 closed)
 
 - 16 finished: logits for 271 models and Grad-CAM maps for 115 now on GitHub. Tables `week07_lira`, `week07_mia_stratified`, `week07_xai_border` (with consistency), `week07_wn_seeds_summary`. D48.
