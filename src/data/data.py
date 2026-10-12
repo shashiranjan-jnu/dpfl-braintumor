@@ -127,13 +127,18 @@ def make_synthetic(n: int = 160, size: int = 128, seed: int = 0,
     rng = np.random.default_rng(seed)
     labels = rng.integers(0, 4, n)
     imgs = rng.integers(0, 60, (n, size, size)).astype(np.uint8)
+    boxes = []
     for k, c in enumerate(labels):           # class-dependent square size, learnable by a GAP model
         h = 8 + 14 * c
         r0, c0 = rng.integers(0, size - h, 2)
         imgs[k, r0:r0 + h, c0:c0 + h] = 200
+        boxes.append((r0, c0, h))
     masks = np.zeros_like(imgs)
     split = rng.choice(["train", "val", "test"], n, p=[0.6, 0.2, 0.2])
     source = rng.choice(["figshare", "sartaj", "br35h"], n)
+    for k, (r0, c0, h) in enumerate(boxes):  # Figshare tumour images carry a mask of their square
+        if source[k] == "figshare" and labels[k] != 2:
+            masks[k, r0:r0 + h, c0:c0 + h] = 1
     sp = pd.DataFrame({
         "image_id": [f"syn:{k}" for k in range(n)], "source": source,
         "relpath": [f"{k}.png" for k in range(n)], "label": [CLASSES[c] for c in labels],

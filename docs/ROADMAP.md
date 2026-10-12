@@ -85,13 +85,13 @@ All 18 steps are not started, and Week 1 is assumed to begin on Monday 5 October
 | 2.1 | Core pipeline implementation | 2 | 18 Oct | none | Not started |  |
 | 2.2 | DP correctness verification | 2 | 18 Oct | v0.2-pipeline-verified | Not started |  |
 | 2.3 | Timing pilot and budget recalibration | 2 | 18 Oct | none | Not started |  |
-| 3.1 | FedAvg core grid and baselines | 3 | 25 Oct | v0.3-week03 | Not started |  |
-| 3.1b | Patient-level DP regime | 4 | 1 Nov | v0.3-unit-dp | In progress | Code ready, 59 runs, D33 |
-| 3.2 | FedAvg completion and Gate A | 4 | 1 Nov | v0.4-week04 | Not started |  |
-| 3.3 | FedProx and SCAFFOLD grid | 5 | 8 Nov | v0.5-week05 | Not started |  |
-| 3.4 | Client count sweep and ResNet-18 | 6 | 15 Nov | v0.6-week06 | Not started |  |
-| 4.1 | Membership inference audit | 7 | 22 Nov | none | Not started |  |
-| 4.2 | XAI fidelity and Gate B | 7 | 22 Nov | v0.7-week07 | Not started |  |
+| 3.1 | FedAvg core grid and baselines | 3 | 25 Oct | v0.3-week03 | Done | Launchers 07 to 09 |
+| 3.1b | Patient-level DP regime | 4 | 1 Nov | v0.3-unit-dp | Done | D33, D36, D37 |
+| 3.2 | FedAvg completion and Gate A | 4 | 1 Nov | v0.4-week04 | Done | Gate A in D37 |
+| 3.3 | FedProx and SCAFFOLD grid | 5 | 8 Nov | v0.5-week05 | Done | D38, D40 to D42 |
+| 3.4 | Client count sweep and ResNet-18 | 6 | 15 Nov | v0.6-week06 | Done | H5 confirmed, D39 |
+| 4.1 | Membership inference audit | 7 | 22 Nov | v0.5-audit | In progress | Code ready, launcher 14, D43 |
+| 4.2 | XAI fidelity and Gate B | 7 | 22 Nov | v0.5-audit | In progress | Code ready, launcher 14, source controls done, D43 |
 | 4.3 | Results freeze | 8 | 29 Nov | v0.9-results-frozen | Not started |  |
 | 5.1 | Methods and Results drafting | 9 | 6 Dec | none | Not started |  |
 | 5.2 | Introduction, Discussion, front matter | 10 | 13 Dec | none | Not started |  |
@@ -355,9 +355,10 @@ Phase 4 turns trained models into evidence for RQ3 and RQ4, then freezes every r
 
 **Objective.** Answer RQ4 by testing whether formal ε translates into measured protection.
 
-- [ ] Upload the audited checkpoints as GitHub Release assets, one seed per configuration
-- [ ] Run a loss-threshold attack on every privacy level
-- [ ] Train a reduced set of shadow models for a LiRA-style attack on the natural partition
+- [x] Keep audited checkpoints as Kaggle notebook outputs of launchers 07 to 10, attached as inputs (D43 replaces Release assets)
+- [x] Code for the loss-threshold attack at image level and Figshare patient level (src/attacks/mia.py)
+- [ ] Run the loss-threshold attack on every privacy level, record and patient level (launcher 14, 165 models)
+- [ ] Train a reduced set of shadow models for a LiRA-style attack on the natural partition (later launcher)
 - [ ] Report true positive rate at 0.1% false positive rate, with ROC curves on a log scale
 
 **Acceptance criteria.**
@@ -373,10 +374,12 @@ Phase 4 turns trained models into evidence for RQ3 and RQ4, then freezes every r
 
 **Objective.** Answer RQ3 with quantitative explanation metrics against expert tumour masks.
 
-- [ ] Generate Grad-CAM, Grad-CAM++, and Integrated Gradients maps on the Figshare test patients
-- [ ] Compute pointing-game accuracy and top 15% heatmap IoU against masks in a CPU session
-- [ ] Compute deletion and insertion AUC for faithfulness
-- [ ] Run model-parameter randomisation sanity checks
+- [x] Code for Grad-CAM, Grad-CAM++ and Integrated Gradients on the 645 Figshare test images (src/xai)
+- [x] Code for pointing game, top 15% IoU, energy in mask, deletion and insertion AUC, patient-bootstrap intervals
+- [x] Code for model-parameter randomisation checks (full and top-block re-initialisation)
+- [ ] Run all of the above on 115 models (launcher 14, GPU, about 2 hours)
+- [x] Source controls from saved predictions (SARTAJ-only accuracy, specificity by source), CPU
+- [ ] Source probe on penultimate features (launcher 14)
 - [ ] Plot each metric against ε and α
 - [ ] Apply Gate B and log the decision
 

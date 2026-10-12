@@ -39,7 +39,8 @@ def regime(r: pd.Series) -> str:
     return f"{unit}eps {float(r['cfg.dp.target_epsilon']):g}"
 
 
-def summarise(df: pd.DataFrame) -> pd.DataFrame:
+def summarise(df: pd.DataFrame, metrics: dict | None = None) -> pd.DataFrame:
+    metrics = METRICS if metrics is None else metrics
     df = df[df["cfg.train.seed"] != 0].copy()
     df["regime"] = df.apply(regime, axis=1)
     if "cfg.fl.local_client" not in df:
@@ -51,7 +52,7 @@ def summarise(df: pd.DataFrame) -> pd.DataFrame:
         row["n_seeds"] = len(g)
         row["epsilon"] = g["epsilon"].iloc[0]
         row["diverged"] = int(g["diverged"].sum())
-        for col, name in METRICS.items():
+        for col, name in metrics.items():
             if col not in g:
                 continue
             v = g[col].astype(float).dropna().values
@@ -66,7 +67,7 @@ def summarise(df: pd.DataFrame) -> pd.DataFrame:
     out = pd.DataFrame(rows)
     if out.empty:
         return out
-    order = {"no DP": 0, "clip only": 1, "eps 8": 2, "eps 3": 3, "eps 1": 4}
+    order = {"no DP": 0, "clip only": 1, "eps 64": 1.5, "eps 32": 1.6, "eps 16": 1.7, "eps 8": 2, "eps 3": 3, "eps 1": 4}
     out["_r"] = out.regime.map(lambda r: order.get(r.replace("patient ", ""), 9) + (10 if r.startswith("patient") else 0))
     out["_m"] = out["mode"].map({"central": 0, "federated": 1, "local": 2})
     return out.sort_values(["_m", "scenario", "local_client", "_r"]).drop(columns=["_r", "_m"]).reset_index(drop=True)

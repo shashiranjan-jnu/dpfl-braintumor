@@ -110,3 +110,9 @@
 - uniform-weighted SCAFFOLD (the D40 ablation) against the same configurations: natural3 epsilon 8 0.590 and epsilon 3 0.358, dir0.1 epsilon 3 0.268, against 0.825, 0.713, 0.633 with size weighting
 - RQ2 answer: with one local epoch, drift correction neither helps nor hurts FedAvg under DP once it is implemented consistently with the aggregation weights; implemented inconsistently, it fails badly exactly where clients are unequal and noise is high
 - Phase 3 complete, 616 GPU runs so far, about 52 GPU hours in total
+
+## 2026-10-12 Phase 4 code and source controls (code v0.5-audit, CPU only)
+- new modules src/xai/maps.py (Grad-CAM, Grad-CAM++, Integrated Gradients with a black baseline, 32 steps), src/xai/metrics.py (pointing game with 3-pixel tolerance, top 15% IoU, energy in mask, deletion and insertion AUC over 20 steps, Spearman rows, patient bootstrap), src/xai/audit.py, src/attacks/mia.py, src/attacks/probe.py; scripts run_audit.py, summarise_audit.py, source_controls.py; make_launcher.py --kind audit builds 14-audit; 40 tests pass
+- launcher 14 audits 165 checkpoints (MIA and probe) and explains 115 of them, using the outputs of 07 to 10 as inputs, no training
+- source controls on saved test predictions, results/tables/week07_source_controls.{csv,md}: SARTAJ-only 4-class balanced accuracy trails the pooled figure by 0.25 to 0.29 in every non-collapsed regime (central no DP 0.663 against 0.919, epsilon 8 0.528 against 0.815); no-tumour specificity is near 1 on Br35H and lower on SARTAJ, and DP widens the gap (central epsilon 8 0.702 against 0.976); FedAvg natural3 no DP has SARTAJ specificity 0.678, the Br35H client being single-source no-tumour
+- caveat: SARTAJ test holds 102 images (13 G, 24 M, 59 N, 6 P), so per-source intervals are wide

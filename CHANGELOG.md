@@ -2,6 +2,13 @@
 
 Newest entry first.
 
+## 2026-10-12 (Phase 4 code)
+
+- New: `src/xai/{maps,metrics,audit}.py`, `src/attacks/{mia,probe}.py`, `scripts/run_audit.py`, `scripts/summarise_audit.py`, `scripts/source_controls.py`, `tests/test_audit.py` (40 tests pass).
+- `make_launcher.py --kind audit` builds `14-audit` for tag `v0.5-audit`; checkpoints come from the outputs of launchers 07 to 10 (D43).
+- Synthetic data gives Figshare tumour images a mask. `summarise.py` takes a metric map and orders patient epsilon 16 to 64.
+- Table `week07_source_controls.{csv,md}`.
+
 ## 2026-10-12 (Step 3.3 closed)
 
 - 13 finished, 105 runs, 10.02 GPU hours. Tables `week06_scaffold_vs_fedavg.csv` (Holm-corrected) and `week06_fedprox_vs_fedavg_seed0.csv`. D42, Phase 3 complete.
