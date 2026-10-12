@@ -130,3 +130,11 @@ def test_weight_noise_sigma_rule_and_grids(tmp_path):
     assert len(cfgs) == 16 and {c["train"]["seed"] for c in cfgs} == set(range(1000, 1016))
     assert {c["data"]["shadow"]["seed"] for c in cfgs} == set(range(16))
     assert os.path.exists(write(g, str(tmp_path)))
+
+
+def test_best_val_ignores_null_rounds(tmp_path):
+    from scripts.make_shadow_grid import best_val
+    os.makedirs(tmp_path / "runs" / "r")
+    json.dump({"history": [{"val_loss": 2.0}, {"val_loss": None}, {"val_loss": 1.5}]},
+              open(tmp_path / "runs" / "r" / "metrics.json", "w"))
+    assert best_val(str(tmp_path), "r") == 1.5

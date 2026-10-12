@@ -68,7 +68,8 @@ def shadow_grid(name: str, presets: list[dict], note: str) -> dict:
 
 def best_val(results: str, rid: str) -> float:
     m = json.load(open(os.path.join(results, "runs", rid, "metrics.json")))
-    return min(h["val_loss"] for h in m["history"])
+    # a diverged round stores val_loss as null (non-finite), which never counts as best
+    return min((h["val_loss"] for h in m["history"] if h["val_loss"] is not None), default=float("inf"))
 
 
 def choose_sigma(vals: dict, ref: float) -> float:

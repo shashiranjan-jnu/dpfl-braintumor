@@ -42,7 +42,7 @@ def select(grid: dict, runs_dir: str, param: str = "optim.lr") -> tuple[list[dic
         if key_cfg.get(sect) == {}:
             key_cfg.pop(sect)
         rows.append({"key": json.dumps(key_cfg, sort_keys=True), "lr": lr, "run_id": rid,
-                     "best_val_loss": min(h["val_loss"] for h in m["history"]),
+                     "best_val_loss": min((h["val_loss"] for h in m["history"] if h["val_loss"] is not None), default=float("inf")),
                      "diverged": m.get("diverged", False),
                      "val_bal_acc_at_best": next(h["val_bal_acc"] for h in m["history"]
                                                  if h["round"] == m["best_round"]) if m["best_round"] > 0 else None})

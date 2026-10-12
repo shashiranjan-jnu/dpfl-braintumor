@@ -2,6 +2,10 @@
 
 Newest entry first.
 
+## 2026-10-12 (v0.6.1-lira)
+
+- Fix: best validation loss skips rounds whose loss was non-finite (stored as null) in `aggregate.py`, `select_lr.py`, `make_shadow_grid.py`. Test added, 48 pass. Launcher 15 points at `v0.6.1-lira`. D46.
+
 ## 2026-10-12 (launcher 15 prepared)
 
 - New optional keys `data.shadow` (LiRA shadow subsets, whole units of train plus test) and `fl.weight_noise` (Gupta-style comparator, refused with DP). Existing run ids unchanged.

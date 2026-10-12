@@ -41,7 +41,7 @@ def collect(runs_dir: str, only_ids: set | None = None) -> pd.DataFrame:
                     "steps": m["privacy"]["steps"], "best_round": m["best_round"],
                     "diverged": m.get("diverged", False),
                     "train_acc": m["train_acc_best"], "train_seconds": m["train_seconds"],
-                    "best_val_loss": min(h["val_loss"] for h in m["history"]),
+                    "best_val_loss": min((h["val_loss"] for h in m["history"] if h["val_loss"] is not None), default=float("inf")),
                     "clip_frac": (sum(h["clip_frac"] for h in m["history"] if h.get("clip_frac") is not None)
                                   / max(1, sum(1 for h in m["history"] if h.get("clip_frac") is not None)))
                                  if m["privacy"]["enabled"] else None})

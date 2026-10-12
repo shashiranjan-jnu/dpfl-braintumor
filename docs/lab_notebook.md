@@ -126,3 +126,4 @@
 
 ## 2026-10-12 Launcher 15 prepared (code v0.6-lira)
 - 64 LiRA shadows (natural3 at no DP, epsilon 8, 3, 1, 16 each), weight-noise selection (5) then seeds (5 per sigma) and shadows (16 per sigma), audit extensions on all 165 earlier models; about 5.5 hours; D45
+- 15 first attempt: tests passed, 5 weight-noise selection runs finished (sigma 0.5 diverged, 0.05 and 0.01 poor, 0.003 and 0.001 near no-DP), then the grid generator crashed on a null val_loss; fixed in v0.6.1-lira, chosen sigmas 0.5 and 0.003 (D46)
