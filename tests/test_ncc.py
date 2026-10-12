@@ -65,3 +65,16 @@ def test_contaminated_and_clean_metrics():
                          "p_notumor": [1, 0, 0, 0], "p_pituitary": [0, 0, 0, 0]})
     m = clean_metrics(pred, {"a"})
     assert m["n_test"] == 3 and m["sens_notumor"] == 0.0 and m["tumour_sens"] == 1.0
+
+
+def test_summarise_keeps_algorithms_apart():
+    from scripts.summarise import summarise
+    rows = []
+    for alg, v in (("fedavg", 0.8), ("scaffold", 0.6)):
+        for seed in (1, 2):
+            rows.append({"cfg.fl.mode": "federated", "cfg.data.scenario": "iid_k10", "cfg.fl.local_client": None,
+                         "cfg.optim.lr": 0.01, "cfg.dp.enabled": False, "cfg.train.seed": seed,
+                         "cfg.fl.algorithm": alg, "epsilon": float("inf"), "diverged": False,
+                         "test.balanced_accuracy": v})
+    s = summarise(pd.DataFrame(rows))
+    assert len(s) == 2 and sorted(s.bal_acc.round(2)) == [0.6, 0.8]

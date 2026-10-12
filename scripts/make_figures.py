@@ -82,7 +82,8 @@ def eps_x(reg: str) -> float:
 
 def runs() -> pd.DataFrame:
     d = pd.read_csv(os.path.join(RES, "tables", "week07_ncc_sensitivity_per_run.csv"))
-    d = d[d["cfg.train.seed"] != 0].copy()
+    # FedAvg only: SCAFFOLD runs share configurations with FedAvg and must not be pooled (D53)
+    d = d[(d["cfg.train.seed"] != 0) & (d["cfg.fl.algorithm"] == "fedavg")].copy()
     d["regime"] = d.apply(regime, axis=1)
     return d
 

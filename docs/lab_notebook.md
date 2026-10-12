@@ -149,3 +149,4 @@
 ## 2026-10-12 Results freeze (notebook 18, code v0.8-figures, CPU)
 - 52 tests pass on Kaggle; tables and figures regenerated, figure data identical to committed (max difference 0)
 - results/FROZEN_MANIFEST.{json,md}: 21 grids, 608 runs all finished, frozen files hashed; Step 4.3 closed (D52)
+- 2026-10-12 D53: FedAvg and SCAFFOLD seeds were pooled in week07_ncc_sensitivity and in Figures 1 and 4; fixed, freeze withdrawn pending a Kaggle rerun of notebook 18 (v0.8.1-figures)

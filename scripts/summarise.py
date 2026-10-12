@@ -43,15 +43,20 @@ def regime(r: pd.Series) -> str:
 
 
 def summarise(df: pd.DataFrame, metrics: dict | None = None) -> pd.DataFrame:
+    """Seed means grouped by mode, scenario, local client, regime, lr and, when the frame
+    holds more than one, the FL algorithm (so FedAvg and SCAFFOLD runs are never pooled, D53)."""
     metrics = METRICS if metrics is None else metrics
     df = df[df["cfg.train.seed"] != 0].copy()
     df["regime"] = df.apply(regime, axis=1)
     if "cfg.fl.local_client" not in df:
         df["cfg.fl.local_client"] = np.nan
     keys = ["cfg.fl.mode", "cfg.data.scenario", "cfg.fl.local_client", "regime", "cfg.optim.lr"]
+    names = ["mode", "scenario", "local_client", "regime", "lr"]
+    if "cfg.fl.algorithm" in df and df["cfg.fl.algorithm"].nunique() > 1:
+        keys, names = keys + ["cfg.fl.algorithm"], names + ["algorithm"]
     rows = []
     for k, g in df.groupby(keys, dropna=False, sort=False):
-        row = dict(zip(["mode", "scenario", "local_client", "regime", "lr"], k))
+        row = dict(zip(names, k))
         row["n_seeds"] = len(g)
         row["epsilon"] = g["epsilon"].iloc[0]
         row["diverged"] = int(g["diverged"].sum())

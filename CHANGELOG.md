@@ -2,6 +2,10 @@
 
 Newest entry first.
 
+## 2026-10-12 (v0.8.1-figures)
+
+- Fix: clean-set summary pooled FedAvg with size-weighted SCAFFOLD; `summarise.py` now groups by algorithm when several are present, figures use FedAvg only. Test added. Notebook 18 points at `v0.8.1-figures`. Freeze v0.9 withdrawn, re-freeze as v0.9.1 after the Kaggle run (D53).
+
 ## 2026-10-12 (v0.9-results-frozen)
 
 - `scripts/freeze.py` writes and checks `results/FROZEN_MANIFEST.{json,md}`. Notebook 18 reproduced figures exactly on Kaggle. D52, Step 4.3 closed.

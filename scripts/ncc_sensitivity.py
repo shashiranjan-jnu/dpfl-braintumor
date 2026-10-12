@@ -75,10 +75,10 @@ def main():
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     df.to_csv(a.out + "_per_run.csv", index=False)
     s.to_csv(a.out + ".csv", index=False)
-    lines = ["| mode | scenario | regime | lr | n | bal_acc | bal_acc clean | sens_N | sens_N clean |",
-             "|---|---|---|---|---|---|---|---|---|"]
+    lines = ["| mode | algorithm | scenario | regime | lr | n | bal_acc | bal_acc clean | sens_N | sens_N clean |",
+             "|---|---|---|---|---|---|---|---|---|---|"]
     for _, r in s.iterrows():
-        lines.append(f"| {r['mode']} | {r['scenario']} | {r['regime']} | {r['lr']:g} | {r['n_seeds']} | "
+        lines.append(f"| {r['mode']} | {r.get('algorithm', 'fedavg')} | {r['scenario']} | {r['regime']} | {r['lr']:g} | {r['n_seeds']} | "
                      f"{r['bal_acc']:.3f} | {r['bal_acc_clean']:.3f} | {r['sens_N']:.3f} | {r['sens_N_clean']:.3f} |")
     md = "\n".join(lines) + (f"\n\nContaminated test images (NCC >= {NEAR} with another split): {len(drop)} of 813; "
                              f"clean test set {int(df['clean.n_test'].iloc[0])} images. Largest absolute change in "
