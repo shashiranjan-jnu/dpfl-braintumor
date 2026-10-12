@@ -2,7 +2,7 @@
 
     python scripts/mia_tables.py --results results --out results/tables/week07
 
-Reads results/audit/<run_id>/logits.npz (float16 logits of every row, plain and
+Reads results/audit/<run_id>/logits.npz (float32 logits of every row, plain and
 flipped). Members of a target are its training rows, non-members its test rows.
 
 1. Within-stratum loss attack for every audited target: the AUC over member and
@@ -56,6 +56,8 @@ def load_phi(results: str, rid: str, y: np.ndarray) -> np.ndarray | None:
     if not os.path.exists(p):
         return None
     d = np.load(p)
+    if not (np.isfinite(d["z"]).all() and np.isfinite(d["zf"]).all()):
+        return None                                                     # diverged model, no usable outputs
     return np.stack([phi(d["z"], y), phi(d["zf"], y)], 1)            # (N, 2)
 
 

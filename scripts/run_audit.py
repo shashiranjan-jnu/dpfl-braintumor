@@ -13,7 +13,7 @@ central runs. audit.json is written last and lists the parts done, so finished
 parts are skipped on a rerun. No training happens here.
 
 --parts limits the work (launcher 15 runs mia probe logits border): logits.npz
-holds float16 logits of every row, plain and flipped, for stratified attacks
+holds float32 logits of every row, plain and flipped, for stratified attacks
 and LiRA (D45); border.json and cams8.npz hold the skull-border analysis,
 layer-3 Grad-CAM and 8 x 8 Grad-CAM maps for cross-seed consistency, for runs
 of --xai-grids. --probe-baselines also probes the ImageNet initialisation and a
@@ -69,28 +69,40 @@ def load_model(cfg: dict, path: str, device) -> torch.nn.Module:
 
 
 ALL_PARTS = ("mia", "probe", "xai", "randomisation", "logits", "border")
+# A part counts as done only if audit.json lists it and its files exist. Launcher 15 listed
+# logits and border as done while .gitignore kept the .npz files out of the repository (D47).
+PART_FILES = {"mia": ["mia.json"], "probe": ["probe.json"], "xai": ["xai_summary.json"],
+              "randomisation": ["randomisation.json"], "logits": ["logits.npz"],
+              "border": ["border.json", "cams8.npz"]}
 
 
 def audit_one(rid, cfg, model, data, rdir, want_xai, want_rand, log, parts=ALL_PARTS[:4]):
     done_path = os.path.join(rdir, "audit.json")
     done = json.load(open(done_path)) if os.path.exists(done_path) else {"parts": []}
+    done["parts"] = [p for p in done["parts"]
+                     if all(os.path.exists(os.path.join(rdir, f)) for f in PART_FILES.get(p, []))]
+    done.setdefault("errors", {})
     t0 = time.time()
     todo = lambda p: p in parts and p not in done["parts"]
     if todo("logits"):
         z, zf = mia.all_logits(model, data.x)
-        np.savez_compressed(os.path.join(rdir, "logits.npz"), z=z.astype(np.float16), zf=zf.astype(np.float16))
+        np.savez_compressed(os.path.join(rdir, "logits.npz"), z=z.astype(np.float32), zf=zf.astype(np.float32))
         done["parts"].append("logits")
     if want_xai and todo("border"):
         summ, cam, idx = xai.border_audit(model, data)
         json.dump(clean(summ), open(os.path.join(rdir, "border.json"), "w"), indent=1)
         np.savez_compressed(os.path.join(rdir, "cams8.npz"), cam=cam, row=idx.astype(np.int32))
         done["parts"].append("border")
-    if todo("mia"):
-        json.dump(clean(mia.audit(model, data, data.splits)), open(os.path.join(rdir, "mia.json"), "w"), indent=1)
-        done["parts"].append("mia")
-    if todo("probe"):
-        json.dump(clean(probe.probe(model, data, data.splits)), open(os.path.join(rdir, "probe.json"), "w"), indent=1)
-        done["parts"].append("probe")
+    for part, fn in (("mia", lambda: mia.audit(model, data, data.splits)),
+                     ("probe", lambda: probe.probe(model, data, data.splits))):
+        if not todo(part):
+            continue
+        try:
+            json.dump(clean(fn()), open(os.path.join(rdir, f"{part}.json"), "w"), indent=1)
+            done["parts"].append(part)
+            done["errors"].pop(part, None)
+        except ValueError as e:      # non-finite outputs of a diverged model
+            done["errors"][part] = str(e)[:200]
     if want_xai and todo("xai"):
         df, summ = xai.audit(model, data)
         df.to_csv(os.path.join(rdir, "xai_per_image.csv"), index=False, float_format="%.5f")

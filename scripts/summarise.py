@@ -30,6 +30,9 @@ METRICS = {"test.balanced_accuracy": "bal_acc", "test.accuracy": "acc", "test.ma
 
 
 def regime(r: pd.Series) -> str:
+    wn = r.get("cfg.fl.weight_noise")
+    if wn is not None and not pd.isna(wn) and float(wn) > 0:
+        return f"weight noise {float(wn):g}"
     if not r.get("cfg.dp.enabled", False):
         return "no DP"
     unit = "patient " if r.get("cfg.dp.unit") == "unit" else ""

@@ -29,7 +29,7 @@ from src.xai.metrics import consistency_iou  # noqa: E402
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GRIDS = ["week03_central", "week04_unit_central", "week04_unit_central_ext", "week03_fed_seeds_a"]
 COLS = {("gradcam", "border_energy"): "gc_border", ("gradcam", "border_area"): "border_chance",
-        ("gradcam", "outside_energy"): "gc_outside", ("gradcam_l3", "border_energy"): "l3_border",
+        ("gradcam", "outside_energy"): "gc_outside", ("gradcam", "outside_area"): "outside_chance", ("gradcam_l3", "border_energy"): "l3_border",
         ("gradcam_l3", "pointing"): "l3_pointing", ("gradcam_l3", "iou15"): "l3_iou15",
         ("gradcam_l3", "energy"): "l3_energy"}
 

@@ -127,3 +127,9 @@
 ## 2026-10-12 Launcher 15 prepared (code v0.6-lira)
 - 64 LiRA shadows (natural3 at no DP, epsilon 8, 3, 1, 16 each), weight-noise selection (5) then seeds (5 per sigma) and shadows (16 per sigma), audit extensions on all 165 earlier models; about 5.5 hours; D45
 - 15 first attempt: tests passed, 5 weight-noise selection runs finished (sigma 0.5 diverged, 0.05 and 0.01 poor, 0.003 and 0.001 near no-DP), then the grid generator crashed on a null val_loss; fixed in v0.6.1-lira, chosen sigmas 0.5 and 0.003 (D46)
+
+## 2026-10-12 Launcher 15 (code v0.6.1-lira, about 4.7 GPU hours of training plus audit)
+- weight noise 0.5 diverged in all 21 runs, balanced accuracy 0.259; weight noise 0.003 0.843 over 5 seeds
+- probe baselines pretrained 0.871 / 0.783, random 0.846 / 0.776 (tumour Figshare vs SARTAJ / no-tumour SARTAJ vs Br35H)
+- Grad-CAM rim energy 0.17 to 0.19 against chance 0.33, outside-brain energy 0.26 to 0.36; layer-3 Grad-CAM no better
+- logits.npz and cams8.npz not pushed (.gitignore *.npz); summary cell failed on inf logits; fixes and launcher 16 in v0.6.2-audit (D47)

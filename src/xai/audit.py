@@ -95,6 +95,7 @@ def border_audit(model, data, methods=("gradcam", "gradcampp", "gradcam_l3"), ba
         for m in methods:
             mp = M.METHODS[m](model, x, y).detach()
             vals = {"border_energy": X.region_energy(mp, rim), "outside_energy": X.region_energy(mp, out),
+                    "outside_area": out.flatten(1).float().mean(1),
                     "border_area": rim.flatten(1).float().mean(1) / brain.flatten(1).float().mean(1).clamp(min=1e-6)}
             if m == "gradcam_l3":
                 vals.update({"pointing": X.pointing_game(mp, mk), "iou15": X.topk_iou(mp, mk),
@@ -113,7 +114,8 @@ def border_audit(model, data, methods=("gradcam", "gradcampp", "gradcam_l3"), ba
             if gg.empty:
                 continue
             summ[m][subset] = {"n": int(len(gg))}
-            for k in [c for c in ("border_energy", "outside_energy", "border_area", "pointing", "iou15", "energy")
+            for k in [c for c in ("border_energy", "outside_energy", "outside_area", "border_area", "pointing",
+                                  "iou15", "energy")
                       if c in gg and gg[c].notna().any()]:
                 mean, lo, hi = X.patient_bootstrap_ci(gg[k].values, gg.unit.values, n_boot=1000)
                 summ[m][subset][k] = {"mean": mean, "lo": lo, "hi": hi}

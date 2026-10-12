@@ -221,6 +221,7 @@ __marimo__/
 /data/
 *.npy
 *.npz
+!results/audit/**/*.npz
 *.pt
 *.pth
 *.ckpt

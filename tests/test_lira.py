@@ -112,12 +112,17 @@ def test_audit_logits_and_border_parts(tmp_path):
     audit_one(rid, cfg, model, data, out, True, False, print, parts=("logits", "border"))
     assert json.load(open(os.path.join(out, "audit.json")))["parts"] == ["logits", "border"]
     z = np.load(os.path.join(out, "logits.npz"))
-    assert z["z"].shape == z["zf"].shape == (len(data.y), 4) and z["z"].dtype == np.float16
+    assert z["z"].shape == z["zf"].shape == (len(data.y), 4) and z["z"].dtype == np.float32
     b = json.load(open(os.path.join(out, "border.json")))
     assert set(b) == {"gradcam", "gradcampp", "gradcam_l3"}
     assert "pointing" in b["gradcam_l3"]["all"] and "border_energy" in b["gradcam"]["all"]
     c = np.load(os.path.join(out, "cams8.npz"))
     assert c["cam"].shape[1:] == (8, 8) and len(c["cam"]) == len(c["row"])
+    # a part listed as done but whose file is missing is redone (D47)
+    os.remove(os.path.join(out, "logits.npz"))
+    os.remove(os.path.join(out, "cams8.npz"))
+    audit_one(rid, cfg, model, data, out, True, False, print, parts=("logits", "border"))
+    assert os.path.exists(os.path.join(out, "logits.npz")) and os.path.exists(os.path.join(out, "cams8.npz"))
 
 
 def test_weight_noise_sigma_rule_and_grids(tmp_path):

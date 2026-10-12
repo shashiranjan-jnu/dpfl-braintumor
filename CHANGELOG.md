@@ -2,6 +2,10 @@
 
 Newest entry first.
 
+## 2026-10-12 (v0.6.2-audit)
+
+- 15 finished training (106 runs, about 5.4 hours) but its .npz audit files were ignored by git. Fix: `.gitignore` re-includes `results/audit/**/*.npz`, parts with missing files are redone, logits float32, non-finite models skipped, weight-noise regimes labelled, border analysis reports the outside-brain chance level. Launcher `16-audit-logits`. Tables `week07_wn_seeds_summary`, `week07_xai_border` (partial). D47.
+
 ## 2026-10-12 (v0.6.1-lira)
 
 - Fix: best validation loss skips rounds whose loss was non-finite (stored as null) in `aggregate.py`, `select_lr.py`, `make_shadow_grid.py`. Test added, 48 pass. Launcher 15 points at `v0.6.1-lira`. D46.
