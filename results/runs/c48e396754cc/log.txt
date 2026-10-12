@@ -1,0 +1,13 @@
+12:19:25 run c48e396754cc mode federated algo fedavg clients [1162, 235, 163] steps/client 1000 sigma 12.8848 eps 0.999 unit record m_max 2
+12:19:30 round   1 val_loss 1.3869 val_acc 0.3081 bal_acc 0.2174 batch 52.8 4.55s
+12:20:10 round  10 val_loss 1.4505 val_acc 0.4076 bal_acc 0.3503 batch 53.8 4.62s
+12:20:55 round  20 val_loss 1.7188 val_acc 0.4573 bal_acc 0.3059 batch 53.0 4.58s
+12:21:40 round  30 val_loss 1.9064 val_acc 0.2796 bal_acc 0.3371 batch 51.2 4.42s
+12:22:25 round  40 val_loss 2.0996 val_acc 0.3720 bal_acc 0.2935 batch 50.4 4.36s
+12:23:09 round  50 val_loss 2.5440 val_acc 0.3009 bal_acc 0.3220 batch 50.8 4.37s
+12:23:54 round  60 val_loss 3.0221 val_acc 0.3412 bal_acc 0.3564 batch 53.1 4.55s
+12:24:38 round  70 val_loss 3.0058 val_acc 0.3744 bal_acc 0.3712 batch 49.2 4.27s
+12:25:23 round  80 val_loss 2.5733 val_acc 0.4289 bal_acc 0.4108 batch 53.1 4.52s
+12:26:07 round  90 val_loss 2.3723 val_acc 0.4455 bal_acc 0.4330 batch 50.1 4.34s
+12:26:52 round 100 val_loss 2.3439 val_acc 0.4479 bal_acc 0.4332 batch 53.9 4.61s
+12:26:53 done c48e396754cc best_round 7 test_acc 0.4588 bal_acc 0.3894 ece 0.0471 train_acc 0.3865 448.1s
