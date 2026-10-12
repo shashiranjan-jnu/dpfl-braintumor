@@ -11,4 +11,4 @@ tests/test_audit.py::test_audit_parts_on_trained_checkpoint
     opt_res = optimize.minimize(
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-52 passed, 2 warnings in 141.72s (0:02:21)
+52 passed, 2 warnings in 136.37s (0:02:16)
