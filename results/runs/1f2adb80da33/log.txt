@@ -1,0 +1,13 @@
+11:39:00 run 1f2adb80da33 mode federated algo fedavg clients [1293, 222, 149] steps/client 1000 sigma 4.8324 eps 2.995 unit record m_max 2
+11:39:05 round   1 val_loss 1.2588 val_acc 0.4147 bal_acc 0.3740 batch 57.0 4.95s
+11:39:48 round  10 val_loss 1.2145 val_acc 0.5118 bal_acc 0.4474 batch 55.5 4.81s
+11:40:36 round  20 val_loss 1.0127 val_acc 0.6588 bal_acc 0.5991 batch 55.2 4.78s
+11:41:24 round  30 val_loss 0.8387 val_acc 0.7393 bal_acc 0.6841 batch 53.3 4.65s
+11:42:13 round  40 val_loss 0.8075 val_acc 0.7559 bal_acc 0.6968 batch 57.9 4.99s
+11:43:01 round  50 val_loss 0.7446 val_acc 0.7559 bal_acc 0.7019 batch 55.3 4.79s
+11:43:50 round  60 val_loss 0.7588 val_acc 0.7630 bal_acc 0.7271 batch 57.0 4.92s
+11:44:38 round  70 val_loss 0.7264 val_acc 0.7725 bal_acc 0.7420 batch 54.0 4.73s
+11:45:26 round  80 val_loss 0.7278 val_acc 0.7773 bal_acc 0.7499 batch 55.7 4.82s
+11:46:14 round  90 val_loss 0.7216 val_acc 0.7773 bal_acc 0.7490 batch 55.0 4.76s
+11:47:02 round 100 val_loss 0.7193 val_acc 0.7773 bal_acc 0.7490 batch 55.2 4.79s
+11:47:03 done 1f2adb80da33 best_round 61 test_acc 0.8069 bal_acc 0.7901 ece 0.0655 train_acc 0.7572 482.6s
