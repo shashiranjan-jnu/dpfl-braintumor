@@ -1,0 +1,14 @@
+date 2026-10-12
+code v0.5-audit 1cc9a129b9c5f80749026c1429667425ae7232f6
+torch 2.11.0+cu128
+returncode 0
+
+........................................                                 [100%]
+=============================== warnings summary ===============================
+tests/test_audit.py::test_audit_parts_on_trained_checkpoint
+tests/test_audit.py::test_audit_parts_on_trained_checkpoint
+  /usr/local/lib/python3.13/dist-packages/sklearn/linear_model/_logistic.py:451: DeprecationWarning: scipy.optimize: The `disp` and `iprint` options of the L-BFGS-B solver are deprecated and will be removed in SciPy 1.18.0.
+    opt_res = optimize.minimize(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+40 passed, 2 warnings in 84.40s (0:01:24)
