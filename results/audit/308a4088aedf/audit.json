@@ -4,5 +4,6 @@
   "probe",
   "logits"
  ],
- "seconds": 1.9
+ "seconds": 1.9,
+ "errors": {}
 }
