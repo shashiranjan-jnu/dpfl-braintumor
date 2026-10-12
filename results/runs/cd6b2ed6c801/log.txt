@@ -1,0 +1,5 @@
+13:26:41 run cd6b2ed6c801 mode federated algo fedavg clients [960, 230, 139] steps/client 1000 sigma 0.0000 eps inf unit record m_max 2
+13:26:43 round   1 val_loss 23.5060 val_acc 0.1493 bal_acc 0.2500 batch 45.0 1.66s
+13:26:57 round  10 val_loss 23.3096 val_acc 0.1564 bal_acc 0.2387 batch 43.0 1.54s
+13:26:59 round 11 diverged (non-finite weights or loss), stopping run
+13:27:00 done cd6b2ed6c801 best_round 5 test_acc 0.2558 bal_acc 0.2500 ece 0.7442 train_acc 0.2122 18.4s
