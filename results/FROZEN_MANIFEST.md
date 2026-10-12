@@ -1,6 +1,6 @@
 # Results freeze manifest
 
-Built from commit 41e2e39767. Test set: clean, 747 images (D51); full 813 in the supplement. Verify with `python scripts/freeze.py --check`.
+Built from commit 1586bec3f9. Test set: clean, 747 images (D51); full 813 in the supplement. Verify with `python scripts/freeze.py --check`.
 
 | Group | Grid | Runs | Finished |
 |---|---|---|---|

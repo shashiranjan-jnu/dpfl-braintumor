@@ -151,3 +151,4 @@
 - results/FROZEN_MANIFEST.{json,md}: 21 grids, 608 runs all finished, frozen files hashed; Step 4.3 closed (D52)
 - 2026-10-12 D53: FedAvg and SCAFFOLD seeds were pooled in week07_ncc_sensitivity and in Figures 1 and 4; fixed, freeze withdrawn pending a Kaggle rerun of notebook 18 (v0.8.1-figures)
 - 2026-10-12 Step 5.1 started: full first draft (Intelligent Oncology, KeAi guide for authors) written as a Docs artifact from frozen and D53-corrected numbers; 12 references marked for verification
+- 2026-10-13 notebook 18 on v0.8.1-figures: all four figure data files identical to committed; manifest rebuilt, D54
