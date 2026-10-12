@@ -1,7 +1,8 @@
 {
  "parts": [
   "mia",
-  "probe"
+  "probe",
+  "logits"
  ],
- "seconds": 3.1
+ "seconds": 2.1
 }
