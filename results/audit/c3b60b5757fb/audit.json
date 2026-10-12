@@ -7,5 +7,6 @@
   "logits",
   "border"
  ],
- "seconds": 5.3
+ "seconds": 5.3,
+ "errors": {}
 }
