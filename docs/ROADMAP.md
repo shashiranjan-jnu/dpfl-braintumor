@@ -90,8 +90,8 @@ All 18 steps are not started, and Week 1 is assumed to begin on Monday 5 October
 | 3.2 | FedAvg completion and Gate A | 4 | 1 Nov | v0.4-week04 | Done | Gate A in D37 |
 | 3.3 | FedProx and SCAFFOLD grid | 5 | 8 Nov | v0.5-week05 | Done | D38, D40 to D42 |
 | 3.4 | Client count sweep and ResNet-18 | 6 | 15 Nov | v0.6-week06 | Done | H5 confirmed, D39 |
-| 4.1 | Membership inference audit | 7 | 22 Nov | v0.5-audit | In progress | Loss attack done for 165 models, stratified MIA and LiRA next, D44 |
-| 4.2 | XAI fidelity and Gate B | 7 | 22 Nov | v0.5-audit | In progress | Gate B passes via utility, IG fails sanity check, probe baselines next, D44 |
+| 4.1 | Membership inference audit | 7 | 22 Nov | v0.6.2-audit | Done | LiRA: no DP leaks, DP at chance, weight noise leaks, D48 |
+| 4.2 | XAI fidelity and Gate B | 7 | 22 Nov | v0.6.2-audit | Done | Gate B passes, mediated by utility, D44, D48 |
 | 4.3 | Results freeze | 8 | 29 Nov | v0.9-results-frozen | Not started |  |
 | 5.1 | Methods and Results drafting | 9 | 6 Dec | none | Not started |  |
 | 5.2 | Introduction, Discussion, front matter | 10 | 13 Dec | none | Not started |  |
@@ -358,9 +358,9 @@ Phase 4 turns trained models into evidence for RQ3 and RQ4, then freezes every r
 - [x] Keep audited checkpoints as Kaggle notebook outputs of launchers 07 to 10, attached as inputs (D43 replaces Release assets)
 - [x] Code for the loss-threshold attack at image level and Figshare patient level (src/attacks/mia.py)
 - [x] Run the loss-threshold attack on every privacy level, record and patient level (launcher 14, 165 models)
-- [ ] Train 16 shadow models per configuration for LiRA on natural3 at no DP, epsilon 8, 3, 1 (launcher 15, D45)
-- [ ] Weight-noise comparator, Gupta sigma 0.5 plus one utility-matched sigma, with LiRA (launcher 15, D45)
-- [ ] Loss attack within source and class cells from saved logits (launcher 15)
+- [x] Train 16 shadow models per configuration for LiRA on natural3 at no DP, epsilon 8, 3, 1 (launcher 15, D45)
+- [x] Weight-noise comparator, Gupta sigma 0.5 plus one utility-matched sigma, with LiRA (launcher 15, D45)
+- [x] Loss attack within source and class cells from saved logits (launcher 15)
 - [ ] Report true positive rate at 0.1% false positive rate, with ROC curves on a log scale
 
 **Acceptance criteria.**

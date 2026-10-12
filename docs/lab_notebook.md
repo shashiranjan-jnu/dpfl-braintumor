@@ -134,3 +134,9 @@
 - Grad-CAM rim energy 0.17 to 0.19 against chance 0.33, outside-brain energy 0.26 to 0.36; layer-3 Grad-CAM no better
 - logits.npz and cams8.npz not pushed (.gitignore *.npz); summary cell failed on inf logits; fixes and launcher 16 in v0.6.2-audit (D47)
 - 16 first attempt stopped at the audit cell: /kaggle/working/logs did not exist (created only in launcher 15's selection cell); fixed in the notebook generator, code tag v0.6.2-audit unchanged
+
+## 2026-10-12 Launcher 16 (code v0.6.2-audit, about 0.3 GPU hours, 271 logits files, 115 Grad-CAM map files)
+- LiRA online, natural3: no DP AUC 0.662, TPR@1% 0.112, TPR@0.1% 0.033, patient AUC 0.805; epsilon 8, 3, 1 TPR@1% 0.015, 0.017, 0.009; weight noise 0.003 AUC 0.589, TPR@1% 0.047, patient AUC 0.745
+- within-stratum loss AUC under DP still below 0.5 (natural3 epsilon 8 0.459)
+- consistency IoU central 0.700 / 0.663 / 0.485 / 0.309 / 0.235 (no DP, clip, eps 8, 3, 1); r 0.79 with accuracy
+- outside-brain chance 0.38 to 0.46, Grad-CAM outside energy at or below it; Steps 4.1 and 4.2 closed (D48)
