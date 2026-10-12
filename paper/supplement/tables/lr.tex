@@ -1,0 +1,69 @@
+{\footnotesize
+\begin{longtable}{llrrrc}
+\caption{Learning-rate selection at seed 0 for federated models, by lowest best validation loss among two candidates. Seed 0 is never used for reported results.}\label{tab:s_lr}\\
+\toprule
+Partition & Regime & lr & Best val. loss & Val. bal. acc. & Selected \\
+\midrule
+\endfirsthead
+\toprule
+Partition & Regime & lr & Best val. loss & Val. bal. acc. & Selected \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+natural3 & no DP & 0.003 & 0.447 & 0.801 &  \\
+natural3 & no DP & 0.01 & 0.333 & 0.847 & \checkmark \\
+IID, $K{=}10$ & no DP & 0.003 & 0.310 & 0.882 &  \\
+IID, $K{=}10$ & no DP & 0.01 & 0.255 & 0.911 & \checkmark \\
+Dir. 0.1, $K{=}10$ & no DP & 0.003 & 0.542 & 0.720 &  \\
+Dir. 0.1, $K{=}10$ & no DP & 0.01 & 0.378 & 0.838 & \checkmark \\
+Dir. 0.5, $K{=}10$ & no DP & 0.003 & 0.356 & 0.836 &  \\
+Dir. 0.5, $K{=}10$ & no DP & 0.01 & 0.318 & 0.889 & \checkmark \\
+Dir. 5.0, $K{=}10$ & no DP & 0.003 & 0.309 & 0.875 &  \\
+Dir. 5.0, $K{=}10$ & no DP & 0.01 & 0.267 & 0.896 & \checkmark \\
+natural3 & $\varepsilon=8$ & 0.003 & 0.780 & 0.678 &  \\
+natural3 & $\varepsilon=8$ & 0.01 & 0.656 & 0.811 & \checkmark \\
+IID, $K{=}10$ & $\varepsilon=8$ & 0.003 & 0.784 & 0.691 & \checkmark \\
+IID, $K{=}10$ & $\varepsilon=8$ & 0.01 & 0.823 & 0.648 &  \\
+Dir. 0.1, $K{=}10$ & $\varepsilon=8$ & 0.003 & 0.751 & 0.689 & \checkmark \\
+Dir. 0.1, $K{=}10$ & $\varepsilon=8$ & 0.01 & 0.901 & 0.568 &  \\
+Dir. 0.5, $K{=}10$ & $\varepsilon=8$ & 0.003 & 0.763 & 0.692 & \checkmark \\
+Dir. 0.5, $K{=}10$ & $\varepsilon=8$ & 0.01 & 0.877 & 0.644 &  \\
+Dir. 5.0, $K{=}10$ & $\varepsilon=8$ & 0.003 & 0.779 & 0.685 & \checkmark \\
+Dir. 5.0, $K{=}10$ & $\varepsilon=8$ & 0.01 & 0.835 & 0.625 &  \\
+natural3 & $\varepsilon=3$ & 0.003 & 0.784 & 0.663 & \checkmark \\
+natural3 & $\varepsilon=3$ & 0.01 & 0.812 & 0.588 &  \\
+IID, $K{=}10$ & $\varepsilon=3$ & 0.003 & 0.928 & 0.504 & \checkmark \\
+IID, $K{=}10$ & $\varepsilon=3$ & 0.01 & 1.228 & 0.336 &  \\
+Dir. 0.1, $K{=}10$ & $\varepsilon=3$ & 0.003 & 0.957 & 0.521 & \checkmark \\
+Dir. 0.1, $K{=}10$ & $\varepsilon=3$ & 0.01 & 1.241 & 0.299 &  \\
+Dir. 0.5, $K{=}10$ & $\varepsilon=3$ & 0.003 & 0.970 & 0.560 & \checkmark \\
+Dir. 0.5, $K{=}10$ & $\varepsilon=3$ & 0.01 & 1.255 & 0.299 &  \\
+Dir. 5.0, $K{=}10$ & $\varepsilon=3$ & 0.003 & 0.953 & 0.483 & \checkmark \\
+Dir. 5.0, $K{=}10$ & $\varepsilon=3$ & 0.01 & 1.233 & 0.308 &  \\
+natural3 & $\varepsilon=1$ & 0.003 & 0.980 & 0.518 & \checkmark \\
+natural3 & $\varepsilon=1$ & 0.01 & 1.363 & 0.274 &  \\
+IID, $K{=}10$ & $\varepsilon=1$ & 0.003 & 1.307 & 0.389 & \checkmark \\
+IID, $K{=}10$ & $\varepsilon=1$ & 0.01 & 1.769 & 0.275 &  \\
+Dir. 0.1, $K{=}10$ & $\varepsilon=1$ & 0.003 & 1.243 & 0.372 & \checkmark \\
+Dir. 0.1, $K{=}10$ & $\varepsilon=1$ & 0.01 & 1.889 & 0.251 &  \\
+Dir. 0.5, $K{=}10$ & $\varepsilon=1$ & 0.003 & 1.311 & 0.384 & \checkmark \\
+Dir. 0.5, $K{=}10$ & $\varepsilon=1$ & 0.01 & 1.738 & 0.269 &  \\
+Dir. 5.0, $K{=}10$ & $\varepsilon=1$ & 0.003 & 1.311 & 0.380 & \checkmark \\
+Dir. 5.0, $K{=}10$ & $\varepsilon=1$ & 0.01 & 1.693 & 0.276 &  \\
+natural3 & patient $\varepsilon=8$ & 0.003 & 1.191 & 0.408 & \checkmark \\
+natural3 & patient $\varepsilon=8$ & 0.01 & 1.543 & 0.280 &  \\
+unit Dir. 0.5, $K{=}10$ & patient $\varepsilon=8$ & 0.003 & 2.098 & 0.353 &  \\
+unit Dir. 0.5, $K{=}10$ & patient $\varepsilon=8$ & 0.01 & 2.051 & 0.246 & \checkmark \\
+natural3 & patient $\varepsilon=3$ & 0.003 & 1.410 & 0.267 & \checkmark \\
+natural3 & patient $\varepsilon=3$ & 0.01 & 15.649 & 0.281 &  \\
+unit Dir. 0.5, $K{=}10$ & patient $\varepsilon=3$ & 0.003 & 2.275 & 0.214 & \checkmark \\
+unit Dir. 0.5, $K{=}10$ & patient $\varepsilon=3$ & 0.01 & 15.845 & 0.250 &  \\
+unit Dir. 0.5, $K{=}10$ & no DP & 0.003 & 0.385 & 0.843 &  \\
+unit Dir. 0.5, $K{=}10$ & no DP & 0.01 & 0.306 & 0.886 & \checkmark \\
+unit Dir. 0.5, $K{=}10$ & $\varepsilon=8$ & 0.003 & 0.783 & 0.681 & \checkmark \\
+unit Dir. 0.5, $K{=}10$ & $\varepsilon=8$ & 0.01 & 0.911 & 0.520 &  \\
+unit Dir. 0.5, $K{=}10$ & $\varepsilon=3$ & 0.003 & 0.958 & 0.599 & \checkmark \\
+unit Dir. 0.5, $K{=}10$ & $\varepsilon=3$ & 0.01 & 1.292 & 0.322 &  \\
+\end{longtable}}
+

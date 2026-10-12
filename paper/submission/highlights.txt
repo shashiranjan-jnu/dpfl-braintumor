@@ -1,0 +1,7 @@
+Highlights
+
+• Deduplicated three-source brain MRI benchmark with patient-disjoint splits
+• Record-level DP at ε 8 removes LiRA leakage for 0.08 to 0.13 accuracy
+• Patient-level DP needs ε 64 to match record-level ε 8 accuracy
+• Unclipped weight noise at matched utility still leaks training patients
+• Explanation consistency under DP falls in step with accuracy

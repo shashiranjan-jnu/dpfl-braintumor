@@ -1,0 +1,17 @@
+\begin{table}[H]
+\centering\footnotesize
+\caption{Local-only baselines. Each client of the natural partition trains alone on its own images with the central protocol and is tested on the shared test set (seed means).}\label{tab:s_local}
+{\begin{tabular}{lrrrr}
+\toprule
+Client & Regime & Seeds & Bal. acc. (full) & Bal. acc. (clean) \\
+\midrule
+Br35H & $\varepsilon=8$ & 3 & 0.249 & 0.255 \\
+Br35H & no DP & 3 & 0.250 & 0.250 \\
+Figshare & $\varepsilon=8$ & 3 & 0.464 & 0.464 \\
+Figshare & no DP & 3 & 0.625 & 0.625 \\
+SARTAJ & $\varepsilon=8$ & 3 & 0.245 & 0.250 \\
+SARTAJ & no DP & 3 & 0.543 & 0.526 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+

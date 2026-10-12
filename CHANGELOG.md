@@ -2,6 +2,11 @@
 
 Newest entry first.
 
+## 2026-10-13 (v0.9.2-manuscript, proposed)
+
+- `paper/`: manuscript in Elsevier CAS LaTeX (`main.tex`), AMA references verified (`references.py`), build script producing the submission folder with preview PDF, Word file, numbered figures, highlights and supplement PDF (D55).
+- `scripts/make_supplement.py`: supplementary Tables S1 to S18 from frozen files.
+
 ## 2026-10-13 (v0.9.1-results-frozen)
 
 - Kaggle rerun under v0.8.1-figures matches the corrected figures exactly; freeze manifest rebuilt (D54).

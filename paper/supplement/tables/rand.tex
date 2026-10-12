@@ -1,0 +1,22 @@
+\begin{table}[H]
+\centering\footnotesize
+\caption{Model-parameter randomisation check, Spearman rank correlation between maps of the trained model and of a fully re-initialised network (central models, seed 1). Values near zero pass the check. All layers re-initialises every weight, last block only the final residual block and the classifier.}\label{tab:s_rand}
+{\begin{tabular}{lrrrr}
+\toprule
+Regime & Grad-CAM, all layers & Grad-CAM, last block & IG, all layers & IG, last block \\
+\midrule
+no DP & 0.310 & 0.444 & 0.684 & 0.709 \\
+clip only & 0.328 & 0.408 & 0.700 & 0.709 \\
+$\varepsilon=8$ & 0.388 & 0.377 & 0.706 & 0.714 \\
+$\varepsilon=3$ & 0.324 & 0.029 & 0.699 & 0.722 \\
+$\varepsilon=1$ & -0.047 & 0.309 & 0.703 & 0.728 \\
+patient clip only & 0.166 & 0.477 & 0.683 & 0.705 \\
+patient $\varepsilon=64$ & 0.232 & 0.491 & 0.694 & 0.719 \\
+patient $\varepsilon=32$ & 0.309 & 0.403 & 0.703 & 0.726 \\
+patient $\varepsilon=16$ & 0.035 & -0.010 & 0.690 & 0.710 \\
+patient $\varepsilon=8$ & 0.050 & 0.316 & 0.698 & 0.726 \\
+patient $\varepsilon=3$ & 0.101 & 0.098 & 0.712 & 0.731 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+

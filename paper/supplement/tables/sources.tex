@@ -1,0 +1,48 @@
+{\scriptsize
+\begin{longtable}{lllrrrrrr}
+\caption{Per-source controls on the full test set (FedAvg, seed means). SARTAJ is the only source with all four classes, and Figshare holds the three tumour classes only. Specificity is the no-tumour recall within each source.}\label{tab:s_sources}\\
+\toprule
+Mode & Partition & Regime & Bal. acc. & SARTAJ (4 cl.) & Figshare (3 cl.) & Tumour sens. & Spec. SARTAJ & Spec. Br35H \\
+\midrule
+\endfirsthead
+\toprule
+Mode & Partition & Regime & Bal. acc. & SARTAJ (4 cl.) & Figshare (3 cl.) & Tumour sens. & Spec. SARTAJ & Spec. Br35H \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+central & natural3 & no DP & 0.919 & 0.663 & 0.924 & 0.984 & 0.919 & 0.994 \\
+central & natural3 & clip only & 0.871 & 0.586 & 0.885 & 0.975 & 0.797 & 0.997 \\
+central & natural3 & $\varepsilon=8$ & 0.815 & 0.528 & 0.830 & 0.975 & 0.702 & 0.976 \\
+central & natural3 & $\varepsilon=3$ & 0.686 & 0.467 & 0.681 & 0.958 & 0.590 & 0.870 \\
+central & natural3 & $\varepsilon=1$ & 0.331 & 0.326 & 0.394 & 0.967 & 0.125 & 0.148 \\
+central & natural3 & patient clip only & 0.884 & 0.636 & 0.882 & 0.974 & 0.902 & 1.000 \\
+central & natural3 & patient $\varepsilon=64$ & 0.836 & 0.617 & 0.818 & 0.962 & 0.871 & 0.997 \\
+central & natural3 & patient $\varepsilon=32$ & 0.745 & 0.561 & 0.695 & 0.960 & 0.847 & 0.988 \\
+central & natural3 & patient $\varepsilon=16$ & 0.584 & 0.449 & 0.487 & 0.845 & 0.820 & 0.976 \\
+central & natural3 & patient $\varepsilon=8$ & 0.353 & 0.290 & 0.177 & 0.462 & 0.824 & 0.948 \\
+central & natural3 & patient $\varepsilon=3$ & 0.253 & 0.256 & 0.006 & 0.018 & 0.983 & 1.000 \\
+federated & Dir. 0.1, $K{=}10$ & no DP & 0.843 & 0.594 & 0.845 & 0.985 & 0.769 & 0.982 \\
+federated & Dir. 0.1, $K{=}10$ & $\varepsilon=8$ & 0.677 & 0.441 & 0.712 & 0.979 & 0.434 & 0.776 \\
+federated & Dir. 0.1, $K{=}10$ & $\varepsilon=3$ & 0.632 & 0.429 & 0.690 & 0.972 & 0.342 & 0.636 \\
+federated & Dir. 0.1, $K{=}10$ & $\varepsilon=1$ & 0.322 & 0.317 & 0.359 & 0.948 & 0.183 & 0.209 \\
+federated & Dir. 0.5, $K{=}10$ & no DP & 0.878 & 0.676 & 0.861 & 0.984 & 0.936 & 1.000 \\
+federated & Dir. 0.5, $K{=}10$ & $\varepsilon=8$ & 0.718 & 0.465 & 0.716 & 0.970 & 0.576 & 0.945 \\
+federated & Dir. 0.5, $K{=}10$ & $\varepsilon=3$ & 0.626 & 0.434 & 0.662 & 0.973 & 0.397 & 0.688 \\
+federated & Dir. 0.5, $K{=}10$ & $\varepsilon=1$ & 0.341 & 0.326 & 0.345 & 0.878 & 0.292 & 0.358 \\
+federated & Dir. 5.0, $K{=}10$ & no DP & 0.899 & 0.631 & 0.903 & 0.986 & 0.885 & 1.000 \\
+federated & Dir. 5.0, $K{=}10$ & $\varepsilon=8$ & 0.720 & 0.462 & 0.714 & 0.968 & 0.607 & 0.958 \\
+federated & Dir. 5.0, $K{=}10$ & $\varepsilon=3$ & 0.623 & 0.428 & 0.658 & 0.975 & 0.393 & 0.691 \\
+federated & Dir. 5.0, $K{=}10$ & $\varepsilon=1$ & 0.333 & 0.326 & 0.354 & 0.901 & 0.247 & 0.282 \\
+federated & IID, $K{=}10$ & no DP & 0.904 & 0.650 & 0.906 & 0.985 & 0.902 & 1.000 \\
+federated & IID, $K{=}10$ & $\varepsilon=8$ & 0.720 & 0.464 & 0.714 & 0.967 & 0.600 & 0.961 \\
+federated & IID, $K{=}10$ & $\varepsilon=3$ & 0.639 & 0.432 & 0.661 & 0.967 & 0.427 & 0.767 \\
+federated & IID, $K{=}10$ & $\varepsilon=1$ & 0.348 & 0.335 & 0.363 & 0.879 & 0.288 & 0.318 \\
+federated & natural3 & no DP & 0.875 & 0.599 & 0.913 & 0.990 & 0.678 & 0.955 \\
+federated & natural3 & $\varepsilon=8$ & 0.808 & 0.517 & 0.852 & 0.976 & 0.590 & 0.906 \\
+federated & natural3 & $\varepsilon=3$ & 0.714 & 0.498 & 0.716 & 0.977 & 0.593 & 0.891 \\
+federated & natural3 & $\varepsilon=1$ & 0.537 & 0.357 & 0.603 & 0.965 & 0.312 & 0.415 \\
+federated & natural3 & patient $\varepsilon=8$ & 0.403 & 0.312 & 0.503 & 0.967 & 0.092 & 0.152 \\
+federated & unit Dir. 0.5, $K{=}10$ & patient $\varepsilon=8$ & 0.264 & 0.255 & 0.184 & 0.497 & 0.549 & 0.479 \\
+\end{longtable}}
+

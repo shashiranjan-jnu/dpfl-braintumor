@@ -1,0 +1,23 @@
+\begin{table}[H]
+\centering\footnotesize
+\caption{Client count at fixed data, Dirichlet $\alpha=0.5$ FedAvg at learning rate 0.003, full test set. The aggregated noise standard deviation is $\sigma C\sqrt{K}/(qN)$ with $N=2610$.}\label{tab:s_h5}
+{\begin{tabular}{rlrrrrr}
+\toprule
+$K$ & Regime & Client size min/med./max & $\sigma$ & Agg. noise s.d. & Bal. acc. & sens$_M$ \\
+\midrule
+3 & $\varepsilon=3$ & 424/618/1568 & 4.832 & 0.0321 & 0.719 (0.698, 0.739) & 0.315 \\
+5 & $\varepsilon=3$ & 204/452/1065 & 4.832 & 0.0414 & 0.708 (0.684, 0.732) & 0.171 \\
+10 & $\varepsilon=3$ & 82/225/533 & 4.832 & 0.0585 & 0.626 (0.570, 0.682) & 0.067 \\
+15 & $\varepsilon=3$ & 29/190/354 & 4.832 & 0.0717 & 0.558 (0.458, 0.658) & 0.030 \\
+3 & $\varepsilon=8$ & 424/618/1568 & 2.179 & 0.0145 & 0.717 (0.644, 0.790) & 0.305 \\
+5 & $\varepsilon=8$ & 204/452/1065 & 2.179 & 0.0187 & 0.735 (0.712, 0.758) & 0.244 \\
+10 & $\varepsilon=8$ & 82/225/533 & 2.179 & 0.0264 & 0.718 (0.686, 0.750) & 0.193 \\
+15 & $\varepsilon=8$ & 29/190/354 & 2.179 & 0.0323 & 0.696 (0.618, 0.774) & 0.163 \\
+3 & no DP & 424/618/1568 & 0.000 & 0.0000 & 0.868 (0.850, 0.886) & 0.643 \\
+5 & no DP & 204/452/1065 & 0.000 & 0.0000 & 0.906 (0.894, 0.919) & 0.811 \\
+10 & no DP & 82/225/533 & 0.000 & 0.0000 & 0.878 (0.863, 0.893) & 0.605 \\
+15 & no DP & 29/190/354 & 0.000 & 0.0000 & 0.903 (0.897, 0.909) & 0.799 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+

@@ -1,0 +1,598 @@
+%% Intelligent Oncology (KeAi) submission, Elsevier CAS single-column template (cas-sc).
+%% Compile on Overleaf with the "Elsevier CAS" template files (cas-sc.cls, cas-common.sty) or with
+%% els-cas-templates from CTAN. paper/build.py also builds a local preview with paper/preview/cas-sc.cls.
+%% Every number in this file comes from results/FROZEN_MANIFEST.json at tag v0.9.1-results-frozen.
+\documentclass[a4paper,fleqn]{cas-sc}
+
+\usepackage[numbers,super,sort&compress]{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{ragged2e}
+\usepackage[switch]{lineno}
+\graphicspath{{figures/}}
+
+\begin{document}
+\let\WriteBookmarks\relax
+
+\shorttitle{Patient-level privacy in federated brain tumour MRI}
+\shortauthors{Authors to be completed}
+
+\title[mode=title]{Patient-level differential privacy, membership leakage and explanation fidelity in federated
+brain tumour MRI classification on a deduplicated benchmark}
+
+\author[1]{First Author}[orcid=0000-0000-0000-0000]
+\cormark[1]
+\ead{author@institution.edu}
+\author[1]{Second Author}
+\affiliation[1]{organization={Department, Institution},
+  addressline={Full postal address},
+  city={City},
+  postcode={Postcode},
+  country={Country}}
+\cortext[1]{Corresponding author. Full postal address and telephone number with country and area code to be
+completed.}
+
+\begin{abstract}
+\noindent\textbf{Background.} Federated brain tumour classifiers on public MRI collections report accuracies above
+92\%, yet the merged sources contain duplicated images, and privacy claims rarely state an accounted budget or a
+privacy unit.
+
+\noindent\textbf{Purpose.} This study measures what formally accounted differential privacy (DP) costs and protects
+in federated brain tumour MRI classification, at the level of single images and of whole patients, on a deduplicated
+benchmark.
+
+\noindent\textbf{Methods.} Figshare, SARTAJ and Br35H images were deduplicated by perceptual hashing into 3845 images
+with patient-disjoint splits, and a later correlation check removed 66 mirrored near-duplicates from the test set. A
+pretrained ResNet-18 was trained centrally and with FedAvg, FedProx and SCAFFOLD under record-level and
+patient-level DP-SGD, with R\'enyi accounting at $\delta=10^{-5}$ and five seeds per setting. Leakage was audited
+with LiRA using 16 shadow models, and Grad-CAM was scored against expert tumour masks and across seeds.
+
+\noindent\textbf{Results.} On 747 clean test images, central balanced accuracy fell from 0.908 without DP to 0.778
+at record-level $\varepsilon=8$, while patient-level DP needed $\varepsilon=64$ to reach 0.820. Under DP, accuracy
+declined with client count at fixed data, by 0.096 per unit of $\ln K$ at $\varepsilon=3$. For federated models
+without DP, LiRA identified 10.8\% of training images at 1\% false positives and training patients with AUC 0.805,
+whereas every DP setting stayed at chance. Unclipped weight noise at matched utility still leaked, and Grad-CAM
+consistency fell from 0.70 to 0.24 in step with accuracy.
+
+\noindent\textbf{Conclusions.} Record-level DP at $\varepsilon=8$ removes measurable image and patient leakage at a
+cost of 0.08 (federated) to 0.13 (central) in balanced accuracy, whereas a formal per-patient guarantee costs far
+more at this data scale.
+\end{abstract}
+
+\begin{highlights}
+\item Deduplicated three-source brain MRI benchmark with patient-disjoint splits
+\item Record-level DP at $\varepsilon$ 8 removes LiRA leakage for 0.08 to 0.13 accuracy
+\item Patient-level DP needs $\varepsilon$ 64 to match record-level $\varepsilon$ 8 accuracy
+\item Unclipped weight noise at matched utility still leaks training patients
+\item Explanation consistency under DP falls in step with accuracy
+\end{highlights}
+
+\begin{keywords}
+Federated learning \sep Differential privacy \sep Membership inference \sep Brain tumour MRI \sep
+Explainable artificial intelligence \sep Data leakage
+\end{keywords}
+
+\maketitle
+\linenumbers
+\RaggedRight
+\setlength{\parindent}{1.5em}
+
+\section{Introduction}
+Federated learning lets hospitals train a shared tumour classifier without pooling scans, and early brain tumour
+studies showed that federated models approach the accuracy of centrally trained ones.\cite{sheller2019,sheller2020,pati2022}
+A large body of later work evaluates the same idea on public four-class MRI collections assembled from Figshare,
+SARTAJ and Br35H, with reported accuracies between 92\% and 99\%.\cite{albalawi2024,mastoi2025,muntaqim2025,paul2026}
+
+Those collections overlap. Vangala et al.\ found that 28.8\% of a widely used Kaggle test split has a near-twin in
+training and that most traceable Figshare test images share a patient with training images.\cite{vangala2026}
+Accuracy measured on such splits partly rewards memorised duplicates, so it cannot show what privacy protection
+costs a model that must generalise to unseen patients.
+
+Privacy claims in the same literature are seldom checkable. Several federated studies add noise but do not state
+the privacy budget $\varepsilon$, the failure probability $\delta$ or the unit being protected.\cite{lakshmi2026,qazi2026}
+Differentially private stochastic gradient descent (DP-SGD) bounds each example's influence by clipping its gradient
+before adding calibrated noise.\cite{abadi2016} The closest prior work on federated brain tumour MRI instead adds
+Gaussian noise with standard deviation 0.5 to client weights without clipping, so its stated $\varepsilon$ of about
+3.4 cannot be derived from the mechanism.\cite{gupta2026}
+
+Formal privacy in medical imaging has a measurable price. Kaissis et al.\ trained a three-site federated model on
+paediatric chest radiographs at $\varepsilon=6$, and accuracy fell while remaining comparable to two
+radiologists.\cite{kaissis2021} Large budgets can already block reconstruction attacks at small cost.\cite{ziller2024}
+Knolle et al.\ showed, however, that patients contributing several similar records can face near-perfect membership
+inference even when an aggregate attack looks random.\cite{knolle2026}
+
+That finding matters for slice-based MRI, where one Figshare patient contributes about 13 slices. A guarantee per
+image then protects a patient only through group privacy, roughly 13 times weaker, so a privacy unit of one patient
+is the clinically meaningful choice. Explanations raise a second question, since DP is known to degrade
+gradient-based attributions,\cite{saifullah2024,manna2024} yet localisation against expert tumour masks under
+federated DP has not been measured.
+
+This study addresses these gaps on a deduplicated three-source benchmark with expert tumour masks.\cite{cheng2015} It
+asks what record-level and patient-level DP cost in accuracy, how client count and drift correction change that cost,
+whether measured leakage follows the formal guarantee, and how explanations change under privacy.
+
+\subsection{Contributions}
+\begin{enumerate}
+\item \textbf{A deduplicated, patient-disjoint benchmark.} Perceptual-hash deduplication reduced 10,189 source
+files to 3845 images split by patient, and an independent correlation check found 66 mirrored near-duplicates in the
+test set, which are excluded from every reported result.
+\item \textbf{An accounted privacy-utility map at two privacy units.} Central and federated models were trained under
+record-level and patient-level DP-SGD with R\'enyi accounting and five seeds per setting. Record-level
+$\varepsilon=8$ cost 0.13 balanced accuracy centrally, while patient-level DP needed $\varepsilon=64$ for the same
+utility.
+\item \textbf{The noise-scale explanation of client count under DP.} Splitting the same data across more clients
+reduced accuracy under DP, by 0.096 per unit of $\ln K$ at $\varepsilon=3$, and the aggregated noise scale predicted
+this decline. FedProx and SCAFFOLD did not recover the loss.
+\item \textbf{An empirical privacy audit.} LiRA with 16 shadow models per setting detected training images and
+patients without DP and found nothing above chance under any DP setting. An unclipped weight-noise mechanism at
+matched utility still leaked.
+\item \textbf{Explanation fidelity under privacy.} Grad-CAM localisation against expert masks and its consistency
+across seeds both fell as $\varepsilon$ shrank, and the fall tracked accuracy closely ($r=0.80$).
+\end{enumerate}
+
+Section~\ref{sec:methods} describes the data, training and audit protocol that produced these results.
+
+\section{Material and methods}\label{sec:methods}
+
+\subsection{Data sources and deduplication}
+Three public collections were combined, namely Figshare (3064 T1-weighted contrast-enhanced slices from 233 patients
+with expert tumour masks),\cite{cheng2015} SARTAJ (3264 images) and Br35H (3861 images). Glioma, meningioma,
+pituitary tumour and no-tumour labels were kept, which left 7828 images before deduplication.
+
+Each image was rescaled to 8-bit intensity between its 0.5th and 99.5th percentiles, padded to a square and resized
+to $128\times128$ pixels with box filtering. A 64-bit discrete cosine transform perceptual hash was computed per
+image. Pairs within Hamming distance 4 were treated as duplicates, and pairs within distance 6, together with all
+slices of one Figshare patient, were linked into one split unit.
+
+Duplicate groups kept one image, preferring Figshare over SARTAJ over Br35H. Groups with conflicting labels were
+removed (26 images within groups and 23 non-Figshare images conflicting with Figshare), and 48 pairs of Figshare
+patients sharing a slice were merged into single units. The curated set holds 3845 images in 821 training and test
+units plus 103 validation units (Table~\ref{tab:data}).
+
+Units were assigned to training, validation and test splits with seed 2026, giving 2610, 422 and 813 images with no
+Figshare patient in two splits. As a later check, every pair of curated images was compared by normalised
+cross-correlation (NCC) of $64\times64$ versions, both as stored and with one image mirrored.
+
+A test image with NCC of at least 0.95 to any image in another split, a threshold fixed before the check, was marked
+contaminated. This marked 66 test images, of which 120 of the underlying 148 cross-split pairs matched only after
+mirroring, a case the perceptual hash cannot detect. All results use the remaining 747 clean test images, and
+full-set values are given in the supplement.
+
+\subsection{Federated partitions}
+The natural partition (natural3) assigns each source to one client, giving clients of 2029 (Figshare), 351 (SARTAJ)
+and 230 (Br35H) training images with strong label skew, since no-tumour images come only from SARTAJ and Br35H.
+Synthetic partitions split the same 2610 images into 10 clients, either uniformly at random or by a Dirichlet prior
+over class proportions with $\alpha$ of 0.1, 0.5 or 5.0.\cite{hsu2019}
+
+To test the effect of client count at fixed data, the $\alpha=0.5$ partition was also built with $K$ of 3, 5 and 15
+clients. For patient-level DP, a Dirichlet partition over whole units ($\alpha=0.5$, $K=10$) keeps every patient on
+one client.
+
+\subsection{Model and training}
+All models are an ImageNet-pretrained ResNet-18\cite{he2016} whose first convolution sums the RGB filters into one
+input channel. Batch normalisation layers stay in inference mode with their pretrained statistics, so the network is
+a per-example function and per-example clipping remains valid, while their affine parameters are trained.
+
+Federated training uses FedAvg\cite{mcmahan2017} with full participation and size-weighted averaging over 100 rounds.
+Each round, every client runs one local epoch of 10 steps with Poisson sampling at rate $q=0.1$, stochastic gradient
+descent with momentum 0.9, a cosine learning-rate schedule and random horizontal flips.
+
+Central training is the one-client case on the pooled training set. The released model is the round with the lowest
+validation loss. Without DP, gradients are clipped to a global norm of 1.0 for stability.
+
+\subsection{Record-level and patient-level differential privacy}
+Record-level DP-SGD\cite{abadi2016} clips each example's gradient $g_i$ to norm $C=1$, adds Gaussian noise to the sum
+and divides by the expected batch size $q\,n_j$ of client $j$, as in Eq.~(\ref{eq:dpsgd}), where $B$ is the sampled
+batch and $\sigma$ the noise multiplier.
+\begin{equation}
+\tilde{g} = \frac{1}{q\, n_j}\left( \sum_{i \in B} g_i \min\left(1, \frac{C}{\lVert g_i \rVert_2}\right)
++ \mathcal{N}\left(0, \sigma^2 C^2 I\right) \right)
+\label{eq:dpsgd}
+\end{equation}
+
+The noise multiplier $\sigma$ was calibrated by bisection so that R\'enyi DP accounting\cite{mironov2017} in
+Opacus\cite{yousefpour2021} gives the target $\varepsilon$ at $\delta=10^{-5}$ over the 1000 local steps. Targets
+were $\varepsilon$ of 1, 3 and 8, plus a clip-only ablation with $\sigma=0$ that separates the effect of clipping from
+that of noise.
+
+Patient-level DP replaces images by units. Units are Poisson-sampled at rate $q$, the mean gradient of each sampled
+unit is clipped to $C$, and noise is added to the sum before division by $q\,U_j$, where $U_j$ counts the client's
+units.
+
+The guarantee then holds per patient, with a unit split across $m$ clients composed over $m$ mechanisms. Central
+patient-level models used $\varepsilon$ of 3, 8, 16, 32 and 64, and federated ones $\varepsilon=8$. Because learning
+rates were chosen on validation data among $k=2$ candidates trained on the same records, the $\varepsilon$ composed
+over both candidates is also reported, following Papernot and Steinke.\cite{papernot2022}
+
+\subsection{Drift correction and the weight-noise comparator}
+FedProx\cite{li2020} adds a proximal term with weight $\mu$ to each local objective, and $\mu$ from 0.01 to 10 was
+screened on validation loss at seed 0. SCAFFOLD\cite{karimireddy2020} uses option II control variates, with two
+corrections required by this setting.
+
+The normaliser of the control variate uses the displacement of heavy-ball momentum, $\eta\,S(K,\beta)$ with
+$S=\sum_{k=1}^{K}(1-\beta^k)/(1-\beta)$, instead of $K\eta$, where $\eta$ is the learning rate, $K$ the number of
+local steps and $\beta$ the momentum. The server control variate is averaged with the same size weights as the model,
+and an ablation keeps the uniform average.
+
+To test the mechanism of the closest prior work,\cite{gupta2026} Gaussian noise $\mathcal{N}(0,s^2)$ was added to each
+client's weights after local training, without clipping or accounting. The literal $s=0.5$ was kept, and a
+utility-matched $s$ was chosen by a rule fixed beforehand.
+
+That rule took the largest $s$ in $\{0.5, 0.05, 0.01, 0.003, 0.001\}$ whose seed-0 validation loss did not exceed
+that of record-level $\varepsilon=8$ FedAvg on natural3, which selected $s=0.003$.
+
+\subsection{Membership inference audit}
+The likelihood-ratio attack LiRA\cite{carlini2022} was run against natural3 FedAvg at no DP and at $\varepsilon$ of
+8, 3 and 1, and against the weight-noise comparator. Each target configuration has 16 shadow models trained with the
+target's own settings and noise multiplier.
+
+Each shadow model trains on a random half of the training and test units, so every patient is wholly in or out. The
+attack statistic is the logit of the true-class confidence on the image and its mirror, and online LiRA compares
+Gaussian fits to IN and OUT shadow statistics with one pooled variance per side.
+
+Members are the training images and non-members the clean test images. Patient-level scores sum image scores over a
+Figshare patient, comparing 126 training with 40 test patients. True-positive rates at 1\% and 0.1\% false-positive
+rate are the primary measures, with AUC reported alongside.
+
+\subsection{Explanation metrics}
+Grad-CAM\cite{selvaraju2017} on the last residual block, Grad-CAM++\cite{chattopadhay2018} and Integrated
+Gradients\cite{sundararajan2017} with a black baseline were computed for the 645 Figshare test tumour images that have
+expert masks. Localisation used the pointing game with a 3-pixel tolerance, the IoU of the top 15\% of pixels with the
+mask and the share of saliency inside the mask.
+
+Faithfulness used deletion and insertion curves over 20 steps.\cite{petsiuk2018} A model-parameter randomisation
+test\cite{adebayo2018} checked that maps depend on learned weights, and the outer 8-pixel rim of the brain was scored
+to detect skull-border artefacts.
+
+Consistency across seeds followed Gupta et al.,\cite{gupta2026} with the five seeds of one configuration in place of
+clients. It is the IoU between the top 10\% of each model's Grad-CAM pixels and those of the mean map, computed per
+image at $8\times8$ resolution.
+
+\subsection{Source controls}
+Because no-tumour images come only from SARTAJ and Br35H, accuracy was also computed on SARTAJ alone, the only source
+with all four classes. A logistic-regression probe on penultimate features tested whether the source collection is
+decodable among images of one class, and the same probe on an ImageNet-initialised and a randomly initialised network
+gave baselines.
+
+\subsection{Statistics and reproducibility}
+Every setting was trained with seeds 1 to 5, with seed 0 reserved for learning-rate and $\mu$ selection. Results are
+seed means with $t$-based 95\% confidence intervals, and SCAFFOLD was compared with FedAvg by paired $t$-tests over
+seeds with Holm correction across 15 configurations.
+
+The client-count effect was estimated as the slope of balanced accuracy on $\ln K$ over 20 runs per privacy level.
+Explanation metrics within one model carry 95\% intervals from 2000 bootstrap resamples of test patients.
+
+All training ran on Kaggle with two NVIDIA T4 GPUs, about 64 GPU hours in total, from tagged code versions. Each run
+is identified by a hash of its resolved configuration. The tables and figures were regenerated on Kaggle from the
+stored run files and frozen with SHA-256 hashes before writing.
+
+These procedures produced the measurements reported next, beginning with the accuracy cost of each privacy setting.
+
+\section{Results}
+
+\subsection{Curated benchmark}
+Deduplication removed half of all labelled images, mostly because SARTAJ and Br35H repeat each other and Figshare
+(Table~\ref{tab:data}). The NCC check then removed 66 test images, almost all Br35H no-tumour images whose mirrored
+copies sat in training or validation.
+
+\begin{table}[width=\linewidth,cols=8,pos=htbp]
+\caption{Images per source through curation and splitting.}\label{tab:data}
+\begin{tabular*}{\tblwidth}{@{}LRRRRRRR@{}}
+\toprule
+Source & Raw files & Four-class labels & After deduplication & Train & Validation & Test & Clean test\\
+\midrule
+Figshare & 3064 & 3064 & 3010 & 2029 & 336 & 645 & 644\\
+SARTAJ & 3264 & 3264 & 505 & 351 & 52 & 102 & 97\\
+Br35H & 3861 & 1500 & 330 & 230 & 34 & 66 & 6\\
+Total & 10,189 & 7828 & 3845 & 2610 & 422 & 813 & 747\\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+Removing the contaminated images lowered balanced accuracy by 0.01 to 0.05 in every configuration, and by up to
+0.072 in a single run. DP models lost slightly more than non-private ones, so the full test set flattered private
+models a little more than non-private ones, and all conclusions below hold on both sets (Supplementary Table~S3).
+
+\subsection{Accuracy cost of record-level and patient-level DP}
+Record-level DP at $\varepsilon=8$ reduced central balanced accuracy from 0.908 to 0.778, and accuracy approached
+chance at $\varepsilon=1$ (Table~\ref{tab:utility}, Fig.~\ref{fig:utility}). Clipping alone cost 0.063, so most of the
+loss at $\varepsilon=8$ came from noise rather than clipping.
+
+\begin{table}[width=\linewidth,cols=6,pos=htbp]
+\caption{Balanced accuracy on the clean test set, mean over five seeds with 95\% confidence interval.}\label{tab:utility}
+\small
+\begin{tabular*}{\tblwidth}{@{}LLLLLL@{}}
+\toprule
+Setting & No DP & Clip only & $\varepsilon=8$ & $\varepsilon=3$ & $\varepsilon=1$\\
+\midrule
+Central, record-level & 0.908 & 0.845 & 0.778 & 0.648 & 0.326\\
+ & {\footnotesize (0.894, 0.921)} & {\footnotesize (0.818, 0.871)} & {\footnotesize (0.739, 0.818)} & {\footnotesize (0.572, 0.723)} & {\footnotesize (0.272, 0.379)}\\[2pt]
+Central, patient-level & 0.908 & 0.872 & 0.337 & 0.251 & not run\\
+ & {\footnotesize (0.894, 0.921)} & {\footnotesize (0.852, 0.891)} & {\footnotesize (0.284, 0.390)} & {\footnotesize (0.248, 0.253)} & \\[2pt]
+FedAvg, natural3 & 0.841 & not run & 0.765 & 0.674 & 0.525\\
+ & {\footnotesize (0.833, 0.848)} &  & {\footnotesize (0.731, 0.800)} & {\footnotesize (0.659, 0.688)} & {\footnotesize (0.463, 0.586)}\\[2pt]
+FedAvg, Dirichlet $\alpha$ 0.5, $K$ 10 & 0.870 & not run & 0.669 & 0.590 & 0.331\\
+ & {\footnotesize (0.852, 0.887)} &  & {\footnotesize (0.626, 0.712)} & {\footnotesize (0.548, 0.631)} & {\footnotesize (0.280, 0.383)}\\[2pt]
+\bottomrule
+\end{tabular*}
+\end{table}
+
+Patient-level DP was far more expensive at the same $\varepsilon$. Patient-level clip-only training reached 0.872,
+so weighting each patient once did not itself harm accuracy, but at $\varepsilon=8$ accuracy fell to 0.337.
+
+The patient-level curve recovered only at large budgets, with 0.565 at $\varepsilon=16$, 0.727 at $\varepsilon=32$
+and 0.820 at $\varepsilon=64$. Matching record-level $\varepsilon=8$ therefore needed a patient-level budget about
+eight times larger.
+
+The gap follows from the noise scale. Patient-level noise is divided by the number of units, 634 in training, rather
+than by 2610 images, so the same $\sigma$ produces about four times more noise in each averaged update.
+
+Record-level $\varepsilon=8$ is not a weak guarantee per patient by accident. A Figshare patient contributes a median
+of 13 slices, so group privacy bounds that patient's loss only at roughly 13 times the per-image budget.
+
+\subsection{Client count under DP}
+With the same 2610 images split across more clients, accuracy fell under DP but not without it
+(Fig.~\ref{fig:clients}). At $\varepsilon=3$ the slope was $-0.096$ per unit of $\ln K$ ($p<0.0001$), from 0.677 with
+three clients to 0.525 with 15.
+
+At $\varepsilon=8$ the decline reached $-0.156$ per unit of $\ln K$ ($p<0.0001$) with a learning rate of 0.01, but
+almost vanished with the rate of 0.003 tuned for 10 clients ($-0.016$, $p=0.38$). Without DP the slope was $+0.013$
+($p=0.08$).
+
+With size-weighted averaging, the noise in the averaged update has standard deviation $\sigma C\sqrt{K}/(qN)$ whatever
+the client sizes, so both privacy levels lie on one curve against this quantity. Client count, not label skew, set the
+cost of DP here, which also explains why the three-client natural3 partition held up best at $\varepsilon=1$.
+
+\subsection{Drift correction}
+Neither FedProx nor SCAFFOLD recovered the utility lost to DP. FedProx with $\mu$ from 0.01 to 1 changed validation
+loss by less than one seed standard deviation in all 15 configurations, and $\mu=10$ made models worse without DP and
+at $\varepsilon=8$.
+
+Size-weighted SCAFFOLD did not differ from FedAvg in any configuration after Holm correction, with the smallest
+adjusted $p=0.064$. With the uniform server average of the original algorithm, SCAFFOLD collapsed on unequal clients,
+falling to 0.590 against 0.825 on natural3 at $\varepsilon=8$ on the full test set.
+
+\subsection{Membership inference}
+Without DP, LiRA identified training images and especially training patients well above chance
+(Table~\ref{tab:lira}, Fig.~\ref{fig:lira}). At a 1\% false-positive rate it found 10.8\% of training images, and
+summed over slices it separated training from test patients with AUC 0.805.
+
+\begin{table}[width=\linewidth,cols=6,pos=htbp]
+\caption{Online LiRA against natural3 FedAvg, 16 shadow models, mean over five target models with 95\% confidence
+interval.}\label{tab:lira}
+\small
+\begin{tabular*}{\tblwidth}{@{}LLLLLL@{}}
+\toprule
+Target & Balanced accuracy & Image AUC & TPR at 1\% FPR & TPR at 0.1\% FPR & Patient AUC\\
+\midrule
+No DP & 0.841 & 0.666 & 0.108 & 0.033 & 0.805\\
+ &  & {\footnotesize (0.642, 0.689)} & {\footnotesize (0.081, 0.135)} & {\footnotesize (0.019, 0.046)} & {\footnotesize (0.762, 0.848)}\\[2pt]
+$\varepsilon=8$ & 0.765 & 0.464 & 0.017 & 0.006 & 0.454\\
+ &  & {\footnotesize (0.448, 0.480)} & {\footnotesize (0.012, 0.022)} & {\footnotesize (0.003, 0.008)} & {\footnotesize (0.427, 0.481)}\\[2pt]
+$\varepsilon=3$ & 0.674 & 0.545 & 0.015 & 0.003 & 0.567\\
+ &  & {\footnotesize (0.522, 0.567)} & {\footnotesize (0.008, 0.023)} & {\footnotesize (0.002, 0.005)} & {\footnotesize (0.529, 0.605)}\\[2pt]
+$\varepsilon=1$ & 0.525 & 0.479 & 0.010 & 0.003 & 0.457\\
+ &  & {\footnotesize (0.469, 0.489)} & {\footnotesize (0.006, 0.015)} & {\footnotesize (0.000, 0.005)} & {\footnotesize (0.413, 0.500)}\\[2pt]
+Weight noise $s=0.003$ & 0.801 & 0.594 & 0.045 & 0.016 & 0.745\\
+ &  & {\footnotesize (0.572, 0.616)} & {\footnotesize (0.038, 0.051)} & {\footnotesize (0.012, 0.020)} & {\footnotesize (0.713, 0.778)}\\[2pt]
+\bottomrule
+\end{tabular*}
+\end{table}
+
+Under every DP setting the true-positive rate at 1\% false positives stayed between 0.010 and 0.017, the level of a
+random guess. Average-case AUC under DP moved slightly away from 0.5 in both directions, which reflects the smaller
+training sets of the shadow models rather than leakage, since the low-false-positive tail stayed at chance.
+
+The weight-noise comparator behaved differently. At $s=0.5$, the value of the prior work, training diverged in all 21
+runs and produced no usable model. At $s=0.003$ accuracy was 0.801, above FedAvg at $\varepsilon=8$, yet the attack
+found 4.5\% of training images at 1\% false positives and training patients with AUC 0.745.
+
+A simpler loss-threshold attack was weak even without DP, with AUC 0.52 to 0.54. Computed within each source and
+class, it stayed below 0.5 under DP, which confirms that its sub-chance values were not caused by the mix of sources
+in each split.
+
+\subsection{Explanations}
+Grad-CAM localisation against expert masks declined as $\varepsilon$ shrank. For correctly classified test images of
+central models, the pointing-game hit rate fell from 0.197 without DP to 0.156 at $\varepsilon=8$ and 0.089 at
+$\varepsilon=1$, and the top-15\% IoU fell from 0.087 to 0.032.
+
+Masks cover 1.8\% of the image on average, so these values remain well above chance but far from precise
+localisation. Grad-CAM placed 0.17 to 0.19 of its mass on the outer brain rim, below the rim's area share of 0.33, and
+placed less mass outside the brain than the area share of the background.
+
+Consistency across seeds fell from 0.700 without DP to 0.663 with clipping alone and to 0.485, 0.309 and 0.235 at
+$\varepsilon$ of 8, 3 and 1 (Fig.~\ref{fig:xai}a). Patient-level models stayed between 0.22 and 0.29 up to
+$\varepsilon=32$ and reached 0.368 at $\varepsilon=64$.
+
+Across all 115 explained models, consistency correlated with clean balanced accuracy at $r=0.80$
+(Fig.~\ref{fig:xai}b), and top-15\% IoU correlated with accuracy at $r=0.85$. Once accuracy entered a regression, the
+noise multiplier added no explanatory power for IoU ($p=0.51$) or consistency ($p=0.15$).
+
+Integrated Gradients failed the randomisation test, since maps from a fully re-initialised network kept a Spearman
+correlation of 0.68 to 0.71 with the trained maps. Grad-CAM passed, with correlations between $-0.05$ and 0.39, so
+its numbers are the ones interpreted here.
+
+\subsection{Source controls}
+The source collection was linearly decodable from penultimate features in every setting. Among tumour images, a probe
+separated Figshare from SARTAJ with balanced accuracy 0.913 without DP and 0.851 at $\varepsilon=1$, close to the
+0.871 of the ImageNet initialisation and the 0.846 of a random network.
+
+Source therefore lives in the images themselves, and training added only about 0.04 to it. Accuracy on SARTAJ alone,
+the one source with all four classes, was 0.663 for central models without DP on the full test set, far below the
+pooled 0.919, which shows how strongly per-source composition shapes headline accuracy.
+
+These measurements raise questions about why privacy cost so much more per patient than per image, and what the
+audit does and does not show, which the next section discusses.
+
+\section{Discussion}
+
+\subsection{Protection bought by the privacy budget}
+The audit and the accounting tell one consistent story. Without DP, a federated model trained on 2610 images leaks
+enough for LiRA to flag one training image in ten at a 1\% false-positive rate, and patient-level aggregation makes
+the leak clearer still.
+
+Record-level DP at $\varepsilon=8$ removed every measurable signal, at a cost of 0.08 in balanced accuracy for
+natural3 FedAvg and 0.13 centrally. This agrees with the view that moderate budgets already defeat practical
+attacks,\cite{ziller2024} although an attack failing does not prove that no stronger attack exists.
+
+The weight-noise comparator separates noise from guarantee. Noise added to weights without clipping can be tuned to
+keep accuracy, as at $s=0.003$, but it then leaves training patients identifiable with AUC 0.745. At the published
+$s=0.5$ it destroys the model, so neither setting supports a stated $\varepsilon$ for that mechanism.\cite{gupta2026}
+
+\subsection{Higher cost of patient-level protection}
+Patient-level DP protects the clinically meaningful unit but needs a budget about eight times larger for the same
+accuracy. The arithmetic is simple, since the noise in each update is divided by 634 units instead of 2610 images,
+and the clip-only control confirms that noise, not per-patient weighting, causes the loss.
+
+This reinforces the finding of Knolle et al.\ that multi-record patients are the real privacy risk.\cite{knolle2026}
+At the scale of public brain tumour collections, a strong per-patient guarantee and a useful classifier are not yet
+compatible, and a larger number of patients is the most direct remedy.
+
+\subsection{Client count, not heterogeneity}
+Under DP, accuracy fell as the same data were split across more clients, while label skew mattered less. The
+aggregated noise standard deviation $\sigma C\sqrt{K}/(qN)$ grows with the square root of client count, so each added
+client adds independent noise without adding data.
+
+This mechanism is standard DP-SGD arithmetic and is not claimed as new. Its practical consequence is that cross-silo
+consortia with few large sites suffer least, and that learning rates tuned for one client count can hide the effect
+at another.
+
+Drift correction did not help because one local epoch per round produced little drift, while noise dominated the
+error. The SCAFFOLD ablation also shows that control variates must be averaged with the same weights as the model, or
+the correction harms exactly the unequal, noisy settings where it is most needed.
+
+\subsection{Explanations under privacy}
+DP degraded Grad-CAM localisation and cross-seed consistency, in line with reports that DP harms gradient-based
+attributions in general.\cite{saifullah2024,manna2024} The present results add that, for brain tumour MRI, the
+degradation follows accuracy closely and the noise level adds nothing once accuracy is known.
+
+For clinical use this means a private model's explanations are about as trustworthy as its predictions, not less. The
+clip-only control shows that clipping alone barely changes consistency (0.700 to 0.663), so noise drives the change
+through the accuracy it costs.
+
+The low absolute localisation, with a pointing hit rate near 0.2 even without DP, reflects the $4\times4$ resolution
+of the last ResNet block at 128-pixel input. Integrated Gradients with a black baseline failed the randomisation test,
+which argues against reporting such maps without that check.\cite{adebayo2018}
+
+\subsection{Benchmark leakage and source confounding}
+The correlation check found mirrored duplicates that perceptual hashing had missed, concentrated in the no-tumour
+class of Br35H. Training with random flips can then show a model the exact test image, and near-perfect no-tumour
+specificity on Br35H partly reflected this.
+
+Source is also decodable from images of a single class even by a random network. Headline accuracy on merged public
+collections therefore partly measures which collection an image came from, as Vangala et al.\ reported for
+centralised benchmarks.\cite{vangala2026}
+
+Both findings suggest that the 92\% to 99\% accuracies reported on these
+collections\cite{albalawi2024,mastoi2025,muntaqim2025,paul2026} should not be compared with clinical performance.
+Deduplication by a flip-invariant measure and per-source reporting should become routine for these data.
+
+\subsection{Limitations}
+\begin{enumerate}
+\item \textbf{Remaining duplicates in development data.} Mirrored pairs remain between training and validation (47
+pairs), so round selection used slightly contaminated validation data, while all test results exclude contaminated
+images.
+\item \textbf{Look-alike units.} SARTAJ and Br35H carry no patient identifiers, so their units are groups of similar
+images, and the patient-level guarantee is exact only for Figshare.
+\item \textbf{Shadow-target mismatch.} Shadow models trained on about 1700 images against 2610 for the targets, which
+shifts average-case AUC, so conclusions rest on low-false-positive rates.
+\item \textbf{Small patient-level test set.} Only 40 Figshare test patients were available, so patient-level
+true-positive rates below 2.5\% false positives cannot be resolved.
+\item \textbf{Scope.} All models are 2D ResNet-18 classifiers on axial slices from three public sources, and the
+federated partitions are simulated rather than real institutions.
+\item \textbf{Selection cost.} Learning rates were chosen on private validation data, and the $\varepsilon$ composed
+over both candidates is reported but was not used for calibration.
+\end{enumerate}
+
+Within these limits, the results support a small number of firm conclusions, stated next.
+
+\section{Conclusions}
+On a deduplicated three-source brain MRI benchmark, record-level DP at $\varepsilon=8$ removed all leakage that a
+strong membership attack could measure, at a cost of 0.08 to 0.13 in balanced accuracy. Without DP, the same attack
+identified training images and, more clearly, training patients.
+
+A formal guarantee per patient cost far more, needing $\varepsilon=64$ to match record-level $\varepsilon=8$, because
+noise is shared among patients rather than slices. Under DP, splitting data across more clients lowered accuracy
+through the aggregated noise scale, and drift correction did not help.
+
+Weight noise without clipping either destroyed the model or left patients identifiable, so it should not be reported
+with an $\varepsilon$. Grad-CAM localisation and consistency degraded with privacy in step with accuracy.
+
+Future federated studies on these public collections should use flip-invariant deduplication, state $\varepsilon$,
+$\delta$ and the privacy unit, and test their privacy claims with an attack.
+
+\section*{CRediT authorship contribution statement}
+To be completed by the corresponding author with roles from the 14-role CRediT taxonomy, for example
+conceptualisation, methodology, software, formal analysis, investigation, data curation, writing of the original
+draft, review and editing, and visualisation.
+
+\section*{Ethics statement}
+The study used only publicly released, de-identified images from Figshare, SARTAJ and Br35H, and no new patient data
+were collected. The authors should confirm with their institution that formal ethics approval was not required and
+state that waiver here.
+
+\section*{Declaration of competing interest}
+To be completed on the journal's declaration template, choosing the first option if there are no interests to
+declare.
+
+\section*{Funding}
+To be completed. If no grant applies, the sentence recommended by the journal for unfunded research is used, together
+with a statement on the role of the funding source.
+
+\section*{Data availability}
+Figshare data are available under CC BY 4.0, SARTAJ under the MIT licence and Br35H from its Kaggle page. Split,
+duplicate and hash manifests, all run results, figure data and code are in the project repository at tag
+v0.9.1-results-frozen, and the repository visibility and a persistent archive are to be decided by the authors.
+
+\section*{Declaration of generative AI and AI-assisted technologies in the writing process}
+To be completed by the authors. The journal permits such tools only to improve readability, so the extent of AI
+assistance in analysis code and drafting must be disclosed accurately after the authors have reviewed every sentence.
+
+\section*{Acknowledgements}
+To be completed by the authors.
+
+\input{references.tex}
+
+\clearpage
+\section*{Figures}
+
+\begin{figure}[pos=htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{Figure1.pdf}
+\caption{Privacy and utility. Balanced accuracy on the 747 clean test images against the privacy budget
+$\varepsilon$ at $\delta=10^{-5}$, for central training with record-level and patient-level DP-SGD and for FedAvg on
+the natural and the Dirichlet $\alpha=0.5$ partitions. Points are means over five seeds with 95\% confidence
+intervals, and the diamond marks unclipped weight noise ($s=0.003$), which carries no formal guarantee.}
+\label{fig:utility}
+\end{figure}
+
+\begin{figure}[pos=htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{Figure2.pdf}
+\caption{Client count under DP. Clean balanced accuracy of FedAvg on Dirichlet $\alpha=0.5$ partitions with 3, 5, 10
+and 15 clients holding the same 2610 images, against the aggregated noise standard deviation $\sigma C\sqrt{K}/(qN)$.
+The dashed series uses the learning rate tuned for 10 clients and hides the decline at $\varepsilon=8$.}
+\label{fig:clients}
+\end{figure}
+
+\begin{figure}[pos=htbp]
+\centering
+\includegraphics[width=0.95\linewidth]{Figure3.pdf}
+\caption{Membership inference. Online LiRA receiver operating characteristic curves on logarithmic axes against
+natural3 FedAvg, each the mean over five target models with 16 shadow models per configuration. The left panel is
+image level and the right panel Figshare patient level, and shaded regions lie below the false-positive resolution of
+the test set.}
+\label{fig:lira}
+\end{figure}
+
+\begin{figure}[pos=htbp]
+\centering
+\includegraphics[width=0.95\linewidth]{Figure4.pdf}
+\caption{Explanations under privacy. (a) Cross-seed Grad-CAM consistency, the IoU of the top 10\% of each model's map
+with the mean map over five seeds, against $\varepsilon$ for central models. (b) Consistency against clean balanced
+accuracy for all 115 explained models, with Pearson $r=0.80$.}
+\label{fig:xai}
+\end{figure}
+
+\end{document}

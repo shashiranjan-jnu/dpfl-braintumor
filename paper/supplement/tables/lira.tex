@@ -1,0 +1,34 @@
+\begin{table}[H]
+\centering\scriptsize
+\caption{LiRA against natural3 FedAvg with 16 shadow models, clean test set (747 images) as non-members. Online and offline variants, mean over target seeds with 95\% $t$ interval.}\label{tab:s_week07_clean_lira}
+\resizebox{\textwidth}{!}{\begin{tabular}{lrrrrrrrr}
+\toprule
+Target & $n$ & AUC & TPR@1\% & TPR@0.1\% & Patient AUC & Off. AUC & Off. TPR@1\% & Off. patient AUC \\
+\midrule
+no DP & 5 & 0.666 (0.642, 0.689) & 0.108 (0.081, 0.135) & 0.033 (0.019, 0.046) & 0.805 (0.762, 0.848) & 0.656 & 0.068 & 0.769 \\
+$\varepsilon=8$ & 5 & 0.464 (0.448, 0.480) & 0.017 (0.012, 0.022) & 0.006 (0.003, 0.008) & 0.454 (0.427, 0.481) & 0.503 & 0.016 & 0.511 \\
+$\varepsilon=3$ & 5 & 0.545 (0.522, 0.567) & 0.015 (0.008, 0.023) & 0.003 (0.002, 0.005) & 0.567 (0.529, 0.605) & 0.546 & 0.014 & 0.581 \\
+$\varepsilon=1$ & 5 & 0.479 (0.469, 0.489) & 0.010 (0.006, 0.015) & 0.003 (0.000, 0.005) & 0.457 (0.413, 0.500) & 0.488 & 0.012 & 0.500 \\
+weight noise $s=0.5$ & 5 & 0.474 (0.437, 0.511) & 0.038 (0.023, 0.053) & 0.003 (0.002, 0.003) & 0.518 (0.497, 0.539) & 0.538 & 0.034 & 0.545 \\
+weight noise $s=0.003$ & 5 & 0.594 (0.572, 0.616) & 0.045 (0.038, 0.051) & 0.016 (0.012, 0.020) & 0.745 (0.713, 0.778) & 0.569 & 0.030 & 0.665 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[H]
+\centering\scriptsize
+\caption{LiRA against natural3 FedAvg with 16 shadow models, full test set (813 images) as non-members. Online and offline variants, mean over target seeds with 95\% $t$ interval.}\label{tab:s_week07_lira}
+\resizebox{\textwidth}{!}{\begin{tabular}{lrrrrrrrr}
+\toprule
+Target & $n$ & AUC & TPR@1\% & TPR@0.1\% & Patient AUC & Off. AUC & Off. TPR@1\% & Off. patient AUC \\
+\midrule
+no DP & 5 & 0.662 (0.642, 0.682) & 0.112 (0.084, 0.140) & 0.033 (0.019, 0.046) & 0.805 (0.762, 0.848) & 0.661 & 0.069 & 0.769 \\
+$\varepsilon=8$ & 5 & 0.472 (0.459, 0.484) & 0.015 (0.010, 0.020) & 0.002 (-0.000, 0.005) & 0.454 (0.427, 0.481) & 0.497 & 0.013 & 0.511 \\
+$\varepsilon=3$ & 5 & 0.545 (0.524, 0.565) & 0.017 (0.010, 0.023) & 0.003 (0.002, 0.005) & 0.567 (0.529, 0.604) & 0.546 & 0.014 & 0.581 \\
+$\varepsilon=1$ & 5 & 0.483 (0.473, 0.493) & 0.009 (0.005, 0.013) & 0.001 (-0.000, 0.002) & 0.456 (0.412, 0.500) & 0.489 & 0.010 & 0.499 \\
+weight noise $s=0.5$ & 5 & 0.480 (0.455, 0.504) & 0.022 (0.014, 0.030) & 0.003 (0.002, 0.003) & 0.518 (0.497, 0.538) & 0.529 & 0.024 & 0.545 \\
+weight noise $s=0.003$ & 5 & 0.589 (0.568, 0.610) & 0.047 (0.038, 0.055) & 0.016 (0.012, 0.020) & 0.745 (0.714, 0.777) & 0.585 & 0.033 & 0.665 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+

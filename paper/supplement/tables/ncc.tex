@@ -1,0 +1,30 @@
+\begin{table}[H]
+\centering\scriptsize
+\caption{Part A of the NCC check. Pairs of curated images ($64\times64$) at or above each normalised cross-correlation threshold, taking the larger of the plain and the mirrored comparison.}\label{tab:s_ncc}
+\resizebox{\textwidth}{!}{\begin{tabular}{lrrrrrrrr}
+\toprule
+NCC $\geq$ & Pairs & Same unit & Cross-split & Test--train & Test--val & Train--val & Mirror only & Label conflict \\
+\midrule
+0.9 & 2296 & 1665 & 295 & 190 & 29 & 76 & 139 & 19 \\
+0.95 & 682 & 357 & 148 & 84 & 17 & 47 & 120 & 0 \\
+0.98 & 195 & 28 & 80 & 43 & 9 & 28 & 79 & 0 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+Across the 813 test images, the NCC to the nearest image in another split has median 0.809, 90th percentile 0.926 and maximum 1.0000. 66 test images reach 0.95 and form the contaminated set.
+
+\begin{table}[H]
+\centering\footnotesize
+\caption{Part B of the NCC check. Agreement between perceptual-hash duplicates removed during curation and their kept partner, by Hamming distance $d$ of the 64-bit hash.}\label{tab:s_ncc_b}
+{\begin{tabular}{lrrrrrr}
+\toprule
+$d$ & Pairs & Median NCC & Min NCC & $<0.90$ & $<0.95$ & $<0.98$ \\
+\midrule
+0 & 2945 & 1.0000 & 0.657 & 6 & 10 & 17 \\
+2 & 733 & 0.9992 & 0.629 & 13 & 22 & 82 \\
+4 & 296 & 0.9735 & 0.558 & 80 & 93 & 176 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+

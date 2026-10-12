@@ -93,8 +93,8 @@ All 18 steps are not started, and Week 1 is assumed to begin on Monday 5 October
 | 4.1 | Membership inference audit | 7 | 22 Nov | v0.6.2-audit | Done | LiRA: no DP leaks, DP at chance, weight noise leaks, D48 |
 | 4.2 | XAI fidelity and Gate B | 7 | 22 Nov | v0.6.2-audit | Done | Gate B passes, mediated by utility, D44, D48 |
 | 4.3 | Results freeze | 8 | 29 Nov | v0.9-results-frozen | Done | 608 runs, manifest with hashes, figures reproduced on Kaggle, D50 to D52 |
-| 5.1 | Methods and Results drafting | 9 | 6 Dec | none | In progress | Full first draft in the project's Docs artifact, numbers from the corrected freeze (D53) |
-| 5.2 | Introduction, Discussion, front matter | 10 | 13 Dec | none | Not started |  |
+| 5.1 | Methods and Results drafting | 9 | 6 Dec | v0.9.2-manuscript | Done | paper/main.tex (Elsevier cas-sc), Tables 2 and 3 checked by script against frozen CSVs, D55 |
+| 5.2 | Introduction, Discussion, front matter | 10 | 13 Dec | v0.9.2-manuscript | In progress | Draft complete with supplement, Word file and highlights; graphical abstract, related-work table and author items open (D55) |
 | 5.3 | Internal expert review | 11 | 20 Dec | v0.95-reviewed | Not started |  |
 | 6.1 | Compliance check and submission | 12 | 27 Dec | v1.0-submission | Not started |  |
 
@@ -422,10 +422,10 @@ Phase 5 and 6 write a fully new manuscript in the Elsevier CAS LaTeX template in
 
 **Objective.** Write the sections that depend only on frozen results.
 
-- [ ] Section 2 Materials and methods covering sources, curation, ethics, federation design, DP accounting, models, XAI evaluation, privacy audit, and statistics
-- [ ] Section 3 Results in the order RQ1, RQ2, H5, RQ3, RQ4, calibration
-- [ ] Every number cross-checked against `results/SUMMARY.md`
-- [ ] Equations as editable text and figures at 300 dpi or higher
+- [x] Section 2 Materials and methods covering sources, curation, ethics, federation design, DP accounting, models, XAI evaluation, privacy audit, and statistics
+- [x] Section 3 Results in the order RQ1, RQ2, H5, RQ3, RQ4 (calibration moved to the supplement plan, not reported)
+- [x] Every number cross-checked against the frozen tables (`results/FROZEN_MANIFEST.json`); Tables 2 and 3 by script, three rounding errors fixed (D55)
+- [x] Equations as editable text (LaTeX, and Office math in the Word file) and figures as vector PDF plus 300 dpi PNG
 
 **Acceptance criteria.**
 
@@ -434,18 +434,19 @@ Phase 5 and 6 write a fully new manuscript in the Elsevier CAS LaTeX template in
 
 | Date | Reviewer | Verdict | Commit or tag | Notes |
 | --- | --- | --- | --- | --- |
-|  |  |  |  |  |
+| 2026-10-13 | Claude (self-review) | Pass | v0.9.2-manuscript (to be tagged) | Supplement Tables S1 to S18 generated from frozen files, style scan clean (mean sentence 21.3 words), D55 |
 
 ### Step 5.2 Introduction, Discussion, and Front Matter (Week 10)
 
 **Objective.** Frame the findings for an oncology readership and complete all front matter.
 
-- [ ] Introduction of about 900 words without a detailed literature survey, as the guide requires
-- [ ] Discussion covering clinical interpretation, comparison with prior work, limitations, and deployment implications
-- [ ] Structured abstract with Background, Methods, Results, and Conclusions, including effect sizes and confidence intervals
-- [ ] Contributions paragraph mapped one to one onto the abstract, with integrated findings
-- [ ] Up to six keywords, three to five highlights of at most 85 characters, and a graphical abstract
+- [ ] Introduction of about 900 words without a detailed literature survey, as the guide requires (now 377 words, expand or accept)
+- [x] Discussion covering clinical interpretation, comparison with prior work, limitations, and deployment implications
+- [x] Structured abstract with Background, Purpose, Methods, Results, and Conclusions, including effect sizes
+- [x] Contributions paragraph mapped one to one onto the abstract, with integrated findings
+- [ ] Up to six keywords and five highlights done (`paper/submission/highlights.txt`); graphical abstract open
 - [ ] Related work comparison table moved to supplementary material
+- [x] All 32 references verified against PubMed, arXiv, Crossref or the publisher page (D55)
 
 **Acceptance criteria.**
 

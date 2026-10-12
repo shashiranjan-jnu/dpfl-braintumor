@@ -229,3 +229,13 @@ checkpoints/
 wandb/
 *.zip
 
+
+# LaTeX build by-products (paper/)
+paper/**/*.aux
+paper/**/*.log
+paper/**/*.fls
+paper/**/*.fdb_latexmk
+paper/**/*.out
+paper/**/*.synctex.gz
+paper/supplement/supplement.pdf
+paper/_draft_export.md

@@ -1,0 +1,48 @@
+{\footnotesize
+\begin{longtable}{llrrrrr}
+\caption{Localisation and faithfulness of three attribution methods for central models on correctly classified Figshare test tumour images with expert masks, seed means. Lower deletion and higher insertion AUC indicate more faithful maps.}\label{tab:s_xai}\\
+\toprule
+Regime & Method & Pointing & IoU top 15\% & Energy in mask & Deletion & Insertion \\
+\midrule
+\endfirsthead
+\toprule
+Regime & Method & Pointing & IoU top 15\% & Energy in mask & Deletion & Insertion \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+no DP & Grad-CAM & 0.197 & 0.087 & 0.032 & 0.290 & 0.604 \\
+no DP & Grad-CAM++ & 0.139 & 0.080 & 0.032 & 0.310 & 0.585 \\
+no DP & Int. Gradients & 0.276 & 0.058 & 0.065 & 0.151 & 0.462 \\
+clip only & Grad-CAM & 0.190 & 0.086 & 0.031 & 0.382 & 0.689 \\
+clip only & Grad-CAM++ & 0.152 & 0.084 & 0.032 & 0.389 & 0.676 \\
+clip only & Int. Gradients & 0.200 & 0.054 & 0.057 & 0.214 & 0.479 \\
+$\varepsilon=8$ & Grad-CAM & 0.156 & 0.076 & 0.029 & 0.406 & 0.715 \\
+$\varepsilon=8$ & Grad-CAM++ & 0.129 & 0.079 & 0.030 & 0.429 & 0.705 \\
+$\varepsilon=8$ & Int. Gradients & 0.198 & 0.051 & 0.053 & 0.311 & 0.510 \\
+$\varepsilon=3$ & Grad-CAM & 0.103 & 0.055 & 0.027 & 0.490 & 0.688 \\
+$\varepsilon=3$ & Grad-CAM++ & 0.098 & 0.069 & 0.028 & 0.494 & 0.708 \\
+$\varepsilon=3$ & Int. Gradients & 0.172 & 0.046 & 0.048 & 0.353 & 0.531 \\
+$\varepsilon=1$ & Grad-CAM & 0.089 & 0.032 & 0.027 & 0.480 & 0.526 \\
+$\varepsilon=1$ & Grad-CAM++ & 0.123 & 0.065 & 0.031 & 0.469 & 0.546 \\
+$\varepsilon=1$ & Int. Gradients & 0.123 & 0.047 & 0.049 & 0.469 & 0.595 \\
+patient clip only & Grad-CAM & 0.187 & 0.085 & 0.032 & 0.307 & 0.620 \\
+patient clip only & Grad-CAM++ & 0.115 & 0.077 & 0.032 & 0.330 & 0.590 \\
+patient clip only & Int. Gradients & 0.239 & 0.055 & 0.060 & 0.155 & 0.396 \\
+patient $\varepsilon=64$ & Grad-CAM & 0.127 & 0.058 & 0.029 & 0.290 & 0.555 \\
+patient $\varepsilon=64$ & Grad-CAM++ & 0.147 & 0.079 & 0.031 & 0.285 & 0.568 \\
+patient $\varepsilon=64$ & Int. Gradients & 0.193 & 0.052 & 0.054 & 0.103 & 0.363 \\
+patient $\varepsilon=32$ & Grad-CAM & 0.097 & 0.042 & 0.027 & 0.267 & 0.459 \\
+patient $\varepsilon=32$ & Grad-CAM++ & 0.129 & 0.075 & 0.029 & 0.251 & 0.521 \\
+patient $\varepsilon=32$ & Int. Gradients & 0.168 & 0.047 & 0.048 & 0.102 & 0.322 \\
+patient $\varepsilon=16$ & Grad-CAM & 0.069 & 0.032 & 0.025 & 0.269 & 0.375 \\
+patient $\varepsilon=16$ & Grad-CAM++ & 0.111 & 0.063 & 0.028 & 0.252 & 0.433 \\
+patient $\varepsilon=16$ & Int. Gradients & 0.147 & 0.046 & 0.047 & 0.105 & 0.247 \\
+patient $\varepsilon=8$ & Grad-CAM & 0.082 & 0.029 & 0.025 & 0.276 & 0.314 \\
+patient $\varepsilon=8$ & Grad-CAM++ & 0.102 & 0.047 & 0.028 & 0.238 & 0.363 \\
+patient $\varepsilon=8$ & Int. Gradients & 0.206 & 0.049 & 0.051 & 0.163 & 0.248 \\
+patient $\varepsilon=3$ & Grad-CAM & 0.056 & 0.023 & 0.018 & 0.345 & 0.300 \\
+patient $\varepsilon=3$ & Grad-CAM++ & 0.000 & 0.030 & 0.018 & 0.281 & 0.334 \\
+patient $\varepsilon=3$ & Int. Gradients & 0.000 & 0.039 & 0.039 & 0.272 & 0.162 \\
+\end{longtable}}
+
