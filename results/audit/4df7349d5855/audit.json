@@ -3,7 +3,9 @@
   "mia",
   "probe",
   "xai",
-  "randomisation"
+  "randomisation",
+  "logits",
+  "border"
  ],
- "seconds": 54.8
+ "seconds": 4.8
 }
