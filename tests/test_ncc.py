@@ -52,3 +52,16 @@ def test_removed_check_and_phash():
     s = removed_summary(res)
     assert s["by_phash_d"]["4"]["below_0.9"] == 1
     assert phash_distance("ff", "0f") == 4 and phash_distance(None, "0f") == -1
+
+
+def test_contaminated_and_clean_metrics():
+    from scripts.ncc_sensitivity import clean_metrics, contaminated
+    pairs = pd.DataFrame({"same_split": [False, False, True], "ncc_max": [0.99, 0.93, 0.99],
+                          "split_i": ["test", "test", "test"], "split_j": ["train", "train", "test"],
+                          "image_id_i": ["a", "b", "c"], "image_id_j": ["x", "y", "z"]})
+    assert contaminated(pairs) == {"a"}
+    pred = pd.DataFrame({"image_id": ["a", "b", "c", "d"], "y": [2, 2, 0, 1],
+                         "p_glioma": [0, 0, 1, 0], "p_meningioma": [0, 1, 0, 1],
+                         "p_notumor": [1, 0, 0, 0], "p_pituitary": [0, 0, 0, 0]})
+    m = clean_metrics(pred, {"a"})
+    assert m["n_test"] == 3 and m["sens_notumor"] == 0.0 and m["tumour_sens"] == 1.0

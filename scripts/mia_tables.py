@@ -158,11 +158,18 @@ def main():
         "week03_central", "week04_unit_central", "week04_unit_central_ext", "week03_fed_seeds_a",
         "week03_fed_seeds_b", "week04_unit_fed", "week07_wn_seeds"])
     ap.add_argument("--out", default=os.path.join(ROOT, "results", "tables", "week07"))
+    ap.add_argument("--exclude", default=None,
+                    help="text file of image_ids left out of every attack evaluation (D50 sensitivity)")
     a = ap.parse_args()
     sp = pd.read_csv(a.splits)
     y = sp.label_id.values.astype(int)
     src, units, split = sp.source.values, sp.unit.values, sp.split.values
-    tr, te = np.flatnonzero(split == "train"), np.flatnonzero(split == "test")
+    drop = np.zeros(len(sp), bool)
+    if a.exclude:
+        drop = sp.image_id.isin(set(open(a.exclude).read().split())).values
+        print(f"excluding {int(drop.sum())} images from evaluation")
+    tr = np.flatnonzero((split == "train") & ~drop)
+    te = np.flatnonzero((split == "test") & ~drop)
     member = np.zeros(len(sp), bool)
     member[tr] = True
     rows_eval = np.concatenate([tr, te])
