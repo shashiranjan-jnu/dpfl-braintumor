@@ -1,0 +1,13 @@
+13:52:08 run b98ddeb737ec mode federated algo fedavg clients [1362, 228, 151] steps/client 1000 sigma 0.0000 eps inf unit record m_max 2
+13:52:10 round   1 val_loss 1.4406 val_acc 0.5948 bal_acc 0.5453 batch 56.0 1.93s
+13:52:28 round  10 val_loss 0.4798 val_acc 0.8057 bal_acc 0.7688 batch 58.8 2.03s
+13:52:48 round  20 val_loss 0.5459 val_acc 0.8057 bal_acc 0.7655 batch 60.7 2.1s
+13:53:09 round  30 val_loss 0.7208 val_acc 0.7891 bal_acc 0.7310 batch 60.0 2.06s
+13:53:29 round  40 val_loss 0.5670 val_acc 0.8081 bal_acc 0.7515 batch 59.1 2.01s
+13:53:49 round  50 val_loss 0.4878 val_acc 0.8341 bal_acc 0.7893 batch 58.1 2.0s
+13:54:09 round  60 val_loss 0.5112 val_acc 0.8223 bal_acc 0.7808 batch 59.6 2.06s
+13:54:29 round  70 val_loss 0.5827 val_acc 0.8246 bal_acc 0.7653 batch 55.9 1.94s
+13:54:49 round  80 val_loss 0.5706 val_acc 0.7867 bal_acc 0.7319 batch 59.9 2.06s
+13:55:09 round  90 val_loss 0.6847 val_acc 0.7536 bal_acc 0.6727 batch 59.2 2.04s
+13:55:29 round 100 val_loss 1.3542 val_acc 0.5806 bal_acc 0.5783 batch 57.3 1.96s
+13:55:30 done b98ddeb737ec best_round 25 test_acc 0.8819 bal_acc 0.8848 ece 0.0279 train_acc 0.8759 201.9s
