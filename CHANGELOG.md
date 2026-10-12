@@ -2,6 +2,10 @@
 
 Newest entry first.
 
+## 2026-10-12 (Step 3.3 closed)
+
+- 13 finished, 105 runs, 10.02 GPU hours. Tables `week06_scaffold_vs_fedavg.csv` (Holm-corrected) and `week06_fedprox_vs_fedavg_seed0.csv`. D42, Phase 3 complete.
+
 ## 2026-10-11 (Step 3.3 first results)
 
 - 12 finished, 95 runs, 9.48 GPU hours.
