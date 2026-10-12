@@ -1,0 +1,126 @@
+panel,series,regime,consistency_iou,lo,hi,run_id,bal_acc_clean
+a,"Central, record-level",eps 1,0.2345,0.1739,0.2951,,
+a,"Central, record-level",eps 3,0.3094,0.2680,0.3508,,
+a,"Central, record-level",eps 8,0.4848,0.4551,0.5145,,
+a,"Central, record-level",no DP,0.7000,0.6736,0.7263,,
+a,"Central, patient-level",no DP,0.7000,0.6736,0.7263,,
+a,"Central, patient-level",patient eps 16,0.2247,0.1866,0.2627,,
+a,"Central, patient-level",patient eps 3,0.2340,0.1839,0.2841,,
+a,"Central, patient-level",patient eps 32,0.2913,0.2006,0.3820,,
+a,"Central, patient-level",patient eps 64,0.3683,0.2862,0.4504,,
+a,"Central, patient-level",patient eps 8,0.2175,0.1842,0.2508,,
+b,"Central, record-level",,0.6982,,,335225e87299,0.9136
+b,"Central, record-level",,0.6792,,,df223391294e,0.8977
+b,"Central, record-level",,0.7011,,,65780b44a8c4,0.9146
+b,"Central, record-level",,0.6868,,,f2b1e11aca7e,0.8943
+b,"Central, record-level",,0.7346,,,a4573208deae,0.9177
+b,"Central, record-level",,0.6514,,,108f293d64bf,0.8119
+b,"Central, record-level",,0.6552,,,1904e77d96d4,0.8355
+b,"Central, record-level",,0.7019,,,c56079bd9457,0.8521
+b,"Central, record-level",,0.6765,,,de604406092b,0.8613
+b,"Central, record-level",,0.6305,,,bb8d25e4d40d,0.8634
+b,"Central, record-level",,0.5114,,,9a7ab404a7df,0.7622
+b,"Central, record-level",,0.5002,,,f61e4737a0b5,0.7652
+b,"Central, record-level",,0.4926,,,f9671c3b4e58,0.8339
+b,"Central, record-level",,0.4552,,,4587f552a0ed,0.7565
+b,"Central, record-level",,0.4646,,,dfbe35272991,0.7745
+b,"Central, record-level",,0.3107,,,c3b60b5757fb,0.6402
+b,"Central, record-level",,0.3342,,,86e2b93182c4,0.6785
+b,"Central, record-level",,0.2942,,,c68a1ae5c5d9,0.6911
+b,"Central, record-level",,0.2619,,,11b888d4e398,0.5444
+b,"Central, record-level",,0.3460,,,9551cec32491,0.6843
+b,"Central, record-level",,0.2035,,,9503f9e45c27,0.3747
+b,"Central, record-level",,0.1954,,,8c47f6a89b3c,0.2711
+b,"Central, record-level",,0.2222,,,7d15515ddb72,0.2899
+b,"Central, record-level",,0.2339,,,91f41eefc294,0.3425
+b,"Central, record-level",,0.3175,,,f4807da709f0,0.3494
+b,"Central, patient-level",,0.1896,,,92f62d0f9fe0,0.2778
+b,"Central, patient-level",,0.2073,,,c7fad2820bca,0.3241
+b,"Central, patient-level",,0.2505,,,104f45425a35,0.3306
+b,"Central, patient-level",,0.2413,,,eeab924f9694,0.3924
+b,"Central, patient-level",,0.1990,,,aaef8307e8e7,0.3584
+b,"Central, patient-level",,0.2592,,,a29e704466c2,0.2542
+b,"Central, patient-level",,0.2280,,,33a228214bbe,0.2500
+b,"Central, patient-level",,0.2811,,,c0dc76e16c11,0.2500
+b,"Central, patient-level",,0.2277,,,08d88db38629,0.2500
+b,"Central, patient-level",,0.1741,,,44a4738b0699,0.2500
+b,"Central, patient-level",,0.5886,,,212b0c4444e0,0.8826
+b,"Central, patient-level",,0.6019,,,caaf2f780f67,0.8456
+b,"Central, patient-level",,0.6185,,,f90d9b3b8098,0.8862
+b,"Central, patient-level",,0.6123,,,24432eca8208,0.8695
+b,"Central, patient-level",,0.6221,,,2fcddb72bd1e,0.8741
+b,"Central, patient-level",,0.2323,,,4df7349d5855,0.5679
+b,"Central, patient-level",,0.2099,,,60b33efa3866,0.5399
+b,"Central, patient-level",,0.2722,,,813d3401d7d7,0.5787
+b,"Central, patient-level",,0.2185,,,17c9733144d2,0.5553
+b,"Central, patient-level",,0.1903,,,36b888424890,0.5857
+b,"Central, patient-level",,0.3390,,,3cbae017b45e,0.7103
+b,"Central, patient-level",,0.3142,,,9c7e40dace4d,0.7358
+b,"Central, patient-level",,0.1649,,,e8a41055e940,0.7805
+b,"Central, patient-level",,0.3417,,,c50d6962ce6a,0.6826
+b,"Central, patient-level",,0.2968,,,193ae7c8fe2d,0.7246
+b,"Central, patient-level",,0.3679,,,058a91930b77,0.7724
+b,"Central, patient-level",,0.3239,,,9ea904ca68d5,0.8014
+b,"Central, patient-level",,0.3273,,,fc07f4a4a987,0.8321
+b,"Central, patient-level",,0.3401,,,652be91e303d,0.8596
+b,"Central, patient-level",,0.4825,,,17a513493ff4,0.8364
+b,"FedAvg, 5 partitions",,0.3096,,,0ad0481822ca,0.3185
+b,"FedAvg, 5 partitions",,0.2517,,,fe4ab7a6ca02,0.3207
+b,"FedAvg, 5 partitions",,0.3112,,,f3a02f54044d,0.2970
+b,"FedAvg, 5 partitions",,0.3054,,,11ff8bce5fe1,0.5563
+b,"FedAvg, 5 partitions",,0.3982,,,87b799a4997b,0.5958
+b,"FedAvg, 5 partitions",,0.3893,,,d001cf08cd83,0.5662
+b,"FedAvg, 5 partitions",,0.4800,,,70b3ba8c7b90,0.6114
+b,"FedAvg, 5 partitions",,0.5215,,,ee9dda0026e8,0.6601
+b,"FedAvg, 5 partitions",,0.4649,,,be39b12b9a06,0.6193
+b,"FedAvg, 5 partitions",,0.6619,,,6e891f1103ba,0.8148
+b,"FedAvg, 5 partitions",,0.6542,,,c68d2ce0f410,0.8081
+b,"FedAvg, 5 partitions",,0.7455,,,26f81efa0a2c,0.8187
+b,"FedAvg, 5 partitions",,0.2660,,,e9457a65adb7,0.3776
+b,"FedAvg, 5 partitions",,0.2992,,,af34bd90abdf,0.3255
+b,"FedAvg, 5 partitions",,0.3405,,,5600b4dc1b26,0.3085
+b,"FedAvg, 5 partitions",,0.4307,,,68954d4f1cba,0.5981
+b,"FedAvg, 5 partitions",,0.5101,,,7f86c052f277,0.6199
+b,"FedAvg, 5 partitions",,0.4129,,,75970e778df5,0.5647
+b,"FedAvg, 5 partitions",,0.4520,,,4b0d531b1456,0.6678
+b,"FedAvg, 5 partitions",,0.5686,,,6c919bc9771c,0.6589
+b,"FedAvg, 5 partitions",,0.5187,,,78746266d22d,0.7163
+b,"FedAvg, 5 partitions",,0.7502,,,a3dbd490ae9a,0.8589
+b,"FedAvg, 5 partitions",,0.6932,,,b15d8a6323f2,0.8574
+b,"FedAvg, 5 partitions",,0.7312,,,a69351a34b7f,0.8799
+b,"FedAvg, 5 partitions",,0.2497,,,75cd3210d2d1,0.3797
+b,"FedAvg, 5 partitions",,0.3031,,,3cf7b57ab84f,0.3054
+b,"FedAvg, 5 partitions",,0.3821,,,4f698c31955e,0.3113
+b,"FedAvg, 5 partitions",,0.4334,,,7ce0f3de31c2,0.5871
+b,"FedAvg, 5 partitions",,0.5118,,,c34c88f177c4,0.6139
+b,"FedAvg, 5 partitions",,0.4224,,,48fe331eeb8a,0.5514
+b,"FedAvg, 5 partitions",,0.4708,,,7a0104eac90c,0.6949
+b,"FedAvg, 5 partitions",,0.5530,,,5a114336dc8e,0.6702
+b,"FedAvg, 5 partitions",,0.5446,,,810754babce4,0.7079
+b,"FedAvg, 5 partitions",,0.7195,,,c196f4d4a324,0.8717
+b,"FedAvg, 5 partitions",,0.6750,,,d8de005ad1b2,0.8760
+b,"FedAvg, 5 partitions",,0.7140,,,0f435488920b,0.9167
+b,"FedAvg, 5 partitions",,0.2691,,,3f1d2686e1ad,0.3711
+b,"FedAvg, 5 partitions",,0.3079,,,9db74b1f3161,0.3283
+b,"FedAvg, 5 partitions",,0.3317,,,ae8b469ca0ca,0.3015
+b,"FedAvg, 5 partitions",,0.5010,,,578d4ad0c025,0.6021
+b,"FedAvg, 5 partitions",,0.4907,,,79eca28d0eeb,0.6079
+b,"FedAvg, 5 partitions",,0.4353,,,6234748b5b67,0.5843
+b,"FedAvg, 5 partitions",,0.4759,,,b9217496f31c,0.7042
+b,"FedAvg, 5 partitions",,0.5508,,,4c23523d4963,0.6632
+b,"FedAvg, 5 partitions",,0.5513,,,ea649b46a164,0.6890
+b,"FedAvg, 5 partitions",,0.7100,,,3e93b0f190dd,0.8945
+b,"FedAvg, 5 partitions",,0.6855,,,b0c18939c428,0.8779
+b,"FedAvg, 5 partitions",,0.7192,,,2cee7f36cbc5,0.8856
+b,"FedAvg, 5 partitions",,0.3558,,,5f71ced8f5ba,0.5935
+b,"FedAvg, 5 partitions",,0.3432,,,dc8dc68fc217,0.5362
+b,"FedAvg, 5 partitions",,0.3676,,,3f66075e0529,0.4744
+b,"FedAvg, 5 partitions",,0.5260,,,b30714c5c37b,0.6828
+b,"FedAvg, 5 partitions",,0.5519,,,ba658c9090db,0.6734
+b,"FedAvg, 5 partitions",,0.5168,,,8bc0eea429a9,0.6834
+b,"FedAvg, 5 partitions",,0.4239,,,c2ed4f579ed5,0.7942
+b,"FedAvg, 5 partitions",,0.5137,,,3888212e2071,0.7700
+b,"FedAvg, 5 partitions",,0.4630,,,a619b2f29ff9,0.7738
+b,"FedAvg, 5 partitions",,0.6617,,,9da2cc0c3c30,0.8387
+b,"FedAvg, 5 partitions",,0.6280,,,a91a0e0368d7,0.8397
+b,"FedAvg, 5 partitions",,0.6808,,,9fabbcbe3e7f,0.8467

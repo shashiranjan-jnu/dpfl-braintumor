@@ -1,0 +1,20 @@
+series,regime,x_epsilon,bal_acc_clean,lo,hi,n_seeds
+"Central, record-level DP",eps 1,1.0000,0.3255,0.2717,0.3793,5
+"Central, record-level DP",eps 3,3.0000,0.6477,0.5719,0.7235,5
+"Central, record-level DP",eps 8,8.0000,0.7785,0.7392,0.8178,5
+"Central, record-level DP",no DP,200.0000,0.9076,0.8943,0.9209,5
+"Central, patient-level DP",no DP,200.0000,0.9076,0.8943,0.9209,5
+"Central, patient-level DP",patient eps 16,16.0000,0.5655,0.5427,0.5883,5
+"Central, patient-level DP",patient eps 3,3.0000,0.2508,0.2485,0.2532,5
+"Central, patient-level DP",patient eps 32,32.0000,0.7267,0.6820,0.7715,5
+"Central, patient-level DP",patient eps 64,64.0000,0.8204,0.7783,0.8625,5
+"Central, patient-level DP",patient eps 8,8.0000,0.3367,0.2838,0.3895,5
+"FedAvg, natural3 (3 sources)",eps 1,1.0000,0.5249,0.4632,0.5865,5
+"FedAvg, natural3 (3 sources)",eps 3,3.0000,0.6723,0.6655,0.6792,10
+"FedAvg, natural3 (3 sources)",eps 8,8.0000,0.7776,0.7572,0.7981,10
+"FedAvg, natural3 (3 sources)",no DP,200.0000,0.8599,0.8440,0.8757,10
+"FedAvg, Dirichlet α 0.5, K 10",eps 1,1.0000,0.3312,0.2797,0.3828,5
+"FedAvg, Dirichlet α 0.5, K 10",eps 3,3.0000,0.5857,0.5621,0.6093,10
+"FedAvg, Dirichlet α 0.5, K 10",eps 8,8.0000,0.6675,0.6442,0.6908,10
+"FedAvg, Dirichlet α 0.5, K 10",no DP,200.0000,0.8733,0.8628,0.8839,10
+weight noise 0.003,weight noise 0.003,,0.8006,0.7854,0.8157,5

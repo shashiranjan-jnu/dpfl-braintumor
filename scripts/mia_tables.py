@@ -166,7 +166,7 @@ def main():
     src, units, split = sp.source.values, sp.unit.values, sp.split.values
     drop = np.zeros(len(sp), bool)
     if a.exclude:
-        drop = sp.image_id.isin(set(open(a.exclude).read().split())).values
+        drop = sp.image_id.isin(set(open(a.exclude).read().splitlines())).values
         print(f"excluding {int(drop.sum())} images from evaluation")
     tr = np.flatnonzero((split == "train") & ~drop)
     te = np.flatnonzero((split == "test") & ~drop)

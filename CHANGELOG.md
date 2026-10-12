@@ -2,6 +2,10 @@
 
 Newest entry first.
 
+## 2026-10-12 (paper figures)
+
+- `scripts/make_figures.py`: fig1 privacy-utility, fig2 LiRA ROC, fig3 explanation consistency, fig4 H5, all on the clean test set, with `figures/figure_data/*.csv` and draft captions. `scripts/ncc_sensitivity.py` and `mia_tables.py --exclude`. Fix: id list read line by line (ids contain spaces).
+
 ## 2026-10-12 (v0.7-ncc)
 
 - `scripts/ncc_check.py` (curated all-pairs NCC with flips, removed-duplicate re-check from raw sources), `tests/test_ncc.py`, `make_launcher.py --kind ncc`, notebook `17-ncc-dedup-check` (CPU). 51 tests pass. D49.
