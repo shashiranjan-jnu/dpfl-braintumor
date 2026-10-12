@@ -2,5 +2,6 @@
  "parts": [
   "logits"
  ],
- "seconds": 2.0
+ "seconds": 2.0,
+ "errors": {}
 }
