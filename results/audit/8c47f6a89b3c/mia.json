@@ -1,0 +1,38 @@
+{
+ "image": {
+  "auc": 0.5100026862337589,
+  "n_members": 2610,
+  "n_nonmembers": 813,
+  "advantage": 0.02990343696540415,
+  "tpr_at_fpr_0.001": 0.0,
+  "tpr_at_fpr_0.01": 0.01532567049808429,
+  "tpr_at_fpr_0.1": 0.10306513409961686,
+  "fpr_resolution": 0.0012300123001230013
+ },
+ "train_loss_mean": 1.6630971431732178,
+ "test_loss_mean": 1.7062342166900635,
+ "patient_mean": {
+  "auc": 0.5424603174603175,
+  "n_members": 126,
+  "n_nonmembers": 40,
+  "advantage": 0.11150793650793656,
+  "tpr_at_fpr_0.001": 0.047619047619047616,
+  "tpr_at_fpr_0.01": 0.047619047619047616,
+  "tpr_at_fpr_0.1": 0.1746031746031746,
+  "fpr_resolution": 0.025
+ },
+ "patient_max": {
+  "auc": 0.5416666666666666,
+  "n_members": 126,
+  "n_nonmembers": 40,
+  "advantage": 0.10436507936507944,
+  "tpr_at_fpr_0.001": 0.0,
+  "tpr_at_fpr_0.01": 0.0,
+  "tpr_at_fpr_0.1": 0.12698412698412698,
+  "fpr_resolution": 0.025
+ },
+ "figshare_train_slices_per_patient": {
+  "median": 13.0,
+  "max": 132
+ }
+}
