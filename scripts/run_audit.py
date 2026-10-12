@@ -11,11 +11,20 @@ results/audit/<run_id>/: mia.json and probe.json for every run, xai_summary.json
 and xai_per_image.csv for runs of --xai-grids, randomisation.json for seed-1
 central runs. audit.json is written last and lists the parts done, so finished
 parts are skipped on a rerun. No training happens here.
+
+--parts limits the work (launcher 15 runs mia probe logits border): logits.npz
+holds float16 logits of every row, plain and flipped, for stratified attacks
+and LiRA (D45); border.json and cams8.npz hold the skull-border analysis,
+layer-3 Grad-CAM and 8 x 8 Grad-CAM maps for cross-seed consistency, for runs
+of --xai-grids. --probe-baselines also probes the ImageNet initialisation and a
+random network once (shard 0). Several --ckpt-root folders may be given.
 """
 from __future__ import annotations
 
 import argparse
 import glob
+
+import numpy as np
 import json
 import os
 import sys
@@ -45,10 +54,11 @@ def grid_ids(names):
     return ids
 
 
-def find_ckpt(root: str, rid: str, cache: dict) -> str | None:
+def find_ckpt(roots, rid: str, cache: dict) -> str | None:
     if not cache:
-        for p in glob.glob(os.path.join(root, "**", "*.pt"), recursive=True):
-            cache[os.path.splitext(os.path.basename(p))[0]] = p
+        for root in ([roots] if isinstance(roots, str) else roots):
+            for p in glob.glob(os.path.join(root, "**", "*.pt"), recursive=True):
+                cache[os.path.splitext(os.path.basename(p))[0]] = p
     return cache.get(rid)
 
 
@@ -58,22 +68,35 @@ def load_model(cfg: dict, path: str, device) -> torch.nn.Module:
     return m.to(device).eval()
 
 
-def audit_one(rid, cfg, model, data, rdir, want_xai, want_rand, log):
+ALL_PARTS = ("mia", "probe", "xai", "randomisation", "logits", "border")
+
+
+def audit_one(rid, cfg, model, data, rdir, want_xai, want_rand, log, parts=ALL_PARTS[:4]):
     done_path = os.path.join(rdir, "audit.json")
     done = json.load(open(done_path)) if os.path.exists(done_path) else {"parts": []}
     t0 = time.time()
-    if "mia" not in done["parts"]:
+    todo = lambda p: p in parts and p not in done["parts"]
+    if todo("logits"):
+        z, zf = mia.all_logits(model, data.x)
+        np.savez_compressed(os.path.join(rdir, "logits.npz"), z=z.astype(np.float16), zf=zf.astype(np.float16))
+        done["parts"].append("logits")
+    if want_xai and todo("border"):
+        summ, cam, idx = xai.border_audit(model, data)
+        json.dump(clean(summ), open(os.path.join(rdir, "border.json"), "w"), indent=1)
+        np.savez_compressed(os.path.join(rdir, "cams8.npz"), cam=cam, row=idx.astype(np.int32))
+        done["parts"].append("border")
+    if todo("mia"):
         json.dump(clean(mia.audit(model, data, data.splits)), open(os.path.join(rdir, "mia.json"), "w"), indent=1)
         done["parts"].append("mia")
-    if "probe" not in done["parts"]:
+    if todo("probe"):
         json.dump(clean(probe.probe(model, data, data.splits)), open(os.path.join(rdir, "probe.json"), "w"), indent=1)
         done["parts"].append("probe")
-    if want_xai and "xai" not in done["parts"]:
+    if want_xai and todo("xai"):
         df, summ = xai.audit(model, data)
         df.to_csv(os.path.join(rdir, "xai_per_image.csv"), index=False, float_format="%.5f")
         json.dump(clean(summ), open(os.path.join(rdir, "xai_summary.json"), "w"), indent=1)
         done["parts"].append("xai")
-    if want_rand and "randomisation" not in done["parts"]:
+    if want_rand and todo("randomisation"):
         r = xai.randomisation_check(model, data, lambda: build_model(cfg["model"]["name"], 4, False,
                                                                    cfg["model"].get("width", 16)))
         json.dump(clean(r), open(os.path.join(rdir, "randomisation.json"), "w"), indent=1)
@@ -88,7 +111,9 @@ def main():
     ap.add_argument("--grids", nargs="+", required=True)
     ap.add_argument("--xai-grids", nargs="*", default=[])
     ap.add_argument("--data-dir", required=True)
-    ap.add_argument("--ckpt-root", required=True)
+    ap.add_argument("--ckpt-root", nargs="+", required=True)
+    ap.add_argument("--parts", nargs="+", default=list(ALL_PARTS[:4]), choices=ALL_PARTS)
+    ap.add_argument("--probe-baselines", action="store_true")
     ap.add_argument("--results-repo", required=True)
     ap.add_argument("--shard", type=int, default=0)
     ap.add_argument("--nshards", type=int, default=1)
@@ -100,6 +125,16 @@ def main():
     xai_ids = set(grid_ids(a.xai_grids))
     mine = ids[a.shard::a.nshards]
     cache, missing, failed = {}, [], []
+    if a.probe_baselines and a.shard == 0:
+        bdir = os.path.join(a.results_repo, "results", "audit", "_baselines")
+        os.makedirs(bdir, exist_ok=True)
+        for tag, pre in (("pretrained", True), ("random", False)):
+            torch.manual_seed(0)
+            m = build_model("resnet18_frozenbn", 4, pre).to(device).eval()
+            json.dump(clean(probe.probe(m, data, data.splits)), open(os.path.join(bdir, f"probe_{tag}.json"), "w"), indent=1)
+            print("probe baseline", tag, open(os.path.join(bdir, f"probe_{tag}.json")).read().replace("\n", " "))
+        if a.push:
+            print("[push] baselines", push_run(a.results_repo, "results/audit/_baselines", "Probe baselines"))
     for i, rid in enumerate(mine, 1):
         run_dir = os.path.join(a.results_repo, "results", "runs", rid)
         if not os.path.exists(os.path.join(run_dir, "metrics.json")):
@@ -117,7 +152,7 @@ def main():
         try:
             model = load_model(cfg, path, device)
             audit_one(rid, cfg, model, data, rdir, rid in xai_ids, want_rand,
-                      lambda s: print(f"[{i}/{len(mine)}] {s}", flush=True))
+                      lambda s: print(f"[{i}/{len(mine)}] {s}", flush=True), parts=a.parts)
         except Exception as e:  # keep going, report at the end
             failed.append(rid)
             print(f"[{i}/{len(mine)}] {rid} FAILED {type(e).__name__}: {e}", flush=True)

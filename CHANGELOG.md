@@ -2,6 +2,12 @@
 
 Newest entry first.
 
+## 2026-10-12 (launcher 15 prepared)
+
+- New optional keys `data.shadow` (LiRA shadow subsets, whole units of train plus test) and `fl.weight_noise` (Gupta-style comparator, refused with DP). Existing run ids unchanged.
+- `run_audit.py --parts`, `--probe-baselines`, several `--ckpt-root`; new parts `logits` and `border`. Layer-3 Grad-CAM, brain-rim regions, consistency IoU.
+- `scripts/make_shadow_grid.py`, `scripts/mia_tables.py` (stratified loss attack, online and offline LiRA), `scripts/xai_tables.py`. Grids `week07_wn_select`, `week07_lira_shadows`. Launcher `15-lira-wn` for tag `v0.6-lira`. 47 tests pass. D45.
+
 ## 2026-10-12 (launcher 14 results)
 
 - 14 finished, 165 models audited. Table `week07_audit_summary.{csv,md}` and per-run CSV. D44, Gate B passes with the utility caveat.

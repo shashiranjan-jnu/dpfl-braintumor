@@ -56,3 +56,18 @@ def audit(model, data, splits) -> dict:
     sizes = np.array([np.sum(unit[tr] == u) for u in np.unique(unit[tr][src[tr] == "figshare"])])
     res["figshare_train_slices_per_patient"] = {"median": float(np.median(sizes)), "max": int(sizes.max())}
     return res
+
+
+@torch.no_grad()
+def all_logits(model, x, batch: int = 256) -> tuple[np.ndarray, np.ndarray]:
+    """Logits for every row, plain and left-right flipped (the training augmentation).
+
+    Saved per model so that stratified loss attacks and LiRA run later on CPU (D45).
+    """
+    model.eval()
+    z, zf = [], []
+    for s in range(0, len(x), batch):
+        xb = x[s:s + batch]
+        z.append(model(xb).float().cpu())
+        zf.append(model(xb.flip(-1)).float().cpu())
+    return torch.cat(z).numpy(), torch.cat(zf).numpy()

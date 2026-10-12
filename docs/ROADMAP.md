@@ -358,7 +358,9 @@ Phase 4 turns trained models into evidence for RQ3 and RQ4, then freezes every r
 - [x] Keep audited checkpoints as Kaggle notebook outputs of launchers 07 to 10, attached as inputs (D43 replaces Release assets)
 - [x] Code for the loss-threshold attack at image level and Figshare patient level (src/attacks/mia.py)
 - [x] Run the loss-threshold attack on every privacy level, record and patient level (launcher 14, 165 models)
-- [ ] Train a reduced set of shadow models for a LiRA-style attack on the natural partition (later launcher)
+- [ ] Train 16 shadow models per configuration for LiRA on natural3 at no DP, epsilon 8, 3, 1 (launcher 15, D45)
+- [ ] Weight-noise comparator, Gupta sigma 0.5 plus one utility-matched sigma, with LiRA (launcher 15, D45)
+- [ ] Loss attack within source and class cells from saved logits (launcher 15)
 - [ ] Report true positive rate at 0.1% false positive rate, with ROC curves on a log scale
 
 **Acceptance criteria.**

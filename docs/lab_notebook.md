@@ -123,3 +123,6 @@
 - probe tumour Figshare vs SARTAJ 0.91 no DP, 0.85 at epsilon 1; no-tumour SARTAJ vs Br35H 0.82 to 0.77
 - Grad-CAM pointing 0.197 to 0.089 and IoU 0.087 to 0.032 from no DP to epsilon 1 (central), explained by accuracy (r 0.85, sigma p 0.51); IG fails the randomisation check (Spearman 0.68 to 0.71); D44
 - bug: the summary cell ran git pull against the token-free remote and failed; summary produced here instead, cell fixed in make_launcher.py
+
+## 2026-10-12 Launcher 15 prepared (code v0.6-lira)
+- 64 LiRA shadows (natural3 at no DP, epsilon 8, 3, 1, 16 each), weight-noise selection (5) then seeds (5 per sigma) and shadows (16 per sigma), audit extensions on all 165 earlier models; about 5.5 hours; D45

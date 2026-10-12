@@ -173,6 +173,102 @@ def build_audit(name: str, ref: str, grids: list[str], xai: list[str], needs: st
     return _write(name, cells)
 
 
+OLD_AUDIT = ["week03_central", "week04_unit_central", "week04_unit_central_ext", "week03_fed_seeds_a",
+             "week03_fed_seeds_b", "week04_unit_fed"]
+XAI_SET = ["week03_central", "week04_unit_central", "week04_unit_central_ext", "week03_fed_seeds_a"]
+
+LIRA_SELECT = r'''
+# Weight-noise sigma selection at seed 0 (5 runs), then the seeds and shadow grids by the fixed rule (D45).
+os.makedirs("/kaggle/working/logs", exist_ok=True)
+def shards(grids, tag):
+    procs = []
+    for shard in (0, 1):
+        env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(shard))
+        script = " && ".join(
+            f"{sys.executable} scripts/run_grid.py --grid configs/grids/{g}.yaml --data-dir {DATA} "
+            f"--results-repo {RES} --shard {shard} --nshards 2 --push --ckpt-dir /kaggle/working/checkpoints"
+            for g in grids)
+        log = open(f"/kaggle/working/logs/{tag}_shard{shard}.log", "w")
+        procs.append(subprocess.Popen(["bash", "-c", script], cwd=CODE, env=env, stdout=log, stderr=subprocess.STDOUT))
+    codes = [p.wait() for p in procs]
+    print(tag, "exit codes", codes)
+    for shard in (0, 1):
+        print(f"----- {tag} shard {shard} tail")
+        print(open(f"/kaggle/working/logs/{tag}_shard{shard}.log").read().replace(token, "***")[-1500:])
+
+shards(["week07_wn_select"], "select")
+print(run([sys.executable, "scripts/make_shadow_grid.py", "wn", "--results", f"{RES}/results", "--out", RES], cwd=CODE))
+for g in ("week07_wn_seeds", "week07_wn_shadows"):
+    shutil.copy(f"{RES}/configs/grids/{g}.yaml", f"{CODE}/configs/grids/{g}.yaml")
+print("push", push_run(RES, "configs/grids", "Weight-noise grids from week07_wn_select"))
+'''
+
+LIRA_TRAIN = r'''
+# Training: weight-noise seeds (5 per sigma), LiRA shadows (64), weight-noise shadows (16 per sigma).
+# About 4.8 hours on two GPUs (DP shadows about 8 min each). Finished runs are skipped if this cell is rerun.
+shards(["week07_wn_seeds", "week07_lira_shadows", "week07_wn_shadows"], "train")
+'''
+
+LIRA_AUDIT = r'''
+# Audit: logits for every target and shadow, border analysis for the explanation set,
+# loss attack and probe for the new targets, probe baselines once. No training.
+AUDIT_TARGETS = OLD_AUDIT + ["week07_wn_select", "week07_wn_seeds"]
+procs = []
+for shard in (0, 1):
+    env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(shard))
+    common = ["--data-dir", DATA, "--ckpt-root", "/kaggle/input", "/kaggle/working/checkpoints",
+              "--results-repo", RES, "--shard", str(shard), "--nshards", "2", "--push"]
+    a = [sys.executable, "scripts/run_audit.py", "--grids", *AUDIT_TARGETS, "--xai-grids", *XAI_GRIDS,
+         "--parts", "mia", "probe", "logits", "border", "--probe-baselines", *common]
+    b = [sys.executable, "scripts/run_audit.py", "--grids", "week07_lira_shadows", "week07_wn_shadows",
+         "--parts", "logits", *common]
+    script = " ".join(map(shlex.quote, a)) + " && " + " ".join(map(shlex.quote, b))
+    log = open(f"/kaggle/working/logs/audit_shard{shard}.log", "w")
+    procs.append(subprocess.Popen(["bash", "-c", script], cwd=CODE, env=env, stdout=log, stderr=subprocess.STDOUT))
+codes = [p.wait() for p in procs]
+print("exit codes", codes)
+for shard in (0, 1):
+    txt = open(f"/kaggle/working/logs/audit_shard{shard}.log").read().replace(token, "***")
+    print(f"----- audit shard {shard}")
+    print("\n".join(l for l in txt.splitlines() if "finished" in l or "missing" in l or "FAILED" in l or "baseline" in l))
+'''
+
+LIRA_SUMMARY = r'''
+# Tables: weight-noise utility, stratified loss attack, LiRA, border and consistency. Pushed to results/tables/.
+print(run([sys.executable, "scripts/summarise.py", "--runs", f"{RES}/results/runs",
+           "--grids", "configs/grids/week07_wn_seeds.yaml", "--out", f"{RES}/results/tables/week07_wn_seeds_summary.csv",
+           "--md", f"{RES}/results/tables/week07_wn_seeds_summary.md"], cwd=CODE))
+print(run([sys.executable, "scripts/mia_tables.py", "--results", f"{RES}/results",
+           "--out", f"{RES}/results/tables/week07"], cwd=CODE)[-6000:])
+print(run([sys.executable, "scripts/xai_tables.py", "--results", f"{RES}/results",
+           "--out", f"{RES}/results/tables/week07_xai_border"], cwd=CODE)[-4000:])
+for t in ("pretrained", "random"):
+    p = f"{RES}/results/audit/_baselines/probe_{t}.json"
+    print("probe baseline", t, open(p).read() if os.path.exists(p) else "missing")
+print("push", push_run(RES, "results/tables", f"Tables {CODE_REF}"))
+'''
+
+
+def build_lira(name: str, ref: str, title: str) -> str:
+    def code(s):
+        return {"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [],
+                "source": s.strip("\n")}
+    needs = "07-week3-core, 08-fed-seeds-a, 09-fed-seeds-b-unit and 10-unit-udir"
+    intro = (f"# {name}, {title}\n\nSettings: **Accelerator GPU T4 x2**, **Internet On**, secret "
+             "`kaggle_dpfl-braintumor` attached, input `brain-mri-curated-v1` added, and the outputs of "
+             f"{needs} added through Add Input, Notebook Output.\n\n"
+             f"Runs code tag `{ref}`. Trains the weight-noise comparator (5 selection runs, then seeds and "
+             "shadows by a fixed rule) and 64 LiRA shadow models, then saves logits of every audited model, "
+             "the skull-border analysis and probe baselines. About 5.5 hours on two GPUs.\n\n"
+             "Generated by `scripts/make_launcher.py --kind lira`, edit that script rather than this notebook.")
+    setup = (SETUP.format(ref=ref, grids=json.dumps(OLD_AUDIT)) + "import shlex\n"
+             + f"OLD_AUDIT = {json.dumps(OLD_AUDIT)}\n")
+    cells = [{"cell_type": "markdown", "metadata": {}, "source": intro},
+             code(setup + CKPT_CHECK.format(xai=json.dumps(XAI_SET), needs=needs)), code(TESTS),
+             code(LIRA_SELECT), code(LIRA_TRAIN), code(LIRA_AUDIT), code(LIRA_SUMMARY)]
+    return _write(name, cells)
+
+
 def _write(name: str, cells: list) -> str:
     nb = {"cells": cells, "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python",
                                                       "name": "python3"},
@@ -205,13 +301,15 @@ if __name__ == "__main__":
     ap.add_argument("--ref", required=True)
     ap.add_argument("--grids", nargs="+", required=True)
     ap.add_argument("--title", default="grid run")
-    ap.add_argument("--kind", choices=["grid", "audit"], default="grid")
+    ap.add_argument("--kind", choices=["grid", "audit", "lira"], default="grid")
     ap.add_argument("--xai-grids", nargs="*", default=[])
     ap.add_argument("--needs", default="the earlier launchers", help="launcher outputs to attach (audit)")
     a = ap.parse_args()
     for g in a.grids + a.xai_grids:
         assert os.path.exists(os.path.join(ROOT, "configs", "grids", f"{g}.yaml")), g
-    if a.kind == "audit":
+    if a.kind == "lira":
+        print(build_lira(a.name, a.ref, a.title))
+    elif a.kind == "audit":
         print(build_audit(a.name, a.ref, a.grids, a.xai_grids, a.needs, a.title))
     else:
         print(build(a.name, a.ref, a.grids, a.title))

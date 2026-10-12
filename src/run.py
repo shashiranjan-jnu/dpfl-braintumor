@@ -88,7 +88,8 @@ def to_cfg(c: dict, sigma: float) -> Cfg:
                pretrained=c["model"]["pretrained"], width=c["model"].get("width", 16),
                grad_clip=c["optim"].get("grad_clip"), schedule=c["optim"].get("schedule", "none"),
                unit_level=c["dp"].get("unit", "record") == "unit",
-               scaffold_c=c["fl"].get("scaffold_c", "uniform"))
+               scaffold_c=c["fl"].get("scaffold_c", "uniform"),
+               weight_noise=float(c["fl"].get("weight_noise", 0.0) or 0.0))
 
 
 def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, force=False) -> str:
@@ -115,7 +116,13 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
         data = load_curated(data_dir, device)
 
     mode = cfg["fl"]["mode"]
-    if mode == "central":
+    shadow = cfg["data"].get("shadow")       # optional key, absent from base.yaml (D45)
+    if shadow is not None:
+        if mode == "local" or cfg["dp"].get("unit", "record") == "unit":
+            raise ValueError("shadow models support central and federated record-level runs only")
+        clients = data.shadow_clients("central" if mode == "central" else cfg["data"]["scenario"],
+                                      int(shadow["seed"]), float(shadow.get("frac", 0.5)))
+    elif mode == "central":
         clients = data.clients("central")
     elif mode == "local":
         clients = [data.clients(cfg["data"]["scenario"])[cfg["fl"]["local_client"]]]
@@ -155,8 +162,14 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
     #  unit_epsilon_worst  unit-level runs, worst unit, composed over the m_max clients holding it
     #  epsilon_if_k_runs   cost of choosing among k candidate runs on validation data (D33),
     #                      since every candidate was trained on the same private records
+    wn = float(cfg["fl"].get("weight_noise", 0.0) or 0.0)
+    if wn > 0 and cfg["dp"]["enabled"]:
+        raise ValueError("fl.weight_noise is a comparator for non-DP runs only")
     extra = {"unit": unit, "units_max_clients": int(m_max),
              "n_units": [int(len(u)) for u in client_units] if client_units else None}
+    if wn > 0:
+        extra["weight_noise"] = wn
+        extra["mechanism"] = "unclipped weight noise, no formal guarantee"
     if cfg["dp"]["enabled"] and sigma > 0:
         extra["unit_epsilon_worst"] = (dpm.epsilon_opacus(sigma, q, steps * m_max, delta, acc)
                                        if unit == "unit" else None)

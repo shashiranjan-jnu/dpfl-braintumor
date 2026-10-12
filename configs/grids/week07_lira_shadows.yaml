@@ -1,0 +1,104 @@
+name: week07_lira_shadows
+note: LiRA shadows for natural3 FedAvg at no DP, epsilon 8, 3, 1 (D45). Generated
+  by scripts/make_shadow_grid.py lira.
+fixed:
+  data:
+    shadow:
+      frac: 0.5
+presets:
+- data:
+    scenario: natural3
+  optim:
+    lr: 0.01
+- data:
+    scenario: natural3
+  dp:
+    enabled: true
+    target_epsilon: 8.0
+    noise_multiplier: 2.179296875
+  optim:
+    lr: 0.01
+- data:
+    scenario: natural3
+  dp:
+    enabled: true
+    target_epsilon: 3.0
+    noise_multiplier: 4.832421875000001
+  optim:
+    lr: 0.003
+- data:
+    scenario: natural3
+  dp:
+    enabled: true
+    target_epsilon: 1.0
+    noise_multiplier: 12.884765624999998
+  optim:
+    lr: 0.003
+axes:
+  data.shadow.seed:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+rules:
+  data.shadow.seed:
+    0:
+      train:
+        seed: 1000
+    1:
+      train:
+        seed: 1001
+    2:
+      train:
+        seed: 1002
+    3:
+      train:
+        seed: 1003
+    4:
+      train:
+        seed: 1004
+    5:
+      train:
+        seed: 1005
+    6:
+      train:
+        seed: 1006
+    7:
+      train:
+        seed: 1007
+    8:
+      train:
+        seed: 1008
+    9:
+      train:
+        seed: 1009
+    10:
+      train:
+        seed: 1010
+    11:
+      train:
+        seed: 1011
+    12:
+      train:
+        seed: 1012
+    13:
+      train:
+        seed: 1013
+    14:
+      train:
+        seed: 1014
+    15:
+      train:
+        seed: 1015

@@ -71,6 +71,56 @@ def audit(model, data, methods=("gradcam", "gradcampp", "ig"), batch: int = 32,
     return df, summ
 
 
+def border_audit(model, data, methods=("gradcam", "gradcampp", "gradcam_l3"), batch: int = 64,
+                 band: int = 8, cam_size: int = 8):
+    """Skull-border analysis and layer-3 Grad-CAM localisation (D44 item 5, D45).
+
+    For each method: share of saliency in the outer brain band (excluding tumour
+    pixels), outside the brain, and the band's area share (chance level). Layer-3
+    Grad-CAM also gets the mask metrics. Grad-CAM maps downsampled to cam_size x
+    cam_size are returned for the cross-seed consistency metric.
+    """
+    idx = figshare_test_index(data)
+    dev = data.x.device
+    rows, cams = [], []
+    for s in range(0, len(idx), batch):
+        b = idx[s:s + batch]
+        x, y = data.x[b], data.y[b]
+        mk = torch.as_tensor(data.masks[b], device=dev) > 0
+        raw = x * data.std + data.mean
+        brain, rim, out = X.brain_regions(raw, band)
+        rim = rim & ~mk
+        with torch.no_grad():
+            pred = model.eval()(x).argmax(1)
+        for m in methods:
+            mp = M.METHODS[m](model, x, y).detach()
+            vals = {"border_energy": X.region_energy(mp, rim), "outside_energy": X.region_energy(mp, out),
+                    "border_area": rim.flatten(1).float().mean(1) / brain.flatten(1).float().mean(1).clamp(min=1e-6)}
+            if m == "gradcam_l3":
+                vals.update({"pointing": X.pointing_game(mp, mk), "iou15": X.topk_iou(mp, mk),
+                             "energy": X.energy_in_mask(mp, mk)})
+            if m == "gradcam":
+                cams.append(torch.nn.functional.adaptive_avg_pool2d(mp[:, None], cam_size)[:, 0].cpu())
+            for j in range(len(b)):
+                rows.append({"row": int(b[j]), "unit": int(data.splits.unit.values[b[j]]), "method": m,
+                             "label": int(y[j]), "pred": int(pred[j]),
+                             **{k: float(v[j]) for k, v in vals.items()}})
+    df = pd.DataFrame(rows)
+    summ = {}
+    for m, g in df.groupby("method"):
+        summ[m] = {}
+        for subset, gg in (("all", g), ("correct", g[g.label == g.pred])):
+            if gg.empty:
+                continue
+            summ[m][subset] = {"n": int(len(gg))}
+            for k in [c for c in ("border_energy", "outside_energy", "border_area", "pointing", "iou15", "energy")
+                      if c in gg and gg[c].notna().any()]:
+                mean, lo, hi = X.patient_bootstrap_ci(gg[k].values, gg.unit.values, n_boot=1000)
+                summ[m][subset][k] = {"mean": mean, "lo": lo, "hi": hi}
+    cam = torch.cat(cams).numpy().astype(np.float16) if cams else np.zeros((0, cam_size, cam_size), np.float16)
+    return summ, cam, idx
+
+
 def randomisation_check(model, data, build_fn, n: int = 64, methods=("gradcam", "ig")) -> dict:
     """Spearman correlation between maps of the trained model and of randomised models.
 

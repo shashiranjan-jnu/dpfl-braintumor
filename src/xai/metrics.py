@@ -83,3 +83,42 @@ def patient_bootstrap_ci(values: np.ndarray, groups: np.ndarray, n_boot: int = 2
         pick = rng.choice(ug, len(ug), replace=True)
         means.append(np.concatenate([per[g] for g in pick]).mean())
     return float(values.mean()), float(np.percentile(means, 2.5)), float(np.percentile(means, 97.5))
+
+
+def brain_regions(x_raw: torch.Tensor, band: int = 8, thr: float = 0.05):
+    """Brain mask, skull-border band and outside region from raw [0, 1] images (B, 1, H, W).
+
+    The brain is every pixel brighter than `thr` after a 5-pixel closing; the band is
+    the outer `band` pixels of that mask (the rim where the skull and scalp sit).
+    Returns three boolean tensors (B, H, W).
+    """
+    m = (x_raw > thr).float()
+    m = F.max_pool2d(m, 5, stride=1, padding=2)
+    m = -F.max_pool2d(-m, 5, stride=1, padding=2)            # closing fills small holes
+    inner = -F.max_pool2d(-m, 2 * band + 1, stride=1, padding=band)
+    brain = m[:, 0] > 0
+    return brain, brain & ~(inner[:, 0] > 0), ~brain
+
+
+def region_energy(maps: torch.Tensor, region: torch.Tensor) -> torch.Tensor:
+    """Share of saliency mass in a boolean region, per image."""
+    flat = maps.flatten(1)
+    return (flat * region.flatten(1).float()).sum(1) / flat.sum(1).clamp(min=1e-12)
+
+
+def consistency_iou(maps: np.ndarray, q: float = 0.9) -> np.ndarray:
+    """Gupta et al. (2026) consistency, adapted across seeds.
+
+    maps (S, N, h, w) for S models of one configuration. For each image, each model's
+    top (1 - q) pixels are compared with the top (1 - q) pixels of the mean map.
+    Returns IoU (S, N).
+    """
+    mean = maps.mean(0)
+    def top(a):
+        flat = a.reshape(*a.shape[:-2], -1)
+        thr = np.quantile(flat, q, axis=-1, keepdims=True)
+        return flat >= thr
+    ref, each = top(mean)[None], top(maps)
+    inter = (each & ref).sum(-1)
+    union = (each | ref).sum(-1)
+    return inter / np.maximum(union, 1)

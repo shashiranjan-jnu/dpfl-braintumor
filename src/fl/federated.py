@@ -49,6 +49,7 @@ class Cfg:
     unit_level: bool = False         # DP over units (patients) instead of images (D33)
     scaffold_c: str = "uniform"      # uniform (historical runs) | size: weight control variates like the model (D40)
     schedule: str = "none"           # none | cosine, learning rate decayed across rounds
+    weight_noise: float = 0.0        # Gupta-style comparator: N(0, s^2) added to client weights, no clipping (D34)
     eval_batch: int = 256
 
     @property
@@ -221,6 +222,11 @@ def train(data, clients: list[np.ndarray], cfg: Cfg, log=print, client_units=Non
         for j, idx in enumerate(idx_t):
             p, dc, s = local_update(model, gparams, data.x, data.y, idx, cfg, gens[j],
                                     c_glob, c_loc[j], lr=round_lr(cfg, t), units=units_t[j])
+            if cfg.weight_noise > 0:
+                # Unclipped weight noise on the released client model, as in Gupta et al. (2026).
+                # Sensitivity is unbounded, so no epsilon can be derived for this mechanism.
+                p = {k: v + cfg.weight_noise * torch.randn(v.shape, generator=gens[j], device=dev)
+                     for k, v in p.items()}
             news.append(p); dcs.append(dc); st.append(s)
         gparams = {k: sum(w[j] * news[j][k] for j in range(len(news))) for k in gparams}
         if cfg.algorithm == "scaffold":

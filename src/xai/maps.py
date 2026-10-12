@@ -17,15 +17,15 @@ def _normalise(m: torch.Tensor) -> torch.Tensor:
     return ((flat - lo[:, None]) / (hi - lo + 1e-12)[:, None]).view_as(m)
 
 
-def _cam_parts(model, x, target):
-    """Activations A (B, C, h, w) of model.cam_layer and dy_c/dA."""
+def _cam_parts(model, x, target, layer=None):
+    """Activations A (B, C, h, w) of `layer` (default model.cam_layer) and dy_c/dA."""
     acts = {}
 
     def hook(_, __, out):
         out.retain_grad()
         acts["a"] = out
 
-    h = model.cam_layer.register_forward_hook(hook)
+    h = (layer if layer is not None else model.cam_layer).register_forward_hook(hook)
     try:
         model.eval()
         model.zero_grad(set_to_none=True)
@@ -37,8 +37,8 @@ def _cam_parts(model, x, target):
     return a.detach(), a.grad.detach(), logits.detach()
 
 
-def gradcam(model, x, target) -> torch.Tensor:
-    a, g, _ = _cam_parts(model, x, target)
+def gradcam(model, x, target, layer=None) -> torch.Tensor:
+    a, g, _ = _cam_parts(model, x, target, layer)
     w = g.mean((2, 3), keepdim=True)
     cam = F.relu((w * a).sum(1, keepdim=True))
     cam = F.interpolate(cam, size=x.shape[-2:], mode="bilinear", align_corners=False)[:, 0]
@@ -73,4 +73,15 @@ def integrated_gradients(model, x, target, baseline: float, steps: int = 32) -> 
     return _normalise(attr)
 
 
-METHODS = {"gradcam": gradcam, "gradcampp": gradcampp}
+def penultimate_block(model):
+    """The block before cam_layer (ResNet layer3, 8 x 8 at 128 px input), a finer Grad-CAM target."""
+    if hasattr(model, "net"):
+        return model.net.layer3
+    return model.features[-2]
+
+
+def gradcam_l3(model, x, target) -> torch.Tensor:
+    return gradcam(model, x, target, penultimate_block(model))
+
+
+METHODS = {"gradcam": gradcam, "gradcampp": gradcampp, "gradcam_l3": gradcam_l3}

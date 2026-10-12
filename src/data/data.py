@@ -90,6 +90,26 @@ class Curated:
         assign = assign.astype(int)
         return [tr[assign == k] for k in range(assign.max() + 1)]
 
+    def shadow_clients(self, scenario: str, seed: int, frac: float = 0.5) -> list[np.ndarray]:
+        """Training sets of a LiRA shadow model (Step 4.1, D45).
+
+        The pool is train plus test (validation still picks the round, as for the
+        targets). Whole units are kept with probability `frac`, so a patient is
+        either in or out, matching the patient-disjoint split of the targets.
+        natural3 clients follow the source mapping of the stored partition.
+        """
+        keep = np.flatnonzero(shadow_members(self.splits, seed, frac))
+        if scenario == "central":
+            return [keep]
+        if scenario != "natural3":
+            raise ValueError("shadow models support central and natural3 only")
+        tr = self.idx("train")
+        col = self.splits["natural3"].values
+        src = self.splits.source.values
+        cmap = {s: int(pd.Series(col[tr][src[tr] == s]).mode()[0]) for s in np.unique(src[tr])}
+        assign = np.array([cmap[s] for s in src[keep]])
+        return [c for c in (keep[assign == j] for j in range(max(cmap.values()) + 1)) if len(c)]
+
     def units_of(self, idx: np.ndarray) -> list[np.ndarray]:
         """Group image indices by split unit, units in sorted order (unit-level DP)."""
         u = self.splits.unit.values[idx]
@@ -97,6 +117,15 @@ class Curated:
         idx, u = np.asarray(idx)[order], u[order]
         cut = np.flatnonzero(np.diff(u)) + 1
         return np.split(idx, cut)
+
+
+def shadow_members(splits: pd.DataFrame, seed: int, frac: float = 0.5) -> np.ndarray:
+    """Boolean mask over all rows: rows of the train+test pool whose unit is kept."""
+    pool = np.isin(splits.split.values, ["train", "test"])
+    units = np.unique(splits.unit.values[pool])
+    rng = np.random.default_rng(1_000_003 + int(seed))
+    kept = units[rng.random(len(units)) < frac]
+    return pool & np.isin(splits.unit.values, kept)
 
 
 def load_curated(data_dir: str, device: str | torch.device = "cpu",
