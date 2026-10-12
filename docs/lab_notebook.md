@@ -143,3 +143,4 @@
 - 2026-10-12 NCC cross-check prepared (D49): notebook 17, CPU only, code v0.7-ncc
 - 2026-10-12 NCC check: 66 contaminated test images, mostly mirrored Br35H no-tumour; author chose the clean test set as primary, no retraining (D50, D51)
 - 2026-10-12 paper figures fig1 to fig4 on the clean test set (scripts/make_figures.py, figures/CAPTIONS.md); fix: image ids with spaces were split when reading contaminated_test_ids.txt (63 instead of 66 excluded in the first clean LiRA table), table regenerated
+- 2026-10-12 notebook 18 prepared so that tables and figures are regenerated on Kaggle (CPU) from GitHub files; local dry run identical to committed figure data

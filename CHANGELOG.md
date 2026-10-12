@@ -2,6 +2,10 @@
 
 Newest entry first.
 
+## 2026-10-12 (v0.8-figures)
+
+- `make_figures.py --results --out`; `make_launcher.py --kind figures` builds notebook `18-figures` (CPU), which regenerates the clean-set tables and figures 1 to 4 on Kaggle from the files on GitHub, compares them with the committed figure data and pushes them. Local dry run reproduces the committed figure data exactly.
+
 ## 2026-10-12 (paper figures)
 
 - `scripts/make_figures.py`: fig1 privacy-utility, fig2 LiRA ROC, fig3 explanation consistency, fig4 H5, all on the clean test set, with `figures/figure_data/*.csv` and draft captions. `scripts/ncc_sensitivity.py` and `mia_tables.py --exclude`. Fix: id list read line by line (ids contain spaces).

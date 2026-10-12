@@ -299,6 +299,13 @@ def fig_h5(d: pd.DataFrame):
 
 
 def main():
+    import argparse
+    global RES, FIG, DATA
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--results", default=RES, help="results folder (runs, audit, tables, ncc)")
+    ap.add_argument("--out", default=FIG, help="figures folder")
+    a = ap.parse_args()
+    RES, FIG, DATA = a.results, a.out, os.path.join(a.out, "figure_data")
     os.makedirs(DATA, exist_ok=True)
     d = runs()
     fig_privacy_utility(d)
