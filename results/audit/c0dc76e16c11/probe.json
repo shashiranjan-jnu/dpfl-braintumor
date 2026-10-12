@@ -1,0 +1,12 @@
+{
+ "tumour_figshare_vs_sartaj": {
+  "balanced_accuracy": 0.7496124031007751,
+  "n_train": 2178,
+  "n_test": 688
+ },
+ "notumour_sartaj_vs_br35h": {
+  "balanced_accuracy": 0.731638418079096,
+  "n_train": 432,
+  "n_test": 125
+ }
+}
