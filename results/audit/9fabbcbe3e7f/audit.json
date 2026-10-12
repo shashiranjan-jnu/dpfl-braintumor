@@ -2,7 +2,9 @@
  "parts": [
   "mia",
   "probe",
-  "xai"
+  "xai",
+  "logits",
+  "border"
  ],
- "seconds": 51.4
+ "seconds": 4.9
 }
