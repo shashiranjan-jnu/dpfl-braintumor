@@ -1,0 +1,13 @@
+10:01:03 run b979fede21c8 mode federated algo fedavg clients [1397, 228, 156] steps/client 1000 sigma 0.0000 eps inf unit record m_max 2
+10:01:05 round   1 val_loss 1.5016 val_acc 0.5142 bal_acc 0.3513 batch 61.4 2.12s
+10:01:23 round  10 val_loss 0.5296 val_acc 0.8104 bal_acc 0.7607 batch 58.1 2.0s
+10:01:43 round  20 val_loss 0.5623 val_acc 0.8270 bal_acc 0.7717 batch 57.3 1.97s
+10:02:04 round  30 val_loss 0.4531 val_acc 0.8602 bal_acc 0.8283 batch 60.7 2.07s
+10:02:24 round  40 val_loss 0.4711 val_acc 0.8673 bal_acc 0.8425 batch 60.0 2.05s
+10:02:45 round  50 val_loss 0.4972 val_acc 0.8768 bal_acc 0.8497 batch 57.4 1.98s
+10:03:05 round  60 val_loss 0.4692 val_acc 0.8791 bal_acc 0.8568 batch 56.5 1.96s
+10:03:25 round  70 val_loss 0.5326 val_acc 0.8720 bal_acc 0.8452 batch 60.3 2.07s
+10:03:46 round  80 val_loss 0.4906 val_acc 0.8863 bal_acc 0.8710 batch 58.8 2.03s
+10:04:06 round  90 val_loss 0.4865 val_acc 0.8863 bal_acc 0.8710 batch 62.8 2.12s
+10:04:27 round 100 val_loss 0.5043 val_acc 0.8815 bal_acc 0.8649 batch 56.0 1.94s
+10:04:28 done b979fede21c8 best_round 22 test_acc 0.9065 bal_acc 0.8838 ece 0.0233 train_acc 0.9180 204.8s
