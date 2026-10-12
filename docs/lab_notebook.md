@@ -145,3 +145,7 @@
 - 2026-10-12 paper figures fig1 to fig4 on the clean test set (scripts/make_figures.py, figures/CAPTIONS.md); fix: image ids with spaces were split when reading contaminated_test_ids.txt (63 instead of 66 excluded in the first clean LiRA table), table regenerated
 - 2026-10-12 notebook 18 prepared so that tables and figures are regenerated on Kaggle (CPU) from GitHub files; local dry run identical to committed figure data
 - 18 first attempt: 12 tests failed, opacus missing because the figures setup cell skipped pip install -r requirements.txt; fixed in the generator, code tag v0.8-figures unchanged
+
+## 2026-10-12 Results freeze (notebook 18, code v0.8-figures, CPU)
+- 52 tests pass on Kaggle; tables and figures regenerated, figure data identical to committed (max difference 0)
+- results/FROZEN_MANIFEST.{json,md}: 21 grids, 608 runs all finished, frozen files hashed; Step 4.3 closed (D52)

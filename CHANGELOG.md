@@ -2,6 +2,10 @@
 
 Newest entry first.
 
+## 2026-10-12 (v0.9-results-frozen)
+
+- `scripts/freeze.py` writes and checks `results/FROZEN_MANIFEST.{json,md}`. Notebook 18 reproduced figures exactly on Kaggle. D52, Step 4.3 closed.
+
 ## 2026-10-12 (v0.8-figures)
 
 - `make_figures.py --results --out`; `make_launcher.py --kind figures` builds notebook `18-figures` (CPU), which regenerates the clean-set tables and figures 1 to 4 on Kaggle from the files on GitHub, compares them with the committed figure data and pushes them. Local dry run reproduces the committed figure data exactly.
