@@ -1,0 +1,4 @@
+13:28:02 run a9761ff98289 mode federated algo fedavg clients [1305, 222, 169] steps/client 1000 sigma 0.0000 eps inf unit record m_max 2
+13:28:05 round   1 val_loss 21.2143 val_acc 0.2322 bal_acc 0.2500 batch 56.3 1.92s
+13:28:20 round 9 diverged (non-finite weights or loss), stopping run
+13:28:21 done a9761ff98289 best_round 7 test_acc 0.2435 bal_acc 0.2404 ece 0.7565 train_acc 0.2518 18.4s
