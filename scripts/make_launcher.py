@@ -358,6 +358,7 @@ print("push", push_run(RES, "results/ncc", f"NCC check, removed duplicates ({COD
 
 
 FIG_SETUP = NCC_SETUP.split("hits = glob.glob")[0] + r'''
+print(run([sys.executable, "-m", "pip", "install", "-q", "-r", f"{{CODE}}/requirements.txt"])[-500:])  # opacus etc.
 import torch
 TODAY = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
 COMMIT = run(["git", "rev-parse", "HEAD"], cwd=CODE).strip()

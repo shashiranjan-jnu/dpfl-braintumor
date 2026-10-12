@@ -144,3 +144,4 @@
 - 2026-10-12 NCC check: 66 contaminated test images, mostly mirrored Br35H no-tumour; author chose the clean test set as primary, no retraining (D50, D51)
 - 2026-10-12 paper figures fig1 to fig4 on the clean test set (scripts/make_figures.py, figures/CAPTIONS.md); fix: image ids with spaces were split when reading contaminated_test_ids.txt (63 instead of 66 excluded in the first clean LiRA table), table regenerated
 - 2026-10-12 notebook 18 prepared so that tables and figures are regenerated on Kaggle (CPU) from GitHub files; local dry run identical to committed figure data
+- 18 first attempt: 12 tests failed, opacus missing because the figures setup cell skipped pip install -r requirements.txt; fixed in the generator, code tag v0.8-figures unchanged
