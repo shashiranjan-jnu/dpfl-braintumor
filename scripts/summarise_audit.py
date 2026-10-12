@@ -38,6 +38,7 @@ for _m in ("gradcam", "gradcampp", "ig"):
 def load_audit(results: str, ids: list[str]) -> pd.DataFrame:
     base = collect(os.path.join(results, "runs"), set(ids))
     rows = []
+    base = base.copy()
     for rid in base.run_id:
         adir = os.path.join(results, "audit", rid)
         row = {"run_id": rid}
@@ -51,9 +52,12 @@ def load_audit(results: str, ids: list[str]) -> pd.DataFrame:
 
 
 def to_markdown(s: pd.DataFrame) -> str:
-    cell = lambda r, n: (f"{r[n]:.3f} ({r[n + '_lo']:.3f} to {r[n + '_hi']:.3f})"
-                         if n in r and not pd.isna(r.get(n + "_lo")) else
-                         ("" if n not in r or pd.isna(r[n]) else f"{r[n]:.3f}"))
+    def cell(r, n):
+        if n not in r or pd.isna(r[n]):
+            return ""
+        if pd.isna(r.get(n + "_lo")) or r.get("n_seeds", 0) < 2:
+            return f"{r[n]:.3f}"
+        return f"{r[n]:.3f} ({r[n + '_lo']:.3f} to {r[n + '_hi']:.3f})"
     head = ["mode", "scenario", "regime", "n", "bal_acc", "MIA AUC image", "MIA AUC patient (mean)",
             "probe tumour", "probe no-tumour", "Grad-CAM pointing", "IG energy"]
     names = ["bal_acc", "mia_auc", "mia_pat_mean_auc", "probe_tumour", "probe_notumour",

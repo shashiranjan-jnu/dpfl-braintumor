@@ -2,6 +2,11 @@
 
 Newest entry first.
 
+## 2026-10-12 (launcher 14 results)
+
+- 14 finished, 165 models audited. Table `week07_audit_summary.{csv,md}` and per-run CSV. D44, Gate B passes with the utility caveat.
+- Fix: audit summary cell no longer pulls from the token-free remote. `summarise_audit.py` leaves cells blank for parts not run.
+
 ## 2026-10-12 (Phase 4 code)
 
 - New: `src/xai/{maps,metrics,audit}.py`, `src/attacks/{mia,probe}.py`, `scripts/run_audit.py`, `scripts/summarise_audit.py`, `scripts/source_controls.py`, `tests/test_audit.py` (40 tests pass).

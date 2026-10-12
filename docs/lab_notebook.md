@@ -116,3 +116,10 @@
 - launcher 14 audits 165 checkpoints (MIA and probe) and explains 115 of them, using the outputs of 07 to 10 as inputs, no training
 - source controls on saved test predictions, results/tables/week07_source_controls.{csv,md}: SARTAJ-only 4-class balanced accuracy trails the pooled figure by 0.25 to 0.29 in every non-collapsed regime (central no DP 0.663 against 0.919, epsilon 8 0.528 against 0.815); no-tumour specificity is near 1 on Br35H and lower on SARTAJ, and DP widens the gap (central epsilon 8 0.702 against 0.976); FedAvg natural3 no DP has SARTAJ specificity 0.678, the Br35H client being single-source no-tumour
 - caveat: SARTAJ test holds 102 images (13 G, 24 M, 59 N, 6 P), so per-source intervals are wide
+
+## 2026-10-12 Phase 4 audit (14-audit, code v0.5-audit, about 1.7 GPU hours, 165 of 165 models, none failed)
+- 115 models explained (about 50 s each), 11 randomisation checks, 165 MIA and probe; table results/tables/week07_audit_summary.{csv,md} plus _per_run.csv
+- MIA image AUC no DP 0.53 to 0.54, patient mean AUC 0.68 (central, FedAvg natural3), 0.61 to 0.64 (dir0.5, dir5.0, iid); every clipped or DP model 0.46 to 0.54
+- probe tumour Figshare vs SARTAJ 0.91 no DP, 0.85 at epsilon 1; no-tumour SARTAJ vs Br35H 0.82 to 0.77
+- Grad-CAM pointing 0.197 to 0.089 and IoU 0.087 to 0.032 from no DP to epsilon 1 (central), explained by accuracy (r 0.85, sigma p 0.51); IG fails the randomisation check (Spearman 0.68 to 0.71); D44
+- bug: the summary cell ran git pull against the token-free remote and failed; summary produced here instead, cell fixed in make_launcher.py

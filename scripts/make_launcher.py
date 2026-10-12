@@ -146,7 +146,7 @@ for shard in (0, 1):
 
 AUDIT_SUMMARY = r'''
 # Audit summary over seeds, pushed to results/tables/.
-run(["git", "pull", "-q", "--rebase"], cwd=RES)
+# no git pull here: origin is the token-free URL, and every audit push already rebased RES
 print(run([sys.executable, "scripts/summarise_audit.py", "--results", f"{RES}/results", "--grids", *GRIDS,
            "--out", f"{RES}/results/tables/{NAME}_audit_summary.csv",
            "--md", f"{RES}/results/tables/{NAME}_audit_summary.md"], cwd=CODE))
