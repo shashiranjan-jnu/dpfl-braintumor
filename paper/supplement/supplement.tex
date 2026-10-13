@@ -26,6 +26,18 @@ fidelity in federated brain tumour MRI classification on a deduplicated benchmar
 \author{Authors to be completed}
 \date{}
 
+% Overleaf shares one output.aux between main.tex and this file, so commands that elsarticle and lineno
+% write there are made harmless here.
+\makeatletter
+\providecommand\emailauthor[2]{}
+\providecommand\Newlabel[2]{}
+\providecommand\@LN[2]{}
+\providecommand\@LN@col[1]{}
+% Find tables and the montage whether compiling from supplement/ or from the project root (Overleaf).
+\def\input@path{{./}{supplement/}}
+\graphicspath{{./}{supplement/}{../../results/ncc/}}
+\makeatother
+
 \begin{document}
 \maketitle
 
@@ -58,7 +70,7 @@ twin sat in another split.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.92\textwidth]{../../results/ncc/top_cross_split_pairs.png}
+\includegraphics[width=0.92\textwidth]{top_cross_split_pairs.png}
 \caption{Cross-split pairs with the highest NCC after mirroring. Each pair shows the test image and its nearest image
 in another split. These pairs define the 66 contaminated test images excluded from every result in the article.}
 \label{fig:s_montage}
