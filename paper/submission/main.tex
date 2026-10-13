@@ -1,37 +1,39 @@
-%% Intelligent Oncology (KeAi) submission, Elsevier CAS single-column template (cas-sc).
-%% Compile on Overleaf with the "Elsevier CAS" template files (cas-sc.cls, cas-common.sty) or with
-%% els-cas-templates from CTAN. paper/build.py also builds a local preview with paper/preview/cas-sc.cls.
-%% Every number in this file comes from results/FROZEN_MANIFEST.json at tag v0.9.1-results-frozen.
-\documentclass[a4paper,fleqn]{cas-sc}
+%% Intelligent Oncology (KeAi) submission, Elsevier elsarticle class (official template supplied by the journal,
+%% generated from elsarticle.dtx into paper/elsarticle/elsarticle.cls). Numbered references in AMA style shown as
+%% superscript numerals. Every number in this file comes from results/FROZEN_MANIFEST.json at tag
+%% v0.9.1-results-frozen.
+\documentclass[preprint,12pt]{elsarticle}
 
-\usepackage[numbers,super,sort&compress]{natbib}
+\usepackage{lmodern}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{graphicx}
-\usepackage{ragged2e}
 \usepackage[switch]{lineno}
 \graphicspath{{figures/}}
+\biboptions{super,sort&compress}
+\setlength{\emergencystretch}{3em}
+
+\journal{Intelligent Oncology}
 
 \begin{document}
-\let\WriteBookmarks\relax
 
-\shorttitle{Patient-level privacy in federated brain tumour MRI}
-\shortauthors{Authors to be completed}
+\begin{frontmatter}
 
-\title[mode=title]{Patient-level differential privacy, membership leakage and explanation fidelity in federated
-brain tumour MRI classification on a deduplicated benchmark}
+\title{Patient-level differential privacy, membership leakage and explanation fidelity in federated brain tumour MRI
+classification on a deduplicated benchmark}
 
-\author[1]{First Author}[orcid=0000-0000-0000-0000]
-\cormark[1]
+%% Author block to be completed by the authors
+\author[aff1]{First Author\corref{cor1}}
 \ead{author@institution.edu}
-\author[1]{Second Author}
-\affiliation[1]{organization={Department, Institution},
-  addressline={Full postal address},
-  city={City},
-  postcode={Postcode},
-  country={Country}}
-\cortext[1]{Corresponding author. Full postal address and telephone number with country and area code to be
+\author[aff1]{Second Author}
+\cortext[cor1]{Corresponding author. Full postal address and telephone number with country and area code to be
 completed.}
+\affiliation[aff1]{organization={Department, Institution},
+            addressline={Full postal address},
+            city={City},
+            postcode={Postcode},
+            state={State},
+            country={Country}}
 
 \begin{abstract}
 \noindent\textbf{Background.} Federated brain tumour classifiers on public MRI collections report accuracies above
@@ -68,14 +70,14 @@ more at this data scale.
 \item Explanation consistency under DP falls in step with accuracy
 \end{highlights}
 
-\begin{keywords}
+\begin{keyword}
 Federated learning \sep Differential privacy \sep Membership inference \sep Brain tumour MRI \sep
 Explainable artificial intelligence \sep Data leakage
-\end{keywords}
+\end{keyword}
 
-\maketitle
+\end{frontmatter}
+
 \linenumbers
-\RaggedRight
 \setlength{\parindent}{1.5em}
 
 \section{Introduction}
@@ -276,11 +278,12 @@ Deduplication removed half of all labelled images, mostly because SARTAJ and Br3
 (Table~\ref{tab:data}). The NCC check then removed 66 test images, almost all Br35H no-tumour images whose mirrored
 copies sat in training or validation.
 
-\begin{table}[width=\linewidth,cols=8,pos=htbp]
+\begin{table}[htbp]
 \caption{Images per source through curation and splitting.}\label{tab:data}
-\begin{tabular*}{\tblwidth}{@{}LRRRRRRR@{}}
+\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrrr@{}}
 \toprule
-Source & Raw files & Four-class labels & After deduplication & Train & Validation & Test & Clean test\\
+Source & Raw files & Four-class & Deduplicated & Train & Validation & Test & Clean test\\
 \midrule
 Figshare & 3064 & 3064 & 3010 & 2029 & 336 & 645 & 644\\
 SARTAJ & 3264 & 3264 & 505 & 351 & 52 & 102 & 97\\
@@ -299,21 +302,21 @@ Record-level DP at $\varepsilon=8$ reduced central balanced accuracy from 0.908 
 chance at $\varepsilon=1$ (Table~\ref{tab:utility}, Fig.~\ref{fig:utility}). Clipping alone cost 0.063, so most of the
 loss at $\varepsilon=8$ came from noise rather than clipping.
 
-\begin{table}[width=\linewidth,cols=6,pos=htbp]
-\caption{Balanced accuracy on the clean test set, mean over five seeds with 95\% confidence interval.}\label{tab:utility}
-\small
-\begin{tabular*}{\tblwidth}{@{}LLLLLL@{}}
+\begin{table}[htbp]
+\caption{Balanced accuracy on the clean test set, mean over five seeds with 95\% confidence interval. Image and patient name the privacy unit of central training, and Dir.~0.5 is the Dirichlet partition with $\alpha=0.5$ and $K=10$ clients.}\label{tab:utility}
+\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llllll@{}}
 \toprule
 Setting & No DP & Clip only & $\varepsilon=8$ & $\varepsilon=3$ & $\varepsilon=1$\\
 \midrule
-Central, record-level & 0.908 & 0.845 & 0.778 & 0.648 & 0.326\\
- & {\footnotesize (0.894, 0.921)} & {\footnotesize (0.818, 0.871)} & {\footnotesize (0.739, 0.818)} & {\footnotesize (0.572, 0.723)} & {\footnotesize (0.272, 0.379)}\\[2pt]
-Central, patient-level & 0.908 & 0.872 & 0.337 & 0.251 & not run\\
- & {\footnotesize (0.894, 0.921)} & {\footnotesize (0.852, 0.891)} & {\footnotesize (0.284, 0.390)} & {\footnotesize (0.248, 0.253)} & \\[2pt]
+Central, image & 0.908 & 0.845 & 0.778 & 0.648 & 0.326\\
+ & {\scriptsize (0.894, 0.921)} & {\scriptsize (0.818, 0.871)} & {\scriptsize (0.739, 0.818)} & {\scriptsize (0.572, 0.723)} & {\scriptsize (0.272, 0.379)}\\[2pt]
+Central, patient & 0.908 & 0.872 & 0.337 & 0.251 & not run\\
+ & {\scriptsize (0.894, 0.921)} & {\scriptsize (0.852, 0.891)} & {\scriptsize (0.284, 0.390)} & {\scriptsize (0.248, 0.253)} & \\[2pt]
 FedAvg, natural3 & 0.841 & not run & 0.765 & 0.674 & 0.525\\
- & {\footnotesize (0.833, 0.848)} &  & {\footnotesize (0.731, 0.800)} & {\footnotesize (0.659, 0.688)} & {\footnotesize (0.463, 0.586)}\\[2pt]
-FedAvg, Dirichlet $\alpha$ 0.5, $K$ 10 & 0.870 & not run & 0.669 & 0.590 & 0.331\\
- & {\footnotesize (0.852, 0.887)} &  & {\footnotesize (0.626, 0.712)} & {\footnotesize (0.548, 0.631)} & {\footnotesize (0.280, 0.383)}\\[2pt]
+ & {\scriptsize (0.833, 0.848)} &  & {\scriptsize (0.731, 0.800)} & {\scriptsize (0.659, 0.688)} & {\scriptsize (0.463, 0.586)}\\[2pt]
+FedAvg, Dir.~0.5 & 0.870 & not run & 0.669 & 0.590 & 0.331\\
+ & {\scriptsize (0.852, 0.887)} &  & {\scriptsize (0.626, 0.712)} & {\scriptsize (0.548, 0.631)} & {\scriptsize (0.280, 0.383)}\\[2pt]
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -358,24 +361,24 @@ Without DP, LiRA identified training images and especially training patients wel
 (Table~\ref{tab:lira}, Fig.~\ref{fig:lira}). At a 1\% false-positive rate it found 10.8\% of training images, and
 summed over slices it separated training from test patients with AUC 0.805.
 
-\begin{table}[width=\linewidth,cols=6,pos=htbp]
+\begin{table}[htbp]
 \caption{Online LiRA against natural3 FedAvg, 16 shadow models, mean over five target models with 95\% confidence
 interval.}\label{tab:lira}
-\small
-\begin{tabular*}{\tblwidth}{@{}LLLLLL@{}}
+\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{tabular*}{\linewidth}{@{}p{1.7cm}@{\extracolsep{\fill}}lllll@{}}
 \toprule
-Target & Balanced accuracy & Image AUC & TPR at 1\% FPR & TPR at 0.1\% FPR & Patient AUC\\
+Target & Bal. acc. & Image AUC & TPR, 1\% FPR & TPR, 0.1\% FPR & Patient AUC\\
 \midrule
 No DP & 0.841 & 0.666 & 0.108 & 0.033 & 0.805\\
- &  & {\footnotesize (0.642, 0.689)} & {\footnotesize (0.081, 0.135)} & {\footnotesize (0.019, 0.046)} & {\footnotesize (0.762, 0.848)}\\[2pt]
+ &  & {\scriptsize (0.642, 0.689)} & {\scriptsize (0.081, 0.135)} & {\scriptsize (0.019, 0.046)} & {\scriptsize (0.762, 0.848)}\\[2pt]
 $\varepsilon=8$ & 0.765 & 0.464 & 0.017 & 0.006 & 0.454\\
- &  & {\footnotesize (0.448, 0.480)} & {\footnotesize (0.012, 0.022)} & {\footnotesize (0.003, 0.008)} & {\footnotesize (0.427, 0.481)}\\[2pt]
+ &  & {\scriptsize (0.448, 0.480)} & {\scriptsize (0.012, 0.022)} & {\scriptsize (0.003, 0.008)} & {\scriptsize (0.427, 0.481)}\\[2pt]
 $\varepsilon=3$ & 0.674 & 0.545 & 0.015 & 0.003 & 0.567\\
- &  & {\footnotesize (0.522, 0.567)} & {\footnotesize (0.008, 0.023)} & {\footnotesize (0.002, 0.005)} & {\footnotesize (0.529, 0.605)}\\[2pt]
+ &  & {\scriptsize (0.522, 0.567)} & {\scriptsize (0.008, 0.023)} & {\scriptsize (0.002, 0.005)} & {\scriptsize (0.529, 0.605)}\\[2pt]
 $\varepsilon=1$ & 0.525 & 0.479 & 0.010 & 0.003 & 0.457\\
- &  & {\footnotesize (0.469, 0.489)} & {\footnotesize (0.006, 0.015)} & {\footnotesize (0.000, 0.005)} & {\footnotesize (0.413, 0.500)}\\[2pt]
+ &  & {\scriptsize (0.469, 0.489)} & {\scriptsize (0.006, 0.015)} & {\scriptsize (0.000, 0.005)} & {\scriptsize (0.413, 0.500)}\\[2pt]
 Weight noise $s=0.003$ & 0.801 & 0.594 & 0.045 & 0.016 & 0.745\\
- &  & {\footnotesize (0.572, 0.616)} & {\footnotesize (0.038, 0.051)} & {\footnotesize (0.012, 0.020)} & {\footnotesize (0.713, 0.778)}\\[2pt]
+ &  & {\scriptsize (0.572, 0.616)} & {\scriptsize (0.038, 0.051)} & {\scriptsize (0.012, 0.020)} & {\scriptsize (0.713, 0.778)}\\[2pt]
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -557,7 +560,7 @@ To be completed by the authors.
 \clearpage
 \section*{Figures}
 
-\begin{figure}[pos=htbp]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\linewidth]{Figure1.pdf}
 \caption{Privacy and utility. Balanced accuracy on the 747 clean test images against the privacy budget
@@ -567,7 +570,7 @@ intervals, and the diamond marks unclipped weight noise ($s=0.003$), which carri
 \label{fig:utility}
 \end{figure}
 
-\begin{figure}[pos=htbp]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\linewidth]{Figure2.pdf}
 \caption{Client count under DP. Clean balanced accuracy of FedAvg on Dirichlet $\alpha=0.5$ partitions with 3, 5, 10
@@ -576,7 +579,7 @@ The dashed series uses the learning rate tuned for 10 clients and hides the decl
 \label{fig:clients}
 \end{figure}
 
-\begin{figure}[pos=htbp]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\linewidth]{Figure3.pdf}
 \caption{Membership inference. Online LiRA receiver operating characteristic curves on logarithmic axes against
@@ -586,7 +589,7 @@ the test set.}
 \label{fig:lira}
 \end{figure}
 
-\begin{figure}[pos=htbp]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\linewidth]{Figure4.pdf}
 \caption{Explanations under privacy. (a) Cross-seed Grad-CAM consistency, the IoU of the top 10\% of each model's map

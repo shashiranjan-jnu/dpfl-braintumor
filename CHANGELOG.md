@@ -2,6 +2,10 @@
 
 Newest entry first.
 
+## 2026-10-13 (official template)
+
+- Manuscript moved to the journal's official elsarticle class (`paper/elsarticle/`), CAS stand-in removed, tables fitted to the text block, Latin Modern fonts; `make_figures.py` embeds TrueType fonts (D56).
+
 ## 2026-10-13 (v0.9.2-manuscript, proposed)
 
 - `paper/`: manuscript in Elsevier CAS LaTeX (`main.tex`), AMA references verified (`references.py`), build script producing the submission folder with preview PDF, Word file, numbered figures, highlights and supplement PDF (D55).

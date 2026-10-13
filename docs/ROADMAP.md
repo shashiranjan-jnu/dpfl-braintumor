@@ -93,7 +93,7 @@ All 18 steps are not started, and Week 1 is assumed to begin on Monday 5 October
 | 4.1 | Membership inference audit | 7 | 22 Nov | v0.6.2-audit | Done | LiRA: no DP leaks, DP at chance, weight noise leaks, D48 |
 | 4.2 | XAI fidelity and Gate B | 7 | 22 Nov | v0.6.2-audit | Done | Gate B passes, mediated by utility, D44, D48 |
 | 4.3 | Results freeze | 8 | 29 Nov | v0.9-results-frozen | Done | 608 runs, manifest with hashes, figures reproduced on Kaggle, D50 to D52 |
-| 5.1 | Methods and Results drafting | 9 | 6 Dec | v0.9.2-manuscript | Done | paper/main.tex (Elsevier cas-sc), Tables 2 and 3 checked by script against frozen CSVs, D55 |
+| 5.1 | Methods and Results drafting | 9 | 6 Dec | v0.9.2-manuscript | Done | paper/main.tex (official elsarticle template, D56), Tables 2 and 3 checked by script against frozen CSVs, D55 |
 | 5.2 | Introduction, Discussion, front matter | 10 | 13 Dec | v0.9.2-manuscript | In progress | Draft complete with supplement, Word file and highlights; graphical abstract, related-work table and author items open (D55) |
 | 5.3 | Internal expert review | 11 | 20 Dec | v0.95-reviewed | Not started |  |
 | 6.1 | Compliance check and submission | 12 | 27 Dec | v1.0-submission | Not started |  |

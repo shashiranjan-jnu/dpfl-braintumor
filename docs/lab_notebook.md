@@ -153,3 +153,4 @@
 - 2026-10-12 Step 5.1 started: full first draft (Intelligent Oncology, KeAi guide for authors) written as a Docs artifact from frozen and D53-corrected numbers; 12 references marked for verification
 - 2026-10-13 notebook 18 on v0.8.1-figures: all four figure data files identical to committed; manifest rebuilt, D54
 - 2026-10-13 Step 5.1 closed, 5.2 in progress: manuscript in cas-sc LaTeX with Word export and 11-page supplement; 32 references verified, 3 rounding errors in Table 2 fixed (D55)
+- 2026-10-13 manuscript converted to the official elsarticle template supplied by the journal; 23 pages, no overfull boxes, no Type 3 text fonts (D56)

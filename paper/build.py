@@ -1,11 +1,11 @@
 """Assemble the Intelligent Oncology submission package (Step 5.2). CPU only.
 
-    python paper/build.py            # writes paper/submission/ and compiles the previews
+    python paper/build.py            # writes paper/submission/ and compiles the manuscript
 
 Steps
   1. references.tex in order of first citation (AMA, superscript numerals via natbib)
   2. paper/submission/ with main.tex, references.tex, figures/Figure1-4 (PDF and PNG), highlights.txt
-  3. preview PDF of main.tex with the stand-in class in paper/preview (needs pdflatex)
+  3. manuscript.pdf compiled with the official elsarticle class in paper/elsarticle (needs pdflatex)
   4. manuscript.docx through pandoc, single column, left aligned, double spaced, line numbers
   5. supplement tables (scripts/make_supplement.py) and supplement.pdf
 """
@@ -64,10 +64,10 @@ def env_body(tex: str, env: str) -> str:
 def docx_tex(tex: str, order: list[str]) -> str:
     """Plain LaTeX that pandoc can read, with numbered superscript citations and a numbered reference list."""
     num = {k: i + 1 for i, k in enumerate(order)}
-    title = re.search(r"\\title\[[^]]*\]\{(.*?)\}\n\n", tex, re.S).group(1)
+    title = re.search(r"\\title\{(.*?)\}\n\n", tex, re.S).group(1)
     abstract = env_body(tex, "abstract").replace("\\noindent", "")
-    keywords = re.sub(r"\s*\\sep\s*", "; ", env_body(tex, "keywords"))
-    body = tex.split("\\maketitle", 1)[1].split("\\end{document}")[0]
+    keywords = re.sub(r"\s*\\sep\s*", "; ", env_body(tex, "keyword"))
+    body = tex.split("\\end{frontmatter}", 1)[1].split("\\end{document}")[0]
     body = re.sub(r"\\(linenumbers|RaggedRight)\b", "", body)
     body = re.sub(r"\\setlength\{\\parindent\}\{[^}]*\}", "", body)
     body = re.sub(r"\\cite\{([^}]*)\}",
@@ -92,8 +92,11 @@ def docx_tex(tex: str, order: list[str]) -> str:
         return m.group(0) + ("Table " if env == "table" else "Fig. ") + f"{n[env]}. "
     body = re.sub(r"\\begin\{(table|figure)\}(?:\[[^]]*\])?(?:(?!\\caption\{).)*\\caption\{", cap, body, flags=re.S)
     body = re.sub(r"\\begin\{(table|figure)\}\[[^]]*\]", r"\\begin{\1}", body)
-    body = re.sub(r"\\begin\{tabular\*\}\{\\tblwidth\}\{@\{\}([LRC]+)@\{\}\}",
-                  lambda m: "\\begin{tabular}{" + m.group(1).lower() + "}", body)
+    def plain_cols(m):
+        spec = re.sub(r"@\{(?:[^{}]|\{[^{}]*\})*\}", "", m.group(1))
+        return "\\begin{tabular}{" + re.sub(r"p\{[^}]*\}", "l", spec) + "}"
+    body = re.sub(r"\\begin\{tabular\*\}\{\\linewidth\}\{((?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\}",
+                  plain_cols, body)
     body = body.replace("\\end{tabular*}", "\\end{tabular}")
     body = re.sub(r"Figure(\d)\.pdf", r"Figure\1.png", body)
     refs = "\\section*{References}\n\\begin{enumerate}\n" + "\n".join(f"\\item {REFS[k]}" for k in order) + \
@@ -157,6 +160,8 @@ def main():
     open(os.path.join(HERE, "references.tex"), "w").write(references_tex(order))
     for f in ("main.tex", "references.tex"):
         shutil.copy(os.path.join(HERE, f), OUT)
+    for f in ("elsarticle.cls", "elsarticle-num.bst"):
+        shutil.copy(os.path.join(HERE, "elsarticle", f), OUT)
     for new, old in FIGS.items():
         for ext in ("pdf", "png"):
             shutil.copy(os.path.join(ROOT, "figures", f"{old}.{ext}"), os.path.join(OUT, "figures", f"{new}.{ext}"))
@@ -166,9 +171,9 @@ def main():
         sys.exit(f"highlights must be 3 to 5 items of at most 85 characters, got {too_long}")
     open(os.path.join(OUT, "highlights.txt"), "w").write("Highlights\n\n" + "\n".join(f"• {h}" for h in hl) + "\n")
 
-    env = dict(os.environ, TEXINPUTS=os.path.join(HERE, "preview") + "//:")
+    env = dict(os.environ, TEXINPUTS=os.path.join(HERE, "elsarticle") + "//:")
     run(["latexmk", "-pdf", "-interaction=nonstopmode", "-halt-on-error", "main.tex"], OUT, env)
-    shutil.copy(os.path.join(OUT, "main.pdf"), os.path.join(OUT, "manuscript_preview.pdf"))
+    shutil.copy(os.path.join(OUT, "main.pdf"), os.path.join(OUT, "manuscript.pdf"))
 
     open(os.path.join(OUT, "_docx.tex"), "w").write(docx_tex(tex, order))
     run(["pandoc", "_docx.tex", "-f", "latex", "-t", "docx", "-o", "manuscript.docx", "--resource-path=.:figures"],

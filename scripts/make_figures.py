@@ -23,6 +23,9 @@ import sys
 import matplotlib
 
 matplotlib.use("Agg")
+# TrueType (Type 42) instead of Type 3 fonts in PDF output, as journal production systems require
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
