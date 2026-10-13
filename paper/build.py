@@ -144,6 +144,25 @@ def format_docx(path: str) -> None:
     d.save(path)
 
 
+def write_zip(sup: str) -> None:
+    """intelligent_oncology_latex.zip for Overleaf. main.tex at the root compiles as is, and supplement/ holds the
+    supplement source with its montage beside it, plus the compiled supplementary_material.pdf."""
+    import zipfile
+    path = os.path.join(OUT, "intelligent_oncology_latex.zip")
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
+        for f in ("main.tex", "references.tex", "elsarticle.cls", "elsarticle-num.bst", "highlights.txt",
+                  "supplementary_material.pdf"):
+            z.write(os.path.join(OUT, f), f)
+        for f in sorted(os.listdir(os.path.join(OUT, "figures"))):
+            z.write(os.path.join(OUT, "figures", f), f"figures/{f}")
+        montage = "top_cross_split_pairs.png"
+        tex = open(os.path.join(sup, "supplement.tex")).read().replace(f"../../results/ncc/{montage}", montage)
+        z.writestr("supplement/supplement.tex", tex)
+        for f in sorted(os.listdir(os.path.join(sup, "tables"))):
+            z.write(os.path.join(sup, "tables", f), f"supplement/tables/{f}")
+        z.write(os.path.join(ROOT, "results", "ncc", montage), f"supplement/{montage}")
+
+
 def run(cmd, cwd, env=None):
     r = subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True, errors="replace")
     if r.returncode:
@@ -188,6 +207,7 @@ def main():
     for f in os.listdir(OUT):
         if f.startswith("main.") and f not in ("main.tex",) or f.startswith("_docx"):
             os.remove(os.path.join(OUT, f))
+    write_zip(sup)
     print(f"{len(order)} references, {len(hl)} highlights")
     print("\n".join(sorted(os.path.relpath(os.path.join(dp, f), OUT) for dp, _, fs in os.walk(OUT) for f in fs)))
 
