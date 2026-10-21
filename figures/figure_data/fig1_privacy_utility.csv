@@ -9,12 +9,12 @@ series,regime,x_epsilon,bal_acc_clean,lo,hi,n_seeds
 "Central, patient-level DP",patient eps 32,32.0000,0.7267,0.6820,0.7715,5
 "Central, patient-level DP",patient eps 64,64.0000,0.8204,0.7783,0.8625,5
 "Central, patient-level DP",patient eps 8,8.0000,0.3367,0.2838,0.3895,5
-"FedAvg, natural3 (3 sources)",eps 1,1.0000,0.5249,0.4632,0.5865,5
-"FedAvg, natural3 (3 sources)",eps 3,3.0000,0.6736,0.6591,0.6881,5
-"FedAvg, natural3 (3 sources)",eps 8,8.0000,0.7654,0.7308,0.8001,5
-"FedAvg, natural3 (3 sources)",no DP,200.0000,0.8408,0.8333,0.8482,5
-"FedAvg, Dirichlet α 0.5, K 10",eps 1,1.0000,0.3312,0.2797,0.3828,5
-"FedAvg, Dirichlet α 0.5, K 10",eps 3,3.0000,0.5896,0.5485,0.6308,5
-"FedAvg, Dirichlet α 0.5, K 10",eps 8,8.0000,0.6692,0.6260,0.7125,5
-"FedAvg, Dirichlet α 0.5, K 10",no DP,200.0000,0.8697,0.8523,0.8872,5
+"FedAvg, natural partition",eps 1,1.0000,0.5249,0.4632,0.5865,5
+"FedAvg, natural partition",eps 3,3.0000,0.6736,0.6591,0.6881,5
+"FedAvg, natural partition",eps 8,8.0000,0.7654,0.7308,0.8001,5
+"FedAvg, natural partition",no DP,200.0000,0.8408,0.8333,0.8482,5
+"FedAvg, Dirichlet α = 0.5, K = 10",eps 1,1.0000,0.3312,0.2797,0.3828,5
+"FedAvg, Dirichlet α = 0.5, K = 10",eps 3,3.0000,0.5896,0.5485,0.6308,5
+"FedAvg, Dirichlet α = 0.5, K = 10",eps 8,8.0000,0.6692,0.6260,0.7125,5
+"FedAvg, Dirichlet α = 0.5, K = 10",no DP,200.0000,0.8697,0.8523,0.8872,5
 weight noise 0.003,weight noise 0.003,,0.8006,0.7854,0.8157,5
