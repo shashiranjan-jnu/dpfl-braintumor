@@ -243,6 +243,7 @@ def main():
     for new, src in TIKZ.items():
         tikz_pdf(src, os.path.join(OUT, "figures"), new)
     tikz_pdf("graphical_abstract", OUT, "graphical_abstract")
+    shutil.copy(os.path.join(OUT, "graphical_abstract.pdf"), os.path.join(OUT, "figures", "graphical_abstract.pdf"))
     hl = [re.sub(r"\$\\varepsilon\s*=\s*(\d+)\$", r"ε = \1", h.strip()).replace("$\\varepsilon$", "ε")
           for h in env_body(tex, "highlights").split("\\item") if h.strip()]
     too_long = [h for h in hl if len(h) > 85]

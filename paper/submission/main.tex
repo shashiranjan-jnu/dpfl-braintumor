@@ -1,7 +1,7 @@
 %% Intelligent Oncology (KeAi) submission, Elsevier elsarticle class (official template supplied by the journal,
 %% generated from elsarticle.dtx into paper/elsarticle/elsarticle.cls). Numbered references in AMA style shown as
 %% superscript numerals. Every number in this file comes from results/FROZEN_MANIFEST.json at tag
-%% v0.9.1-results-frozen, or from results/tables/week07_xai_mediation.csv (D57).
+%% v0.9.5-results-frozen, or from results/tables/week07_xai_mediation.csv (D57).
 \documentclass[preprint,12pt]{elsarticle}
 
 \usepackage{lmodern}
@@ -67,6 +67,10 @@ cost of 0.076 (federated) to 0.130 (central), whereas per-patient guarantees cos
 in real hospital consortia remain untested, because clients were simulated from public data.
 \end{abstract}
 
+\begin{graphicalabstract}
+\includegraphics[width=\linewidth]{graphical_abstract.pdf}
+\end{graphicalabstract}
+
 \begin{highlights}
 \item Mirrored near-duplicates contaminated 66 of 813 test images of a public MRI benchmark
 \item Record-level DP at $\varepsilon=8$ kept LiRA at chance for a 0.076 to 0.130 accuracy cost
@@ -87,10 +91,10 @@ activation mapping \sep Neuro-oncology \sep Dataset contamination
 \section{Introduction}
 Artificial intelligence is changing how brain tumours are detected and graded on magnetic resonance imaging (MRI),
 and its clinical value depends on training data drawn from many hospitals.\cite{ahmed2026}\footnote{Abbreviations.
-AUC, area under the receiver operating characteristic curve. DP, differential privacy. DP-SGD, differentially
+AUC, area under the receiver operating characteristic curve. CI, confidence interval. DP, differential privacy. DP-SGD, differentially
 private stochastic gradient descent. FedAvg, federated averaging. FPR, false-positive rate. Grad-CAM,
 gradient-weighted class activation mapping. IG, Integrated Gradients. IoU, intersection over union. LiRA,
-likelihood-ratio attack. NCC, normalised cross-correlation. TPR, true-positive rate.} Federated learning lets
+likelihood-ratio attack. NCC, normalised cross-correlation. ROC, receiver operating characteristic. TPR, true-positive rate.} Federated learning lets
 those hospitals train one shared model without moving scans, and early brain tumour studies showed that
 federated models approach the accuracy of centrally trained ones.\cite{sheller2019,sheller2020,pati2022}
 
@@ -215,9 +219,7 @@ audits measure leakage and explanation quality on the released models.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{Figure1.pdf}
-\caption{Evaluation framework. (a) Curation of three public collections. (b) Federated training with local DP-SGD at
-image or patient level and size-weighted FedAvg. (c) Membership inference audit with LiRA. (d) Explanation audit.
-Alg., algorithm. NCC, normalised cross-correlation. TPR and FPR, true-positive and false-positive rate.}
+\caption{Evaluation framework. (a) Curation. (b) Private federated training. (c) Leakage audit. (d) Explanation audit.}
 \label{fig:framework}
 \end{figure}
 
@@ -418,7 +420,7 @@ $\alpha=0.5$ partition was also built with $K$ of 3, 5 and 15 clients, and a Dir
 ($\alpha=0.5$, $K=10$) serves patient-level DP.
 
 \begin{table}[htbp]
-\caption{Images per source through curation and splitting.}\label{tab:data}
+\caption{Images per source.}\label{tab:data}
 \footnotesize\setlength{\tabcolsep}{4pt}
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrrr@{}}
 \toprule
@@ -503,7 +505,7 @@ level of 0.25 at $\varepsilon=1$. Clipping alone accounted for 0.063 of the 0.13
 for the remaining 0.067 ($0.845-0.778$).
 
 \begin{table}[htbp]
-\caption{Balanced accuracy on the clean test set (747 images), mean over five seeds with 95\% confidence interval.}
+\caption{Clean-set balanced accuracy, mean (95\% CI) over five seeds.}
 \label{tab:utility}
 \footnotesize\setlength{\tabcolsep}{3pt}
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llllll@{}}
@@ -524,7 +526,8 @@ FedAvg, Dir.~0.5\textsuperscript{a} & 0.870 & not run & 0.669 & 0.590 & 0.331\\
 patient name the privacy unit of central training.}
 \end{table}
 
-For FedAvg on the natural partition the cost at $\varepsilon=8$ was 0.076 ($0.841-0.765$). Local-only training on any
+For FedAvg on the natural partition the cost at $\varepsilon=8$ was 0.076 ($0.841-0.765$), and the diamond in
+Fig.~\ref{fig:utility} marks the unclipped weight-noise comparator, which has no formal $\varepsilon$. Local-only training on any
 single natural client stayed below federated accuracy, at most 0.625 for the Figshare client (Supplementary Table S4).
 Patient-level DP was far more expensive at the same $\varepsilon$. Patient-level clip-only training reached 0.872, so
 counting each patient once did not by itself harm accuracy, but at $\varepsilon=8$ accuracy fell to 0.337.
@@ -532,10 +535,7 @@ counting each patient once did not by itself harm accuracy, but at $\varepsilon=
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.66\linewidth]{Figure2.pdf}
-\caption{Privacy and utility. Balanced accuracy on 747 clean test images against the privacy budget $\varepsilon$
-($\delta=10^{-5}$) for central training at two privacy units and for FedAvg on two partitions. Points are means over
-five seeds and error bars 95\% $t$-intervals. The diamond marks unclipped weight noise ($s=0.003$), which has no formal
-$\varepsilon$.}
+\caption{Balanced accuracy against privacy budget $\varepsilon$ ($\delta=10^{-5}$). Means of five seeds with 95\% CIs.}
 \label{fig:utility}
 \end{figure}
 
@@ -552,16 +552,14 @@ learning-rate candidates raised federated record-level $\varepsilon=8$ to 11.98 
 Fig.~\ref{fig:clients} shows that, with the same 2610 images split across more clients, accuracy fell under DP but not
 without it. At $\varepsilon=3$ the slope was $-0.096$ per unit of $\ln K$ ($p<0.001$), from 0.677 with three clients
 to 0.525 with 15. At $\varepsilon=8$ the slope was $-0.156$ ($p<0.001$) with learning rate 0.01, from 0.779 to 0.525,
-and $-0.016$ ($p=0.380$) with the rate of 0.003 selected for 10 clients, whereas without DP the slope was
+and $-0.016$ ($p=0.380$) with the rate of 0.003 selected for 10 clients (dashed in Fig.~\ref{fig:clients}),
+whereas without DP the slope was
 $+0.013$ ($p=0.079$).
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.6\linewidth]{Figure3.pdf}
-\caption{Client count under DP. Clean balanced accuracy of FedAvg on Dirichlet ($\alpha=0.5$) partitions of the same
-2610 images into $K=3$, 5, 10 and 15 clients, against the aggregated noise standard deviation $s_{\mathrm{agg}}$ of
-Eq.~(\ref{eq:aggnoise}). Error bars are 95\% $t$-intervals over five seeds, and the dashed series uses learning rate
-0.003.}
+\caption{Accuracy against aggregated noise $s_{\mathrm{agg}}$ for $K=3$ to 15 clients. Means of five seeds with 95\% CIs.}
 \label{fig:clients}
 \end{figure}
 
@@ -587,8 +585,7 @@ training patients above chance. At a 1\% FPR it found 10.8\% of training images 
 separated training from test patients with AUC 0.805.
 
 \begin{table}[htbp]
-\caption{Online LiRA against FedAvg on the natural partition, mean over five target models with 95\% confidence
-interval.}\label{tab:lira}
+\caption{Online LiRA against FedAvg on the natural partition, mean (95\% CI) over five targets.}\label{tab:lira}
 \footnotesize\setlength{\tabcolsep}{3pt}
 \begin{tabular*}{\linewidth}{@{}p{1.7cm}@{\extracolsep{\fill}}lllll@{}}
 \toprule
@@ -617,9 +614,7 @@ models, since the low-FPR tail stayed at chance.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\linewidth]{Figure4.pdf}
-\caption{Membership inference. Online LiRA receiver operating characteristic curves on logarithmic axes against FedAvg
-on the natural partition, each the mean over five target models with 16 shadow models per configuration. (a) Image
-level. (b) Figshare patient level. Shaded regions lie below the FPR resolution of the test set.}
+\caption{LiRA ROC curves at image (a) and patient (b) level. Shading marks FPR below the test-set resolution.}
 \label{fig:lira}
 \end{figure}
 
@@ -642,23 +637,20 @@ $\varepsilon=32$ and reached 0.368 at $\varepsilon=64$.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\linewidth]{Figure5.pdf}
-\caption{Explanations under privacy. (a) Cross-seed Grad-CAM consistency, the IoU of the top 10\% of each model's map
-with that of the five-seed mean map, against $\varepsilon$ for central models, with 95\% $t$-intervals. (b) Consistency
-against clean balanced accuracy for 115 models.}
+\caption{Grad-CAM consistency across seeds against $\varepsilon$ (a) and against accuracy (b).}
 \label{fig:xai}
 \end{figure}
 
 Across 115 explained models, consistency correlated with clean balanced accuracy at $r=0.798$ (Fig.~\ref{fig:xai}b),
 and across 111 models with correctly classified masked images, top-15\% IoU correlated with accuracy at $r=0.839$. With
 accuracy in the regression, $\sigma$ added no explanatory power for IoU ($p=0.834$) or consistency ($p=0.153$,
-Supplementary Table S19). Fig.~\ref{fig:examples} illustrates the pattern on one image per tumour class.
+Supplementary Table S19). Fig.~\ref{fig:examples} illustrates the pattern on one image per tumour class, chosen by a rule fixed beforehand as
+the image with mask area closest to the class median among those the non-private model classifies correctly.
 
 \begin{figure}[htbp]
 \centering
 \figorplaceholder{Figure6.pdf}{0.9\linewidth}
-\caption{Grad-CAM examples. One clean Figshare test image per tumour class, chosen by a fixed rule (mask area closest to
-the class median among images the non-private model classifies correctly), with the expert mask outline in cyan and the
-Grad-CAM maps of central seed-1 models. Labels give each model's prediction, in red when wrong.}
+\caption{Grad-CAM maps of central seed-1 models, one test image per class. Cyan, expert mask. Red, wrong prediction.}
 \label{fig:examples}
 \end{figure}
 
@@ -774,7 +766,7 @@ sectors.
 \section*{Data availability}
 The Figshare,\cite{chengdata} SARTAJ\cite{sartajdata} and Br35H\cite{br35hdata} collections are publicly available from
 the cited sources. Split, duplicate and hash manifests, all run results, figure data and code are available at
-\url{https://github.com/shashiranjan-jnu/dpfl-braintumor} under tag v0.9.1-results-frozen. [CHECK: make the repository
+\url{https://github.com/shashiranjan-jnu/dpfl-braintumor} under tag v0.9.5-results-frozen. [CHECK: make the repository
 public and add the archive DOI before submission]
 
 \section*{Acknowledgements}

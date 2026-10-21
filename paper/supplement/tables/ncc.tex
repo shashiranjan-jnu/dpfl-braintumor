@@ -1,6 +1,6 @@
 \begin{table}[H]
 \centering\scriptsize
-\caption{Part A of the NCC check. Pairs of curated images ($64\times64$) at or above each normalised cross-correlation threshold, taking the larger of the plain and the mirrored comparison.}\label{tab:s_ncc}
+\caption{Part A of the NCC check, curated pairs at or above each threshold.}\label{tab:s_ncc}
 \resizebox{\textwidth}{!}{\begin{tabular}{lrrrrrrrr}
 \toprule
 NCC $\geq$ & Pairs & Same unit & Cross-split & Test--train & Test--val & Train--val & Mirror only & Label conflict \\
@@ -16,7 +16,7 @@ Across the 813 test images, the NCC to the nearest image in another split has me
 
 \begin{table}[H]
 \centering\footnotesize
-\caption{Part B of the NCC check. Agreement between perceptual-hash duplicates removed during curation and their kept partner, by Hamming distance $d$ of the 64-bit hash.}\label{tab:s_ncc_b}
+\caption{Part B of the NCC check, removed duplicates against their kept partner.}\label{tab:s_ncc_b}
 {\begin{tabular}{lrrrrrr}
 \toprule
 $d$ & Pairs & Median NCC & Min NCC & $<0.90$ & $<0.95$ & $<0.98$ \\

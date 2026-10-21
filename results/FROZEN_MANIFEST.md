@@ -1,6 +1,6 @@
 # Results freeze manifest
 
-Built from commit 1586bec3f9. Test set: clean, 747 images (D51); full 813 in the supplement. Verify with `python scripts/freeze.py --check`.
+Built from commit 2e259999fe. Test set: clean, 747 images (D51); full 813 in the supplement. Verify with `python scripts/freeze.py --check`.
 
 | Group | Grid | Runs | Finished |
 |---|---|---|---|
@@ -26,4 +26,4 @@ Built from commit 1586bec3f9. Test set: clean, 747 images (D51); full 813 in the
 | learning-rate selection (seed 0) | week04_select_udir | 6 | 6 |
 | learning-rate selection (seed 0) | week04_select_unit | 8 | 8 |
 
-Total 608 runs, 608 finished. 91 files hashed (tables, figures, figure data, NCC results, probe baselines, split and duplicate manifests).
+Total 608 runs, 608 finished. 96 files hashed (tables, figures, figure data, NCC results, probe baselines, split and duplicate manifests).

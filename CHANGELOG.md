@@ -2,6 +2,10 @@
 
 Newest entry first.
 
+## 2026-10-21 (v0.9.5-results-frozen, proposed)
+
+- Figures from notebook 20 (v0.9.4-figures), short captions, graphical abstract environment, freeze manifest rebuilt with 96 files (D58).
+
 ## 2026-10-21 (v0.9.3-figures, proposed)
 
 - Manuscript restructured to the journal guide and project instructions, with author details, framework figure, three algorithms, settings table, Grad-CAM example figure (Kaggle notebook 19), graphical abstract, cover letter and verified references; rounding and five overstatements corrected (D57).

@@ -108,8 +108,7 @@ def s_ncc() -> str:
         rows.append([thr, v["pairs"], v["pairs_same_unit"], v["pairs_cross_split"], rel.get("test-train", 0),
                      rel.get("test-val", 0), rel.get("train-val", 0), v["cross_split_flip_only"],
                      v["cross_split_label_conflicts"]])
-    a = table("tab:s_ncc", "Part A of the NCC check. Pairs of curated images ($64\\times64$) at or above each "
-              "normalised cross-correlation threshold, taking the larger of the plain and the mirrored comparison.",
+    a = table("tab:s_ncc", "Part A of the NCC check, curated pairs at or above each threshold.",
               ["NCC $\\geq$", "Pairs", "Same unit", "Cross-split", "Test--train", "Test--val", "Train--val",
                "Mirror only", "Label conflict"], rows)
     q = c["test_nearest_other_split"]
@@ -119,8 +118,7 @@ def s_ncc() -> str:
     r = json.load(open(os.path.join(ROOT, "results", "ncc", "removed_summary.json")))
     rows = [[d, v["n"], f"{v['ncc_median']:.4f}", f"{v['ncc_min']:.3f}", v["below_0.9"], v["below_0.95"],
              v["below_0.98"]] for d, v in r["by_phash_d"].items()]
-    b = table("tab:s_ncc_b", "Part B of the NCC check. Agreement between perceptual-hash duplicates removed during "
-              "curation and their kept partner, by Hamming distance $d$ of the 64-bit hash.",
+    b = table("tab:s_ncc_b", "Part B of the NCC check, removed duplicates against their kept partner.",
               ["$d$", "Pairs", "Median NCC", "Min NCC", "$<0.90$", "$<0.95$", "$<0.98$"], rows)
     return a + note + "\n\n" + b
 
@@ -133,9 +131,7 @@ def s_full_clean() -> str:
              regime(r["regime"]), f"{r['lr']:g}",
              ci(r, "bal_acc"), ci(r, "bal_acc_clean"), f3(r["sens_N"]), f3(r["sens_N_clean"])]
             for _, r in d.iterrows()]
-    return table("tab:s_full_clean", "Balanced accuracy on the full test set (813 images) and on the clean test set "
-                 "(747 images) for every reported configuration, mean over seeds 1 to 5 with 95\\% $t$ interval. "
-                 "sens$_N$ is the no-tumour sensitivity.",
+    return table("tab:s_full_clean", "Balanced accuracy on the full (813) and clean (747) test sets, mean (95\\% CI).",
                  ["Training", "Algorithm", "Regime", "lr", "Bal. acc. (full)", "Bal. acc. (clean)",
                   "sens$_N$ full", "sens$_N$ clean"], rows, align="llllrrrr", long=True)
 
@@ -155,8 +151,7 @@ def s_local() -> str:
     g = pd.DataFrame(out).groupby(["client", "dp"], sort=True).agg(n=("full", "size"), full=("full", "mean"),
                                                                      clean=("clean", "mean")).reset_index()
     rows = [[r["client"], r["dp"], r["n"], f3(r["full"]), f3(r["clean"])] for _, r in g.iterrows()]
-    return table("tab:s_local", "Local-only baselines. Each client of the natural partition trains alone on its own "
-                 "images with the central protocol and is tested on the shared test set (seed means).",
+    return table("tab:s_local", "Local-only baselines of the natural partition, seed means.",
                  ["Client", "Regime", "Seeds", "Bal. acc. (full)", "Bal. acc. (clean)"], rows)
 
 
@@ -165,8 +160,7 @@ def s_sources() -> str:
     rows = [[r["mode"], scen(r["scenario"]), regime(r["regime"]), f3(r["bal_acc"]), f3(r["sartaj_bal_acc4"]),
              f3(r["figshare_bal_acc3"]), f3(r["tumour_sens"]), f3(r["spec_sartaj"]), f3(r["spec_br35h"])]
             for _, r in d.iterrows()]
-    return table("tab:s_sources", "Per-source controls, full test set, seed means. SARTAJ has all four classes and "
-                 "Figshare only the three tumour classes. Specificity is no-tumour recall within a source.",
+    return table("tab:s_sources", "Per-source controls on the full test set, seed means.",
                  ["Mode", "Partition", "Regime", "Bal. acc.", "SARTAJ (4 cl.)", "Figshare (3 cl.)",
                   "Tumour sens.", "Spec. SARTAJ", "Spec. Br35H"], rows, align="lllrrrrrr", long=True)
 
@@ -179,9 +173,7 @@ def s_probe() -> str:
         b = json.load(open(os.path.join(ROOT, "results", "audit", "_baselines", fn)))
         rows.append(["baseline", "--", name, f3(b["tumour_figshare_vs_sartaj"]["balanced_accuracy"]),
                      f3(b["notumour_sartaj_vs_br35h"]["balanced_accuracy"])])
-    return table("tab:s_probe", "Source probe. Balanced accuracy of a logistic-regression probe on penultimate "
-                 "features that predicts the source within one class (tumour, Figshare against SARTAJ. No tumour, "
-                 "SARTAJ against Br35H).",
+    return table("tab:s_probe", "Source probe on penultimate features, balanced accuracy.",
                  ["Mode", "Partition", "Regime", "Tumour probe", "No-tumour probe"], rows, align="lllrr", long=True)
 
 
@@ -191,23 +183,20 @@ def s_loss_mia() -> str:
     m = full.merge(clean, on=["mode", "scenario", "regime"], suffixes=("", "_c"))
     rows = [[r["mode"], scen(r["scenario"]), regime(r["regime"]), f3(r["auc_pooled"]), f3(r["auc_within_stratum"]),
              f3(r["auc_pooled_c"]), f3(r["auc_within_stratum_c"]), f3(r["auc_figshare_c"])] for _, r in m.iterrows()]
-    return table("tab:s_loss_mia", "Loss-threshold membership attack, AUC of the negative per-example loss with "
-                 "training images as members and test images as non-members. Within-stratum AUC averages the AUC "
-                 "computed inside each source and class stratum.",
+    return table("tab:s_loss_mia", "Loss-threshold membership attack, AUC.",
                  ["Mode", "Partition", "Regime", "Pooled (full)", "Stratum (full)", "Pooled (clean)",
                   "Stratum (clean)", "Figshare (clean)"], rows, align="lllrrrrr", long=True)
 
 
 def s_lira() -> str:
     out = ""
-    for f, name in (("week07_clean_lira", "clean test set (747 images) as non-members"),
-                    ("week07_lira", "full test set (813 images) as non-members")):
+    for f, name in (("week07_clean_lira", "clean test set (747 images)"),
+                    ("week07_lira", "full test set (813 images)")):
         d = pd.read_csv(os.path.join(T, f + ".csv"))
         rows = [[regime(r["regime"]), r["n_seeds"], ci(r, "online_auc"), ci(r, "online_tpr_at_fpr_0.01"),
                  ci(r, "online_tpr_at_fpr_0.001"), ci(r, "online_patient_auc"), f3(r["offline_auc"]),
                  f3(r["offline_tpr_at_fpr_0.01"]), f3(r["offline_patient_auc"])] for _, r in d.iterrows()]
-        out += table(f"tab:s_{f}", f"LiRA against natural3 FedAvg with 16 shadow models, {name}. Online and offline "
-                     "variants, mean over target seeds with 95\\% $t$ interval.",
+        out += table(f"tab:s_{f}", f"LiRA with the {name}, mean (95\\% CI) over five targets.",
                      ["Target", "$n$", "AUC", "TPR@1\\%", "TPR@0.1\\%", "Patient AUC", "Off. AUC", "Off. TPR@1\\%",
                       "Off. patient AUC"], rows, align="lrrrrrrrr")
     return out
@@ -220,8 +209,7 @@ def s_scaffold() -> str:
         p, reg = [x.strip() for x in r["config"].split("|")]
         rows.append([scen(p), regime(reg), f3(r["fedavg"]), f3(r["scaffold_size"]), f"{r['diff']:+.3f}",
                      f"{r['p']:.4f}", f"{r['p_holm']:.3f}", f3(r["scaffold_uniform_seeds1to3"])])
-    return table("tab:s_scaffold", "SCAFFOLD against FedAvg, full test set. Size-weighted SCAFFOLD over seeds 1 to 5 "
-                 "with paired $t$-tests and Holm correction, and the uniform server average over seeds 1 to 3.",
+    return table("tab:s_scaffold", "SCAFFOLD against FedAvg on the full test set.",
                  ["Partition", "Regime", "FedAvg", "SCAFFOLD (size)", "Diff.", "$p$", "$p$ Holm",
                   "SCAFFOLD (uniform)"], rows, align="llrrrrrr")
 
@@ -241,8 +229,7 @@ def s_fedprox() -> str:
         vals = {m: v for m, v in zip(g["cfg.fl.mu"], g["best_val_loss"])}
         reg = "no DP" if pd.isna(k[1]) else f"$\\varepsilon={k[1]:g}$"
         rows.append([scen(k[0]), reg, f"{k[2]:g}", f3(b)] + [f3(vals.get(m, np.nan)) for m in (0.01, 0.1, 1.0, 10.0)])
-    return table("tab:s_fedprox", "FedProx screening at seed 0. Best validation loss of FedAvg ($\\mu=0$) and of "
-                 "FedProx with proximal weight $\\mu$, at the learning rate selected for FedAvg.",
+    return table("tab:s_fedprox", "FedProx screening at seed 0, best validation loss.",
                  ["Partition", "Regime", "lr", "$\\mu=0$", "$\\mu=0.01$", "$\\mu=0.1$", "$\\mu=1$", "$\\mu=10$"],
                  rows, align="lllrrrrr", long=True)
 
@@ -264,8 +251,7 @@ def s_wn() -> str:
             f"{thr:.3f}. The rule takes the largest $s$ that meets it. Over seeds 1 to 5 on the full test set, "
             + " and ".join(f"{regime(r['regime'])} reaches balanced accuracy {ci(r, 'bal_acc')}" for _, r in s.iterrows())
             + ".")
-    return table("tab:s_wn", "Selection of the utility-matched weight-noise level $s$ at seed 0 on the natural "
-                 "partition. Noise $\\mathcal{N}(0,s^2)$ is added to client weights without clipping.",
+    return table("tab:s_wn", "Selection of the weight-noise level $s$ at seed 0.",
                  ["$s$", "Diverged", "Best val. loss", "Meets reference"], rows, align="rrrr", note=note)
 
 
@@ -282,8 +268,7 @@ def s_lr() -> str:
             mode, sc, reg, alg, _ = cfg_label(r)
             rows.append([sc, reg, f"{r['lr']:g}", f3(r["best_val_loss"]), f3(r["val_bal_acc_at_best"]),
                          "\\checkmark" if r["selected"] else ""])
-    return table("tab:s_lr", "Learning-rate selection at seed 0 for federated models, by lowest best validation "
-                 "loss among two candidates. Seed 0 is never used for reported results.",
+    return table("tab:s_lr", "Learning-rate selection at seed 0, federated models.",
                  ["Partition", "Regime", "lr", "Best val. loss", "Val. bal. acc.", "Selected"], rows,
                  align="llrrrc", long=True)
 
@@ -293,9 +278,7 @@ def s_h5() -> str:
     rows = [[r["K"], regime(r["regime"]), f"{r['n_min']}/{r['n_median']}/{r['n_max']}", f"{r['sigma']:.3f}",
              f"{r['agg_noise_std']:.4f}", f"{r['bal_acc']:.3f} ({r['lo']:.3f}, {r['hi']:.3f})", f3(r["sens_M"])]
             for _, r in d.sort_values(["regime", "K"]).iterrows()]
-    return table("tab:s_h5", "Client count at fixed data, FedAvg on Dirichlet ($\\alpha=0.5$) partitions, full test "
-                 "set, learning rate 0.003 under DP and 0.01 without. Aggregated noise s.d. is $\\sigma C\\sqrt{K}/(qN)$, "
-                 "$N=2610$.",
+    return table("tab:s_h5", "Client count at fixed data on the full test set.",
                  ["$K$", "Regime", "Client size min/med./max", "$\\sigma$", "Agg. noise s.d.", "Bal. acc.",
                   "sens$_M$"], rows, align="rlrrrrr")
 
@@ -308,9 +291,7 @@ def s_xai() -> str:
         for m, name in (("gradcam", "Grad-CAM"), ("gradcampp", "Grad-CAM++"), ("ig", "Int. Gradients")):
             rows.append([regime(r["regime"]), name] + [f3(r[f"{m}_{k}"]) for k in
                                                        ("pointing", "iou15", "energy", "deletion", "insertion")])
-    return table("tab:s_xai", "Localisation and faithfulness of three attribution methods for central models on "
-                 "correctly classified Figshare test tumour images with expert masks, seed means. Lower deletion and "
-                 "higher insertion AUC indicate more faithful maps.",
+    return table("tab:s_xai", "Localisation and faithfulness of three attribution methods, central models.",
                  ["Regime", "Method", "Pointing", "IoU top 15\\%", "Energy in mask", "Deletion", "Insertion"], rows,
                  align="llrrrrr", long=True)
 
@@ -329,9 +310,7 @@ def s_rand() -> str:
     d["reg"] = [cfg_label(r)[2] for _, r in d.iterrows()]
     d = d.iloc[sorted(range(len(d)), key=lambda i: ORDER(d["reg"].iloc[i]))]
     rows = [[r["reg"]] + [f3(r[c]) for c in rc] for _, r in d.iterrows()]
-    return table("tab:s_rand", "Randomisation check. Spearman correlation between maps of the trained model and of "
-                 "a re-initialised network (central models, seed 1, 64 images), with all layers or only the last "
-                 "block and classifier re-initialised. Values near zero pass.", ["Regime"] + short, rows,
+    return table("tab:s_rand", "Randomisation check, Spearman correlation with re-initialised networks.", ["Regime"] + short, rows,
                  align="l" + "r" * len(rc))
 
 
@@ -340,9 +319,7 @@ def s_border() -> str:
     rows = [[r["mode"], scen(r["scenario"]), regime(r["regime"]), f3(r["gc_border"]), f3(r["border_chance"]),
              f3(r["gc_outside"]), f3(r["outside_chance"]), f3(r["l3_pointing"]), f3(r["l3_iou15"]),
              f3(r["consistency_iou"])] for _, r in d.iterrows()]
-    return table("tab:s_border", "Border-rim analysis, layer-3 Grad-CAM ($8\\times8$) and cross-seed consistency. "
-                 "Rim and outside-brain values are the share of Grad-CAM mass, next to the share of image area "
-                 "(chance).",
+    return table("tab:s_border", "Border rim, layer-3 Grad-CAM and cross-seed consistency.",
                  ["Mode", "Partition", "Regime", "Rim", "Rim chance", "Outside", "Outside chance", "L3 pointing",
                   "L3 IoU", "Consistency"], rows, align="lllrrrrrrr", long=True)
 
@@ -363,9 +340,7 @@ def s_eps() -> str:
                      f"{g['epsilon_k2'].mean():.2f}" if r["cfg.fl.mode"] != "central" and g["epsilon_k2"].notna().any()
                      else "--",
                      f"{g['unit_epsilon_worst'].mean():.2f}" if unit and g["unit_epsilon_worst"].notna().any() else "--"])
-    return table("tab:s_eps", "Accounted privacy loss ($\\delta=10^{-5}$, 1000 steps, $q=0.1$). $\\varepsilon_{k=2}$ "
-                 "composes over the two learning-rate candidates, and the worst-unit $\\varepsilon$ over the "
-                 "clients holding one unit.",
+    return table("tab:s_eps", "Accounted privacy loss of every private configuration.",
                  ["Mode", "Partition", "Unit", "Target $\\varepsilon$", "$\\sigma$", "$\\varepsilon$",
                   "$\\varepsilon_{k=2}$", "Worst-unit $\\varepsilon$"], rows, align="lllrrrrr", long=True,
                  note="Central models use the learning rate 0.02 fixed in pilot runs on the same training data, so "
@@ -377,9 +352,7 @@ def s_mediation() -> str:
     d = pd.read_csv(os.path.join(T, "week07_xai_mediation.csv"))
     rows = [[r["metric"], r["n_models"], f3(r["pearson_r_accuracy"]), "$<0.001$" if r["p_r"] < 0.001 else f3(r["p_r"]),
              f3(r["b_accuracy"]), f"{r['b_sigma']:.4f}", f3(r["p_sigma"])] for _, r in d.iterrows()]
-    return table("tab:s_mediation", "Explanation quality against clean balanced accuracy and the noise multiplier "
-                 "$\\sigma$. Pearson $r$ with accuracy, and least-squares coefficients of metric on accuracy and "
-                 "$\\sigma$ with the $p$-value of $\\sigma$.",
+    return table("tab:s_mediation", "Explanation quality against accuracy and noise multiplier.",
                  ["Metric", "Models", "$r$", "$p$", "$b$ accuracy", "$b$ $\\sigma$", "$p$ ($\\sigma$)"], rows,
                  align="lrrrrrr")
 
