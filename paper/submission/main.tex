@@ -464,7 +464,7 @@ Membership audit & 16 shadow models per target configuration\\
 \end{tabular*}
 \end{table}
 
-All models were trained in PyTorch [CHECK: PyTorch version on Kaggle] with per-example gradients from
+All models were trained in PyTorch 2.11.0 with CUDA 12.8 and per-example gradients from
 \texttt{torch.func} and the R\'enyi accountant of Opacus 1.6.0, on Kaggle machines with two NVIDIA T4 GPUs. The 608
 reported runs and the audit took about 59 GPU hours [CHECK: the lab notebook gives 52 hours to the end of Phase 3 and
 1.7, 4.7 and 0.3 hours for the audit runs, 58.7 hours in all]. Each run is identified by a hash of its resolved
