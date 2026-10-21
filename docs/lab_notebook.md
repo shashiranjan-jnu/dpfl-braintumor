@@ -154,3 +154,4 @@
 - 2026-10-13 notebook 18 on v0.8.1-figures: all four figure data files identical to committed; manifest rebuilt, D54
 - 2026-10-13 Step 5.1 closed, 5.2 in progress: manuscript in cas-sc LaTeX with Word export and 11-page supplement; 32 references verified, 3 rounding errors in Table 2 fixed (D55)
 - 2026-10-13 manuscript converted to the official elsarticle template supplied by the journal; 23 pages, no overfull boxes, no Type 3 text fonts (D56)
+- 2026-10-21 finalisation pass (D57): manuscript 28 pages, compile clean; notebook 19-figures-v2 prepared for code tag v0.9.3-figures (CPU, needs dataset brain-mri-curated-v1)

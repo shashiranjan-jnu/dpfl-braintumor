@@ -2,6 +2,11 @@
 
 Newest entry first.
 
+## 2026-10-21 (v0.9.3-figures, proposed)
+
+- Manuscript restructured to the journal guide and project instructions, with author details, framework figure, three algorithms, settings table, Grad-CAM example figure (Kaggle notebook 19), graphical abstract, cover letter and verified references; rounding and five overstatements corrected (D57).
+- `scripts/make_xai_examples.py`, `scripts/xai_mediation.py`; `make_figures.py` uses STIX fonts and drops in-figure titles; `make_launcher.py --kind figures` adds the Grad-CAM examples cell.
+
 ## 2026-10-13 (official template)
 
 - Manuscript moved to the journal's official elsarticle class (`paper/elsarticle/`), CAS stand-in removed, tables fitted to the text block, Latin Modern fonts; `make_figures.py` embeds TrueType fonts (D56).

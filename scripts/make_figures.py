@@ -26,6 +26,10 @@ matplotlib.use("Agg")
 # TrueType (Type 42) instead of Type 3 fonts in PDF output, as journal production systems require
 matplotlib.rcParams["pdf.fonttype"] = 42
 matplotlib.rcParams["ps.fonttype"] = 42
+# Times-compatible STIX fonts ship with matplotlib, so Kaggle and local builds render identically;
+# the journal accepts Arial, Courier, Times or Symbol in figures.
+matplotlib.rcParams["font.family"] = "STIXGeneral"
+matplotlib.rcParams["mathtext.fontset"] = "stix"
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
@@ -134,7 +138,7 @@ def fig_privacy_utility(d: pd.DataFrame):
     ax.set_xticks(ticks)
     ax.set_xticklabels(["1", "3", "8", "16", "32", "64", "no DP"])
     ax.minorticks_off()
-    ax.set_xlabel("privacy budget ε  (δ = 10⁻⁵, larger is weaker privacy)", color=INK, fontsize=9)
+    ax.set_xlabel("privacy budget ε (δ = 10⁻⁵)", color=INK, fontsize=9)
     ax.set_ylabel("balanced accuracy, clean test set (747 images)", color=INK, fontsize=9)
     ax.set_ylim(0.2, 0.95)
     style(ax)
@@ -191,8 +195,8 @@ def fig_lira():
     grid, curves, n_te = lira_curves()
     fig, axes = plt.subplots(1, 2, figsize=(7.6, 3.8), constrained_layout=True)
     rows = []
-    for ax, k, title, floor in ((axes[0], 1, f"Image level ({n_te} test images)", 1 / n_te),
-                                (axes[1], 2, "Patient level (Figshare, 40 test patients)", 1 / 40)):
+    for ax, k, title, floor in ((axes[0], 1, "a  Image level", 1 / n_te),
+                                (axes[1], 2, "b  Patient level", 1 / 40)):
         ax.plot(grid, grid, color=FAINT, lw=1, ls="--", label="random guess")
         for name, v in curves.items():
             ok = grid >= floor
@@ -240,7 +244,7 @@ def fig_explanations(d: pd.DataFrame):
     ax.minorticks_off()
     ax.set_xlabel("privacy budget ε", color=INK, fontsize=9)
     ax.set_ylabel("Grad-CAM consistency across seeds (IoU)", color=INK, fontsize=9)
-    ax.set_title("a  Consistency falls as ε shrinks", loc="left", fontsize=9, color=INK)
+    ax.set_title("a", loc="left", fontsize=10, color=INK, fontweight="bold")
     ax.set_ylim(0, 0.8)
     style(ax)
     ax.legend(frameon=False, fontsize=7.5, loc="lower right", labelcolor=INK)
@@ -255,9 +259,9 @@ def fig_explanations(d: pd.DataFrame):
             rows.append({"panel": "b", "series": name, "run_id": rid, "bal_acc_clean": acc, "consistency_iou": ci})
     g = x.dropna(subset=["consistency_iou", "clean.bal_acc"])
     rr = stats.pearsonr(g["clean.bal_acc"], g.consistency_iou)[0]
-    ax.text(0.03, 0.95, f"r = {rr:.2f}, {len(g)} models", transform=ax.transAxes, color=MUTED, fontsize=8, va="top")
+    ax.text(0.03, 0.95, f"r = {rr:.3f}, {len(g)} models", transform=ax.transAxes, color=MUTED, fontsize=8, va="top")
     ax.set_xlabel("balanced accuracy, clean test set", color=INK, fontsize=9)
-    ax.set_title("b  …and tracks accuracy", loc="left", fontsize=9, color=INK)
+    ax.set_title("b", loc="left", fontsize=10, color=INK, fontweight="bold")
     ax.set_ylim(0, 0.8)
     style(ax)
     ax.legend(frameon=False, fontsize=7.5, loc="lower right", labelcolor=INK)
@@ -294,7 +298,6 @@ def fig_h5(d: pd.DataFrame):
                 ax.annotate(f"K={k}", (a, b), textcoords="offset points", xytext=(6, 4), fontsize=7.5, color=INK)
     ax.set_xlabel("aggregated noise std  σC√K / (qN)", color=INK, fontsize=9)
     ax.set_ylabel("balanced accuracy, clean test set", color=INK, fontsize=9)
-    ax.set_title("Dirichlet α 0.5, the same 2,610 images over K clients", loc="left", fontsize=9, color=INK)
     ax.set_ylim(0.4, 0.85)
     style(ax)
     ax.legend(frameon=False, fontsize=7.5, labelcolor=INK)

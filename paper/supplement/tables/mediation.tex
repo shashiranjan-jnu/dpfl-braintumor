@@ -1,0 +1,13 @@
+\begin{table}[H]
+\centering\footnotesize
+\caption{Explanation quality against clean balanced accuracy and the noise multiplier $\sigma$. Pearson $r$ with accuracy, and least-squares coefficients of metric on accuracy and $\sigma$ with the $p$-value of $\sigma$.}\label{tab:s_mediation}
+{\begin{tabular}{lrrrrrr}
+\toprule
+Metric & Models & $r$ & $p$ & $b$ accuracy & $b$ $\sigma$ & $p$ ($\sigma$) \\
+\midrule
+Grad-CAM top-15% IoU & 111 & 0.839 & $<0.001$ & 0.102 & 0.0001 & 0.834 \\
+Cross-seed consistency IoU & 115 & 0.798 & $<0.001$ & 0.734 & 0.0049 & 0.153 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+

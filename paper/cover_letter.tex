@@ -1,0 +1,58 @@
+% Cover letter, one page. Compiled by paper/build.py to cover_letter.pdf and cover_letter.docx.
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{url}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\pagestyle{empty}
+\begin{document}
+
+\begin{flushright}
+School of Computer and Systems Sciences\\
+Jawaharlal Nehru University, New Delhi 110067, India\\
+{}[CHECK: date of submission]
+\end{flushright}
+
+The Editors\\
+\textit{Intelligent Oncology}
+
+Dear Editors,
+
+The authors submit the manuscript ``Patient-level differential privacy, membership leakage and explanation fidelity in
+federated brain tumour MRI classification'' for consideration as a full-length research article.
+
+The manuscript addresses a question that affects any multi-hospital artificial intelligence model in neuro-oncology,
+namely what a formal privacy guarantee costs and what it actually protects. On a deduplicated three-source brain
+tumour MRI benchmark, a mirror-aware check found 66 contaminated test images that perceptual hashing had missed.
+Record-level differential privacy at $\varepsilon=8$ kept a likelihood-ratio membership attack at chance for a
+balanced-accuracy cost of 0.076 in federated and 0.130 in central training, whereas a per-patient guarantee needed
+$\varepsilon=64$. Without privacy the same attack separated training from test patients with an AUC of 0.805, and an
+unclipped noise mechanism used in prior work still exposed patients. Grad-CAM localisation and cross-seed consistency
+declined with privacy in step with accuracy.
+
+The work fits the journal's scope in artificial intelligence for oncology imaging and builds on themes the journal has
+published. Ahmed et al.\ reviewed artificial intelligence for brain tumour detection, grading and response evaluation
+(Intell Oncol 2026;2(3):100071, doi:10.1016/j.intonc.2026.100071), and Jung et al.\ applied deep learning to small
+brain metastases (Intell Oncol 2026;2(2):100049, doi:10.1016/j.intonc.2026.100049). Li et al.\ reviewed
+cryptographic privacy-preserving medical image processing (Intell Oncol 2026;2(4):100083,
+doi:10.1016/j.intonc.2026.100083), and Cai discussed transparency and privacy preservation in medical artificial
+intelligence (Intell Oncol 2025;1(2):172-175, doi:10.1016/j.intonc.2025.03.006). The manuscript complements these
+papers with a measured privacy, utility and explanation audit for federated neuro-oncology models.
+
+The manuscript is original, has not been published, and is not under consideration elsewhere. All authors approved
+the submission. The authors declare no competing interests, and the work received no specific funding. Code, frozen
+results and figure data are available in a public repository [CHECK: repository visibility and archive DOI].
+
+Two potential reviewers are suggested in the submission system [CHECK: names, institutional e-mail addresses, no conflicts].
+
+Yours sincerely,
+
+Poonguzhali N (corresponding author)\\
+School of Computer and Systems Sciences, Jawaharlal Nehru University, New Delhi 110067, India\\
+poonguzhali@jnu.ac.in, telephone [CHECK]
+
+On behalf of Shashi Ranjan and Poonguzhali N
+
+\end{document}

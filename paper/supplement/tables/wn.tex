@@ -1,6 +1,6 @@
 \begin{table}[H]
 \centering\footnotesize
-\caption{Selection of the utility-matched weight-noise level at seed 0 on natural3. Gaussian noise $\mathcal{N}(0,s^2)$ is added to each client's weights after local training, without clipping.}\label{tab:s_wn}
+\caption{Selection of the utility-matched weight-noise level $s$ at seed 0 on the natural partition. Noise $\mathcal{N}(0,s^2)$ is added to client weights without clipping.}\label{tab:s_wn}
 {\begin{tabular}{rrrr}
 \toprule
 $s$ & Diverged & Best val. loss & Meets reference \\
@@ -12,6 +12,6 @@ $s$ & Diverged & Best val. loss & Meets reference \\
 0.001 & no & 0.313 & yes \\
 \bottomrule
 \end{tabular}}
-\par\smallskip{\footnotesize The reference is the seed-0 validation loss of record-level $\varepsilon=8$ FedAvg on natural3, 0.656. The rule takes the largest $s$ that meets it. Over seeds 1 to 5 on the full test set, weight noise $s=0.5$ reaches balanced accuracy 0.259 (0.235, 0.284) and weight noise $s=0.003$ reaches balanced accuracy 0.843 (0.826, 0.860).}
+\par\smallskip{\footnotesize The reference is the seed-0 validation loss of record-level $\varepsilon=8$ FedAvg on the natural partition, 0.656. The rule takes the largest $s$ that meets it. Over seeds 1 to 5 on the full test set, weight noise $s=0.5$ reaches balanced accuracy 0.259 (0.235, 0.284) and weight noise $s=0.003$ reaches balanced accuracy 0.843 (0.826, 0.860).}
 \end{table}
 

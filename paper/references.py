@@ -1,7 +1,9 @@
 """AMA reference entries for the manuscript, keyed by the \\cite keys in main.tex.
 
 Titles, authors, volumes and pages were checked on 12 Oct 2026 against PubMed (entries with a PMID), the arXiv
-abstract page, Crossref (IEEE entries) or the publisher page. build.py orders the list by first citation.
+abstract page, Crossref (IEEE entries) or the publisher page. Entries added on 21 Oct 2026
+(ahmed2026, adnan2022, ziller2021, tayebi2024, pati2024 and the three datasets) were checked against PubMed,
+Crossref or DataCite the same day. build.py orders the list by first citation.
 LaTeX markup is allowed. Journal abbreviations follow the NLM catalogue.
 """
 REFS = {
@@ -92,4 +94,22 @@ REFS = {
                    "In: \\textit{Proceedings of the British Machine Vision Conference}. 2018. arXiv:1806.07421",
     "adebayo2018": "Adebayo J, Gilmer J, Muelly M, Goodfellow I, Hardt M, Kim B. Sanity checks for saliency maps. In: "
                    "\\textit{Advances in Neural Information Processing Systems 31}. 2018. arXiv:1810.03292",
+    "ahmed2026": "Ahmed MM, Adebayo UO, Othman ZK, et al. Artificial intelligence in neuro-oncology imaging: "
+                 "advancing brain tumor detection, grading, and treatment response evaluation. \\textit{Intell Oncol}. "
+                 "2026;2(3):100071. doi:10.1016/j.intonc.2026.100071",
+    "adnan2022": "Adnan M, Kalra S, Cresswell JC, Taylor GW, Tizhoosh HR. Federated learning and differential privacy "
+                 "for medical image analysis. \\textit{Sci Rep}. 2022;12(1):1953. doi:10.1038/s41598-022-05539-7",
+    "ziller2021": "Ziller A, Usynin D, Braren R, Makowski M, Rueckert D, Kaissis G. Medical imaging deep learning with "
+                  "differential privacy. \\textit{Sci Rep}. 2021;11(1):13524. doi:10.1038/s41598-021-93030-0",
+    "tayebi2024": "Tayebi Arasteh S, Ziller A, Kuhl C, et al. Preserving fairness and diagnostic accuracy in private "
+                  "large-scale AI models for medical imaging. \\textit{Commun Med (Lond)}. 2024;4(1):46. "
+                  "doi:10.1038/s43856-024-00462-6",
+    "pati2024": "Pati S, Kumar S, Varma A, et al. Privacy preservation for federated learning in health care. "
+                "\\textit{Patterns (N Y)}. 2024;5(7):100974. doi:10.1016/j.patter.2024.100974",
+    "chengdata": "[dataset] Cheng J. Brain tumor dataset. figshare. Version 8. 2024. "
+                 "doi:10.6084/m9.figshare.1512427.v8",
+    "sartajdata": "[dataset] Bhuvaji S, Kadam A, Bhumkar P, Dedge S, Kanchan S. Brain tumor classification (MRI). "
+                  "Kaggle. Version 3. 2020. doi:10.34740/kaggle/dsv/1183165",
+    "br35hdata": "[dataset] Hamada A. Br35H :: Brain tumor detection 2020. Kaggle. Version 12. Accessed October 1, 2026. "
+                 "\\url{https://www.kaggle.com/datasets/ahmedhamada0/brain-tumor-detection}",
 }

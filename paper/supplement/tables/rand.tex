@@ -1,6 +1,6 @@
 \begin{table}[H]
 \centering\footnotesize
-\caption{Model-parameter randomisation check, Spearman rank correlation between maps of the trained model and of a fully re-initialised network (central models, seed 1). Values near zero pass the check. All layers re-initialises every weight, last block only the final residual block and the classifier.}\label{tab:s_rand}
+\caption{Randomisation check. Spearman correlation between maps of the trained model and of a re-initialised network (central models, seed 1, 64 images), with all layers or only the last block and classifier re-initialised. Values near zero pass.}\label{tab:s_rand}
 {\begin{tabular}{lrrrr}
 \toprule
 Regime & Grad-CAM, all layers & Grad-CAM, last block & IG, all layers & IG, last block \\

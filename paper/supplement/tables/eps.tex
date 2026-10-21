@@ -1,6 +1,6 @@
 {\scriptsize
 \begin{longtable}{lllrrrrr}
-\caption{Accounted privacy loss at $\delta=10^{-5}$ over 1000 local steps with $q=0.1$. $\varepsilon_{k=2}$ composes the guarantee over the two learning-rate candidates trained on the same records, and the worst-unit $\varepsilon$ composes a patient-level guarantee over the clients that hold one unit.}\label{tab:s_eps}\\
+\caption{Accounted privacy loss ($\delta=10^{-5}$, 1000 steps, $q=0.1$). $\varepsilon_{k=2}$ composes over the two learning-rate candidates, and the worst-unit $\varepsilon$ over the clients holding one unit.}\label{tab:s_eps}\\
 \toprule
 Mode & Partition & Unit & Target $\varepsilon$ & $\sigma$ & $\varepsilon$ & $\varepsilon_{k=2}$ & Worst-unit $\varepsilon$ \\
 \midrule
@@ -11,14 +11,14 @@ Mode & Partition & Unit & Target $\varepsilon$ & $\sigma$ & $\varepsilon$ & $\va
 \endhead
 \bottomrule
 \endlastfoot
-central & natural3 & image & 1 & 12.885 & 1.00 & -- & -- \\
-central & natural3 & image & 3 & 4.832 & 3.00 & -- & -- \\
-central & natural3 & patient & 3 & 4.832 & 3.00 & -- & 3.00 \\
-central & natural3 & image & 8 & 2.179 & 7.96 & -- & -- \\
-central & natural3 & patient & 8 & 2.179 & 7.96 & -- & 7.96 \\
-central & natural3 & patient & 16 & 1.353 & 15.96 & -- & 15.96 \\
-central & natural3 & patient & 32 & 0.922 & 31.90 & -- & 31.90 \\
-central & natural3 & patient & 64 & 0.673 & 63.69 & -- & 63.69 \\
+central & natural & image & 1 & 12.885 & 1.00 & -- & -- \\
+central & natural & image & 3 & 4.832 & 3.00 & -- & -- \\
+central & natural & patient & 3 & 4.832 & 3.00 & -- & 3.00 \\
+central & natural & image & 8 & 2.179 & 7.96 & -- & -- \\
+central & natural & patient & 8 & 2.179 & 7.96 & -- & 7.96 \\
+central & natural & patient & 16 & 1.353 & 15.96 & -- & 15.96 \\
+central & natural & patient & 32 & 0.922 & 31.90 & -- & 31.90 \\
+central & natural & patient & 64 & 0.673 & 63.69 & -- & 63.69 \\
 federated & Dir. 0.1, $K{=}10$ & image & 1 & 12.885 & 1.00 & 1.46 & -- \\
 federated & Dir. 0.1, $K{=}10$ & image & 3 & 4.832 & 3.00 & 4.42 & -- \\
 federated & Dir. 0.1, $K{=}10$ & image & 8 & 2.179 & 7.96 & 11.98 & -- \\
@@ -37,10 +37,10 @@ federated & Dir. 5.0, $K{=}10$ & image & 8 & 2.179 & 7.96 & 11.98 & -- \\
 federated & IID, $K{=}10$ & image & 1 & 12.885 & 1.00 & 1.46 & -- \\
 federated & IID, $K{=}10$ & image & 3 & 4.832 & 3.00 & 4.42 & -- \\
 federated & IID, $K{=}10$ & image & 8 & 2.179 & 7.96 & 11.98 & -- \\
-federated & natural3 & image & 1 & 12.885 & 1.00 & 1.46 & -- \\
-federated & natural3 & image & 3 & 4.832 & 3.00 & 4.42 & -- \\
-federated & natural3 & image & 8 & 2.179 & 7.96 & 11.98 & -- \\
-federated & natural3 & patient & 8 & 2.179 & 7.96 & 18.39 & 11.98 \\
+federated & natural & image & 1 & 12.885 & 1.00 & 1.46 & -- \\
+federated & natural & image & 3 & 4.832 & 3.00 & 4.42 & -- \\
+federated & natural & image & 8 & 2.179 & 7.96 & 11.98 & -- \\
+federated & natural & patient & 8 & 2.179 & 7.96 & 18.39 & 11.98 \\
 federated & unit Dir. 0.5, $K{=}10$ & image & 3 & 4.832 & 3.00 & 4.42 & -- \\
 federated & unit Dir. 0.5, $K{=}10$ & image & 8 & 2.179 & 7.96 & 11.98 & -- \\
 federated & unit Dir. 0.5, $K{=}10$ & patient & 8 & 2.179 & 7.96 & 11.98 & 7.96 \\
