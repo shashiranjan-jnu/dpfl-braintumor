@@ -1,0 +1,16 @@
+class,row,image_id,mask_area,regime,run_id,pred,pointing,iou15
+glioma,2167,figshare:2983.mat,0.0190,No DP,335225e87299,glioma,1.0000,0.1269
+glioma,2167,figshare:2983.mat,0.0190,Clip only,108f293d64bf,glioma,1.0000,0.1269
+glioma,2167,figshare:2983.mat,0.0190,ε = 8,9a7ab404a7df,glioma,1.0000,0.1269
+glioma,2167,figshare:2983.mat,0.0190,ε = 3,c3b60b5757fb,glioma,0.0000,0.0824
+glioma,2167,figshare:2983.mat,0.0190,ε = 1,9503f9e45c27,meningioma,0.0000,0.0000
+meningioma,2282,figshare:331.mat,0.0195,No DP,335225e87299,meningioma,0.0000,0.0436
+meningioma,2282,figshare:331.mat,0.0195,Clip only,108f293d64bf,meningioma,0.0000,0.0559
+meningioma,2282,figshare:331.mat,0.0195,ε = 8,9a7ab404a7df,meningioma,0.0000,0.0527
+meningioma,2282,figshare:331.mat,0.0195,ε = 3,c3b60b5757fb,meningioma,0.0000,0.0907
+meningioma,2282,figshare:331.mat,0.0195,ε = 1,9503f9e45c27,glioma,0.0000,0.0000
+pituitary,173,figshare:1155.mat,0.0070,No DP,335225e87299,pituitary,0.0000,0.0464
+pituitary,173,figshare:1155.mat,0.0070,Clip only,108f293d64bf,pituitary,0.0000,0.0464
+pituitary,173,figshare:1155.mat,0.0070,ε = 8,9a7ab404a7df,pituitary,0.0000,0.0170
+pituitary,173,figshare:1155.mat,0.0070,ε = 3,c3b60b5757fb,meningioma,0.0000,0.0000
+pituitary,173,figshare:1155.mat,0.0070,ε = 1,9503f9e45c27,pituitary,0.0000,0.0304
