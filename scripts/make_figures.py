@@ -101,10 +101,10 @@ def fig_privacy_utility(d: pd.DataFrame):
         ("Central, record-level DP", S1, (d["cfg.fl.mode"] == "central") & ~d.regime.str.startswith("patient")),
         ("Central, patient-level DP", S2, (d["cfg.fl.mode"] == "central")
          & (d.regime.str.startswith("patient") | (d.regime == "no DP"))),
-        ("FedAvg, natural3 (3 sources)", S3, (d["cfg.fl.mode"] == "federated") & (d["cfg.data.scenario"] == "natural3")
+        ("FedAvg, natural partition", S3, (d["cfg.fl.mode"] == "federated") & (d["cfg.data.scenario"] == "natural3")
          & d["cfg.fl.weight_noise"].isna() & ~d.regime.str.startswith("patient")
          & ~((d.regime == "eps 8") & (d["cfg.optim.lr"] != 0.01))),
-        ("FedAvg, Dirichlet α 0.5, K 10", S4, (d["cfg.fl.mode"] == "federated") & (d["cfg.data.scenario"] == "dir0.5_k10")
+        ("FedAvg, Dirichlet α = 0.5, K = 10", S4, (d["cfg.fl.mode"] == "federated") & (d["cfg.data.scenario"] == "dir0.5_k10")
          & (d["cfg.optim.lr"] == np.where(d.regime == "no DP", 0.01, 0.003))),
     ]
     rows = []
@@ -126,8 +126,8 @@ def fig_privacy_utility(d: pd.DataFrame):
     wn = d[(d["cfg.fl.weight_noise"] == 0.003)]
     mu, lo, hi = tci(wn["clean.bal_acc"])
     ax.errorbar([INF_X], [mu], yerr=[[mu - lo], [hi - mu]], color=S5, marker="D", ms=7, mec="white",
-                mew=1.5, ls="none", label="FedAvg natural3, weight noise σ 0.003 (no guarantee)", zorder=5)
-    ax.annotate("weight noise\nσ 0.003", (INF_X, mu), textcoords="offset points", xytext=(-58, -14),
+                mew=1.5, ls="none", label="FedAvg, weight noise s = 0.003 (no guarantee)", zorder=5)
+    ax.annotate("weight noise\ns = 0.003", (INF_X, mu), textcoords="offset points", xytext=(-58, -14),
                 fontsize=7.5, color=INK)
     rows.append({"series": "weight noise 0.003", "regime": "weight noise 0.003", "x_epsilon": np.nan,
                  "bal_acc_clean": mu, "lo": lo, "hi": hi, "n_seeds": len(wn)})
@@ -138,7 +138,7 @@ def fig_privacy_utility(d: pd.DataFrame):
     ax.set_xticks(ticks)
     ax.set_xticklabels(["1", "3", "8", "16", "32", "64", "no DP"])
     ax.minorticks_off()
-    ax.set_xlabel("privacy budget ε (δ = 10⁻⁵)", color=INK, fontsize=9)
+    ax.set_xlabel(r"privacy budget $\varepsilon$ ($\delta = 10^{-5}$)", color=INK, fontsize=9)
     ax.set_ylabel("balanced accuracy, clean test set (747 images)", color=INK, fontsize=9)
     ax.set_ylim(0.2, 0.95)
     style(ax)
@@ -156,9 +156,9 @@ def lira_curves():
     te = np.flatnonzero((sp.split.values == "test") & ~drop)
     src, units = sp.source.values, sp.unit.values
     wn = yaml_presets(os.path.join(ROOT, "configs", "grids", "week07_wn_seeds.yaml"))
-    targets = [("No DP", S1, msg.LIRA_TARGETS[0]), ("ε 8", S2, msg.LIRA_TARGETS[1]),
-               ("ε 3", S3, msg.LIRA_TARGETS[2]), ("ε 1", S4, msg.LIRA_TARGETS[3]),
-               ("Weight noise σ 0.003", S5, [p for p in wn if p["fl"]["weight_noise"] == 0.003][0])]
+    targets = [("No DP", S1, msg.LIRA_TARGETS[0]), ("ε = 8", S2, msg.LIRA_TARGETS[1]),
+               ("ε = 3", S3, msg.LIRA_TARGETS[2]), ("ε = 1", S4, msg.LIRA_TARGETS[3]),
+               ("Weight noise s = 0.003", S5, [p for p in wn if p["fl"]["weight_noise"] == 0.003][0])]
     grid = np.logspace(-3, 0, 200)
     out = {}
     for name, col, t in targets:
@@ -289,14 +289,14 @@ def fig_h5(d: pd.DataFrame):
                          "bal_acc_clean": mu, "lo": lo, "hi": hi, "n_seeds": len(gg)})
         pts.sort()
         xx, mu, lo, hi, ks = map(np.array, zip(*pts))
-        lab = f"{reg.replace('eps', 'ε')}, lr {lr:g}"
+        lab = f"{reg.replace('eps ', 'ε = ')}, lr {lr:g}"
         ax.plot(xx, mu, color=col, lw=2, ls=ls, label=lab)
         ax.errorbar(xx, mu, yerr=[mu - lo, hi - mu], color=col, ls="none", marker="o", ms=6, mec="white", mew=1.5,
                     elinewidth=1.2)
         if lr == 0.01 or reg == "eps 3":
             for a, b, k in zip(xx, mu, ks):
                 ax.annotate(f"K={k}", (a, b), textcoords="offset points", xytext=(6, 4), fontsize=7.5, color=INK)
-    ax.set_xlabel("aggregated noise std  σC√K / (qN)", color=INK, fontsize=9)
+    ax.set_xlabel(r"aggregated noise s.d. $s_{\mathrm{agg}} = \sigma C\sqrt{K}/(qN)$", color=INK, fontsize=9)
     ax.set_ylabel("balanced accuracy, clean test set", color=INK, fontsize=9)
     ax.set_ylim(0.4, 0.85)
     style(ax)
