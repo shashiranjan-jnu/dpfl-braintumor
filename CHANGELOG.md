@@ -6,7 +6,7 @@ Newest entry first.
 
 - `scripts/mia_matched.py` (LiRA with source- and class-matched non-members and the diverged-model reference), `scripts/class_sensitivity.py` (per-class clean-set sensitivity), configuration-level statistics in `scripts/xai_mediation.py`, `make_launcher.py --kind review` and notebook 21-review-analyses (CPU).
 - Manuscript revised after a critical-reviewer pass: matched LiRA as headline, claims limited to audited models, group-privacy statement corrected, per-class Table 4, client-level DP and update-channel scope, three-seed federated explanations, configuration-level correlations; supplement Tables S20 and S21; two verified references (Dwork and Roth 2014, McMahan et al. 2018).
-- v0.9.5-results-frozen moves to the commit that holds the Kaggle copy of the new tables.
+- Notebook 21 tables from Kaggle match the local run (largest difference 1.5e-14); manifest re-frozen at 102 files (D60). Tag v0.9.5-results-frozen on this commit.
 
 ## 2026-10-21 (v0.9.5-results-frozen, proposed)
 

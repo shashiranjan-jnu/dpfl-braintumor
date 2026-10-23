@@ -1,5 +1,5 @@
 {
- "frozen_from_commit": "2e259999feb77400d2a9cca9c9ad165c192bf961",
+ "frozen_from_commit": "775a4c38622025d8838523740a6c1849241ec3a2",
  "test_set": "clean, 747 images (D51); full 813 in the supplement",
  "grids": {
   "week03_central": {
@@ -802,6 +802,9 @@
   "results/tables/week07_audit_summary.csv": "d01c05776ffa664484a8e6ee01a46a6dbf2d47275642a7f00312eed8fc312698",
   "results/tables/week07_audit_summary.md": "9d44d3290a11586f75bdce0eeaa8bb8da84e2cde70c035eed1ac0a972d8f0326",
   "results/tables/week07_audit_summary_per_run.csv": "31bfcea0019d1b2324ddf60ca97835ca7d57fb417c4e12f3918015fb191eadbe",
+  "results/tables/week07_class_sensitivity.csv": "aa7d4314658dd096657787fb1de6f374a20488c8d3cdf11d5d8135d1716760f5",
+  "results/tables/week07_class_sensitivity.md": "5cea1b03b6965ec465103f00b86367b54756b01ac04fb4674405363ae7062844",
+  "results/tables/week07_class_sensitivity_per_run.csv": "2626b9c53ea45712dd9b5d74820afc5d80cb5b27b028a0d19f066dc95144d2a6",
   "results/tables/week07_clean_lira.csv": "662022f1779725332e60044d4d39d88c63b0c1d76c49bf27fa97b5d2171e9d92",
   "results/tables/week07_clean_lira.md": "ff11351fc66814ebbd16cfe19ff3818be2cb38ea0775e0d18b556d33f8fd1515",
   "results/tables/week07_clean_lira_per_run.csv": "724d23b0411ec4ab4af16bf5f5316817d8ea63f59686ba337bad78443b461d89",
@@ -811,6 +814,9 @@
   "results/tables/week07_lira.csv": "4e1ecbd288fb056c3ac2e2f438b1d08dc86092236516f81d923d7af3f6e80d91",
   "results/tables/week07_lira.md": "7afcb8c91e509181a7461f586de42353830fb2a234e10bfc60c13c376e3eb341",
   "results/tables/week07_lira_per_run.csv": "482494493803a0ee765a9469cddafbcd8364a01aa2b8595fcd8270b837d1255c",
+  "results/tables/week07_mia_matched.csv": "59ce09f2cac8bb3d02fbc35aad3e4f1354b27f2d4909287f96a1d1e68bff89a7",
+  "results/tables/week07_mia_matched.md": "0a6222bea523579ac828aa288b9dca1ac6516dabb31161362f1bd59412c245fa",
+  "results/tables/week07_mia_matched_per_run.csv": "c684fcd8b2e1912cd7c31c432ea0df2731af3ca7d29c1c31b268e6a64f87698c",
   "results/tables/week07_mia_stratified.csv": "f779c6caf1be68cbddc94da481c883fd6cff01b843ca85f361735f09f41edd02",
   "results/tables/week07_mia_stratified.md": "2949f1081d6616382ba64b4ca23718f991682430cfee229606f16eec558c0669",
   "results/tables/week07_mia_stratified_per_run.csv": "254965eb55921d1a61d11b9e6460848ca7929e9d1ffe8aac90079d1728f3a590",
@@ -825,8 +831,8 @@
   "results/tables/week07_xai_border.csv": "ed8e121e98984e78c0956fc42c987f333aa3e8b73ba01de3e7429a29dc2cb230",
   "results/tables/week07_xai_border.md": "747bd839ec8e12b9141713127d96a7b80560da25d2f28081ac73b1154757c74b",
   "results/tables/week07_xai_border_per_run.csv": "bc76a0707d56cccb87866e35c1442dce3f5b7a1956dc1cbb9938f34c32439fee",
-  "results/tables/week07_xai_mediation.csv": "f427470f24722f212de76bd86e8de4336ef446d4865a99b2f345f14bdce9da28",
-  "results/tables/week07_xai_mediation.md": "00e4035c40efd2a7358d411d1e6df79cd4d1c6bdbe542bcaaec36230ceb77dc2",
+  "results/tables/week07_xai_mediation.csv": "835d6c7dcd3c8cfe72fcf0f1b4275d4a3185bdc2a9613db1967a38873b638a3d",
+  "results/tables/week07_xai_mediation.md": "d5df45b5c19f6c93fd46116f14f6beaac275c20bb419a674f1c60edc6424f240",
   "figures/fig1_privacy_utility.png": "7ea9d1429b73a60fe0e22d1493aa58e02bdf816952e140026aec3dc0867441e7",
   "figures/fig2_lira_roc.png": "83e6349b8d017dfa1f4522ecfe81d35f69e5d5a5e681a91a9e68b816cf2192f3",
   "figures/fig3_explanations.png": "5e2df6e1805b8186435e62cf3d18d19fb64d5acd7f840235f6d0425a371a8a55",
