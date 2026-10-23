@@ -163,3 +163,4 @@
 - 2026-10-23 cover letter regenerated: updated findings, dated, blank reviewer table, blanks for DOI and telephone
 - 2026-10-23 three journal references added (45 references), D62
 - 2026-10-23 Zenodo record 23601090 (v1.0-submission) cited in paper, supplement, cover letter and README (D63)
+- 2026-10-23 full-text check of lakshmi2026 and qazi2026, Introduction sentence made specific (D64)

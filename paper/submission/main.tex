@@ -109,9 +109,11 @@ through group privacy.
 
 Two further problems weaken the published evidence for private federated brain tumour classifiers. The public
 four-class collections assembled from Figshare, SARTAJ and Br35H overlap, so test images can have near-copies in
-training.\cite{vangala2026} The privacy mechanism, its budget and the protected unit are also often not reported in a
-form that can be checked.\cite{lakshmi2026,qazi2026,gupta2026} [CHECK: the statement for lakshmi2026 and
-qazi2026 rests on their abstracts, confirm against the full texts]
+training.\cite{vangala2026} The privacy budget and the protected unit are also often not reported in a
+form that can be checked. One recent federated brain tumour study leaves the values of $\varepsilon$ and $\delta$
+blank in its published text,\cite{lakshmi2026} and a multi-disease study that includes brain tumour MRI reports the
+noise multiplier and clipping norm of DP-SGD without $\varepsilon$, $\delta$ or the sampling rate.\cite{qazi2026} A
+third study states an $\varepsilon$ that its unclipped mechanism cannot support.\cite{gupta2026}
 
 The present paper therefore measures, on a deduplicated benchmark with expert tumour masks, what record-level and
 patient-level DP cost in accuracy, whether measured leakage follows the formal guarantee, and how explanations
