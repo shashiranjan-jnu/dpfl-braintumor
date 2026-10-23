@@ -473,7 +473,7 @@ Phase 5 and 6 write a fully new manuscript in the Elsevier CAS LaTeX template in
 
 | Date | Reviewer | Verdict | Commit or tag | Notes |
 | --- | --- | --- | --- | --- |
-|  |  |  |  |  |
+| 2026-10-23 | Claude (critical-reviewer pass) | Passed with notes | main after 5f7447a | Seven major and ten minor issues fixed in text (D59); M1 needed a CPU re-analysis (notebook 21, no GPU). Open: Kaggle copy of the three new tables, re-freeze, tag v0.9.5-results-frozen, full-text check of lakshmi2026 and qazi2026, human clinical and DP reviewers still to be found |
 
 ### Step 6.1 Compliance Check and Submission (Week 12)
 

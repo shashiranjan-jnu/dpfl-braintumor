@@ -72,6 +72,10 @@ REFS = {
                       "arXiv:2109.12298",
     "papernot2022": "Papernot N, Steinke T. Hyperparameter tuning with R\\'enyi differential privacy. In: "
                     "\\textit{International Conference on Learning Representations}. 2022. arXiv:2110.03620",
+    "dwork2014": "Dwork C, Roth A. The algorithmic foundations of differential privacy. \\textit{Found Trends Theor "
+                 "Comput Sci}. 2014;9:211-407. doi:10.1561/0400000042",
+    "mcmahan2018": "McMahan HB, Ramage D, Talwar K, Zhang L. Learning differentially private recurrent language "
+                   "models. \\textit{arXiv}. Preprint posted online 2017. arXiv:1710.06963",
     "li2020": "Li T, Sahu AK, Zaheer M, Sanjabi M, Talwalkar A, Smith V. Federated optimization in heterogeneous "
               "networks. In: \\textit{Proceedings of Machine Learning and Systems}. 2020;2:429-450.",
     "karimireddy2020": "Karimireddy SP, Kale S, Mohri M, Reddi S, Stich S, Suresh AT. SCAFFOLD: stochastic "

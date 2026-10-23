@@ -26,11 +26,13 @@ federated brain tumour MRI classification'' for consideration as a full-length r
 The manuscript addresses a question that affects any multi-hospital artificial intelligence model in neuro-oncology,
 namely what a formal privacy guarantee costs and what it actually protects. On a deduplicated three-source brain
 tumour MRI benchmark, a mirror-aware check found 66 contaminated test images that perceptual hashing had missed.
-Record-level differential privacy at $\varepsilon=8$ kept a likelihood-ratio membership attack at chance for a
-balanced-accuracy cost of 0.076 in federated and 0.130 in central training, whereas a per-patient guarantee needed
+In federated models, record-level differential privacy at $\varepsilon=8$ left a likelihood-ratio membership attack
+with no rate significantly above chance once members and non-members were matched in source and class, for a
+balanced-accuracy cost of 0.076, against 0.130 in central training, whereas a per-patient guarantee needed
 $\varepsilon=64$. Without privacy the same attack separated training from test patients with an AUC of 0.805, and an
 unclipped noise mechanism used in prior work still exposed patients. Grad-CAM localisation and cross-seed consistency
-declined with privacy in step with accuracy.
+declined with privacy in step with accuracy, and the accuracy lost under privacy fell mainly on meningioma and
+no-tumour sensitivity.
 
 The work fits the journal's scope in artificial intelligence for oncology imaging and builds on themes the journal has
 published. Ahmed et al.\ reviewed artificial intelligence for brain tumour detection, grading and response evaluation

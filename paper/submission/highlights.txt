@@ -1,7 +1,7 @@
 Highlights
 
 • Mirrored near-duplicates contaminated 66 of 813 test images of a public MRI benchmark
-• Record-level DP at ε = 8 kept LiRA at chance for a 0.076 to 0.130 accuracy cost
+• Federated DP at ε = 8 held matched LiRA at chance for 0.076 balanced-accuracy cost
 • Patient-level DP needed ε = 64 to exceed the accuracy of record-level ε = 8
-• Unclipped weight noise at matched utility still exposed training patients
+• Unclipped weight noise with higher utility still exposed training patients
 • Grad-CAM quality under DP followed accuracy, not the noise level

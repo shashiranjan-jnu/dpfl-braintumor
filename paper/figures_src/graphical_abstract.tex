@@ -32,14 +32,14 @@
 \node[panel, fill=auditC] (p3) at (6.56,4.45) {};
 \node[head] at ($(p3.north)+(0,-0.08)$) {Leakage audit};
 \node[body] at ($(p3.north)+(0,-0.62)$) {LiRA, 16 shadow models\\[4pt]
-  TPR at 1\% FPR\\no DP 0.108\\DP 0.010 to 0.017 (chance)\\[4pt]
+  TPR at 1\% FPR, source-\\and class-matched\\no DP 0.111\\DP 0.010 to 0.015\\[4pt]
   unclipped weight noise\\patient AUC 0.745};
 % panel 4
 \node[panel, fill=xaiC] (p4) at (9.79,4.45) {};
 \node[head] at ($(p4.north)+(0,-0.08)$) {Explanation audit};
 \node[body] at ($(p4.north)+(0,-0.62)$) {Grad-CAM vs expert masks\\[4pt]
   cross-seed consistency\\0.700 (no DP) to 0.235 ($\varepsilon=1$)\\[4pt]
-  tracks accuracy, $r=0.798$\\noise adds nothing\\beyond accuracy};
+  tracks accuracy, $r=0.838$\\noise adds nothing\\beyond accuracy};
 \foreach \a/\b in {p1/p2,p2/p3,p3/p4} \draw[->, draw=ink!70, line width=0.8pt] (\a.east) -- (\b.west);
 \end{tikzpicture}
 \end{document}

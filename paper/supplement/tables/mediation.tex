@@ -1,12 +1,14 @@
 \begin{table}[H]
-\centering\footnotesize
+\centering\scriptsize
 \caption{Explanation quality against accuracy and noise multiplier.}\label{tab:s_mediation}
-{\begin{tabular}{lrrrrrr}
+\resizebox{\textwidth}{!}{\begin{tabular}{llrrrrrr}
 \toprule
-Metric & Models & $r$ & $p$ & $b$ accuracy & $b$ $\sigma$ & $p$ ($\sigma$) \\
+Level & Metric & Points & $r$ & $p$ & $b$ accuracy & $b$ $\sigma$ & $p$ ($\sigma$) \\
 \midrule
-Grad-CAM top-15% IoU & 111 & 0.839 & $<0.001$ & 0.102 & 0.0001 & 0.834 \\
-Cross-seed consistency IoU & 115 & 0.798 & $<0.001$ & 0.734 & 0.0049 & 0.153 \\
+model & Grad-CAM top-15\% IoU & 111 & 0.839 & $<0.001$ & 0.102 & 0.0001 & 0.834 \\
+model & Cross-seed consistency IoU & 115 & 0.798 & $<0.001$ & 0.734 & 0.0049 & 0.153 \\
+configuration & Grad-CAM top-15\% IoU & 31 & 0.903 & $<0.001$ & 0.098 & -0.0002 & 0.747 \\
+configuration & Cross-seed consistency IoU & 31 & 0.838 & $<0.001$ & 0.774 & 0.0054 & 0.389 \\
 \bottomrule
 \end{tabular}}
 \end{table}

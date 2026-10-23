@@ -66,7 +66,7 @@ def ci(r, n) -> str:
     return f"{r[n]:.3f} ({lo:.3f}, {hi:.3f})"
 
 
-def table(label, caption, head, rows, align=None, long=False, small=True, note=None) -> str:
+def table(label, caption, head, rows, align=None, long=False, small=True, note=None, resize=False) -> str:
     align = align or "l" * (len(head) - len(rows[0]) if False else 0) or "l" + "r" * (len(head) - 1)
     h = " & ".join(head) + r" \\"
     body = "\n".join(" & ".join(map(str, r)) + r" \\" for r in rows)
@@ -77,7 +77,7 @@ def table(label, caption, head, rows, align=None, long=False, small=True, note=N
                 f"\\midrule\n\\endfirsthead\n\\toprule\n{h}\n\\midrule\n\\endhead\n\\bottomrule\n\\endlastfoot\n"
                 f"{body}\n\\end{{longtable}}}}{nt}\n\n")
     return (f"\\begin{{table}}[H]\n\\centering{size}\n\\caption{{{caption}}}\\label{{{label}}}\n"
-            + (r"\resizebox{\textwidth}{!}{" if len(head) >= 8 else "{")
+            + (r"\resizebox{\textwidth}{!}{" if len(head) >= 8 or resize else "{")
             + f"\\begin{{tabular}}{{{align}}}\n\\toprule\n{h}\n\\midrule\n{body}\n\\bottomrule\n\\end{{tabular}}}}{nt}\n"
             f"\\end{{table}}\n\n")
 
@@ -350,17 +350,54 @@ def s_eps() -> str:
 
 def s_mediation() -> str:
     d = pd.read_csv(os.path.join(T, "week07_xai_mediation.csv"))
-    rows = [[r["metric"], r["n_models"], f3(r["pearson_r_accuracy"]), "$<0.001$" if r["p_r"] < 0.001 else f3(r["p_r"]),
-             f3(r["b_accuracy"]), f"{r['b_sigma']:.4f}", f3(r["p_sigma"])] for _, r in d.iterrows()]
+    if "level" not in d:
+        d["level"] = "model"
+    rows = [[r["level"], r["metric"].replace("%", "\\%"), r["n_models"], f3(r["pearson_r_accuracy"]),
+             "$<0.001$" if r["p_r"] < 0.001 else f3(r["p_r"]), f3(r["b_accuracy"]), f"{r['b_sigma']:.4f}",
+             f3(r["p_sigma"])] for _, r in d.iterrows()]
     return table("tab:s_mediation", "Explanation quality against accuracy and noise multiplier.",
-                 ["Metric", "Models", "$r$", "$p$", "$b$ accuracy", "$b$ $\\sigma$", "$p$ ($\\sigma$)"], rows,
-                 align="lrrrrrr")
+                 ["Level", "Metric", "Points", "$r$", "$p$", "$b$ accuracy", "$b$ $\\sigma$", "$p$ ($\\sigma$)"], rows,
+                 align="llrrrrrr")
+
+
+def s_matched() -> str:
+    d = pd.read_csv(os.path.join(T, "week07_mia_matched.csv"))
+    d = d[d.metric == "tpr_at_fpr_0.01"]
+    names = {"pooled": "all", "matched": "matched", "figshare": "Figshare"}
+    rows = []
+    for _, r in d.iterrows():
+        pv = lambda p: "--" if pd.isna(p) else ("$<0.001$" if p < 0.001 else f3(p))
+        rows.append([regime(r["regime"]).replace("weight noise", "w.\\ noise"), names[r["variant"]],
+                     f"{r['mean']:.3f} ({r['lo']:.3f}, {r['hi']:.3f})", pv(r["p_vs_nominal"]), pv(r["p_vs_floor"]),
+                     f"{int(r['n_mem'])}", f"{int(r['n_non'])} ({r['ess_non']:.0f})"])
+    return table("tab:s_matched", "LiRA TPR at 1\\% FPR with composition-matched non-members.",
+                 ["Target", "Non-members", "TPR@1\\% (95\\% CI)", "$p$ vs 0.01", "$p$ vs $s=0.5$", "Members",
+                  "Non-members (ESS)"], rows, align="llrrrrr")
+
+
+def s_class() -> str:
+    d = pd.read_csv(os.path.join(T, "week07_class_sensitivity.csv"))
+    cols = ["sens_glioma", "sens_meningioma", "sens_notumor", "sens_pituitary", "tumour_missed"]
+    order = ["Central, no DP", "Central, clip only", "Central, eps 8", "Central, eps 3", "Central, eps 1",
+             "Central, patient, clip only", "Central, patient, eps 64", "Central, patient, eps 32",
+             "Central, patient, eps 16", "Central, patient, eps 8", "Central, patient, eps 3", "FedAvg natural, no DP",
+             "FedAvg natural, eps 8", "FedAvg natural, eps 3", "FedAvg natural, eps 1", "FedAvg natural, patient, eps 8",
+             "FedAvg, weight noise s=0.003"]
+    d = d.set_index("regime").loc[[o for o in order if o in set(d.regime)]].reset_index()
+    lab = lambda x: re.sub(r"eps ([0-9.]+)", lambda m: "$\\varepsilon=" + m.group(1) + "$", x).replace("s=0.003", "$s=0.003$")
+    rows = [[lab(r["regime"])] + [ci(r, c) for c in cols] for _, r in d.iterrows()]
+    return table("tab:s_class", "Per-class sensitivity on the clean test set, mean (95\\% CI) over five seeds.",
+                 ["Setting", "Glioma", "Meningioma", "No tumour", "Pituitary", "Missed tumour"], rows,
+                 align="lrrrrr", note="Clean test images per class are 291 glioma, 188 meningioma, 60 no tumour and "
+                 "208 pituitary. Missed tumour is the share of tumour images predicted as no tumour. The $t$-intervals "
+                 "are not truncated to $[0, 1]$.", resize=True)
 
 
 SECTIONS = [("ncc", s_ncc), ("full_clean", s_full_clean), ("local", s_local), ("sources", s_sources),
             ("probe", s_probe), ("eps", s_eps), ("lr", s_lr), ("h5", s_h5), ("fedprox", s_fedprox),
             ("scaffold", s_scaffold), ("wn", s_wn), ("lira", s_lira), ("loss_mia", s_loss_mia),
-            ("xai", s_xai), ("rand", s_rand), ("border", s_border), ("mediation", s_mediation)]
+            ("xai", s_xai), ("rand", s_rand), ("border", s_border), ("mediation", s_mediation),
+            ("matched", s_matched), ("class", s_class)]
 
 
 def main():

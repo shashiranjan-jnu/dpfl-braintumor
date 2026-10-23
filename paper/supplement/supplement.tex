@@ -54,7 +54,8 @@ a frozen grid. Seeds 1 to 5 give every reported mean, seed 0 serves only for sel
 The sections follow the order of the article. Section S1 documents the duplicate check that defines the clean test set,
 Section S2 compares the full and the clean test sets and adds the source controls, Section S3 gives the privacy
 accounting and the selection costs, Section S4 covers client count and drift correction, Section S5 adds the
-membership-inference detail and Section S6 the explanation detail. Tables S5, S9 and S11 use the full test set of 813
+membership-inference detail, Section S6 the explanation detail and Section S7 the composition-matched attack and the
+per-class sensitivity. Tables S5, S9 and S11 use the full test set of 813
 images, and the clean-set values of the corresponding results come from Table S3.
 
 \section{Benchmark curation and near-duplicate check}
@@ -152,7 +153,8 @@ record-level $\varepsilon=8$.
 Tables~\ref{tab:s_week07_clean_lira} and \ref{tab:s_week07_lira} report LiRA with the clean and with the full test set
 as non-members, in its online and its offline form. The choice of non-member set changes no conclusion, since online
 AUC, true-positive rate at 1\% false positives and patient AUC move by less than 0.01 for every target that produced a
-usable model, and every private setting stays at the level of a random guess under both definitions.
+usable model. Section S7 tests whether the rates that remain under privacy exceed chance once members and non-members
+are matched in composition.
 
 \input{tables/lira.tex}
 
@@ -186,9 +188,34 @@ brain rim and outside the brain than their area shares, so neither artefact expl
 
 \input{tables/border.tex}
 
-Table~\ref{tab:s_mediation} relates explanation quality to accuracy and noise. Both metrics correlate with clean
-balanced accuracy, and the noise multiplier adds no explanatory power once accuracy is in the fit.
+Table~\ref{tab:s_mediation} relates explanation quality to accuracy and noise, once per model and once per
+configuration, where each point is the mean over the seeds of one configuration (five for central and three for
+federated configurations). Seeds of one configuration share the mean map against which consistency is measured, so
+the configuration level is the conservative analysis. Both metrics correlate with clean balanced accuracy at both
+levels, and the noise multiplier adds no explanatory power once accuracy is in the fit.
 
 \input{tables/mediation.tex}
+
+\section{Composition-matched membership inference and per-class sensitivity}
+Removing the 66 contaminated test images changed the mix of the non-members. Br35H forms 230 of 2610 members (8.8\%)
+but 6 of 747 clean non-members (0.8\%), and no-tumour images form 432 of 2610 members (16.6\%) against 60 of 747
+non-members (8.0\%). A score that only recognises the source or class of an image can then separate the two groups.
+Table~\ref{tab:s_matched} therefore repeats the online LiRA of Table~\ref{tab:s_week07_clean_lira} with the same
+shadow fits in three ways, namely with all clean non-members, with non-members reweighted so that their source and
+class mix equals that of the members, and with both groups restricted to Figshare and reweighted by class. The
+effective sample size (ESS) gives the number of equally weighted non-members that carries the same information.
+
+\input{tables/matched.tex}
+
+Under privacy, only the unmatched rate at $\varepsilon=8$ differs significantly from the nominal 0.01 (one-sample
+$t$-test over five targets, two-sided), and no matched or Figshare-only rate does. The diverged weight-noise models at
+$s=0.5$ classify at chance, yet they reach rates of 0.024 to 0.039, so rates of a few percent at 1\% false positives
+can arise in this audit without a usable classifier. The $p$-values are descriptive and not corrected for multiple
+comparisons.
+
+Table~\ref{tab:s_class} breaks clean balanced accuracy into the recall of each class, recomputed from the stored
+predictions of every reported run.
+
+\input{tables/class.tex}
 
 \end{document}
