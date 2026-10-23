@@ -75,8 +75,14 @@ def cite_order(tex: str) -> list[str]:
     return order
 
 
+def link_doi(s: str) -> str:
+    """Make every doi:10.x/... clickable while keeping the printed AMA form."""
+    return re.sub(r"doi:(10\.[^\s,]+)",
+                  lambda m: f"\\href{{https://doi.org/{m.group(1).replace(chr(92) + '_', '_')}}}{{doi:{m.group(1)}}}", s)
+
+
 def references_tex(order: list[str]) -> str:
-    items = "\n".join(f"\\bibitem{{{k}}} {REFS[k]}" for k in order)
+    items = "\n".join(f"\\bibitem{{{k}}} {link_doi(REFS[k])}" for k in order)
     return f"\\begin{{thebibliography}}{{{len(order)}}}\n{items}\n\\end{{thebibliography}}\n"
 
 
@@ -151,7 +157,7 @@ def docx_tex(tex: str, order: list[str]) -> str:
                   plain_cols, body)
     body = body.replace("\\end{tabular*}", "\\end{tabular}")
     body = re.sub(r"Figure(\d)\.pdf", r"Figure\1.png", body)
-    refs = "\\section*{References}\n\\begin{enumerate}\n" + "\n".join(f"\\item {REFS[k]}" for k in order) + \
+    refs = "\\section*{References}\n\\begin{enumerate}\n" + "\n".join(f"\\item {link_doi(REFS[k])}" for k in order) + \
            "\n\\end{enumerate}\n"
     body = body.replace("\\input{references.tex}", refs)
     return ("\\documentclass{article}\n\\usepackage{amsmath,graphicx,booktabs}\n\\graphicspath{{figures/}}\n"
