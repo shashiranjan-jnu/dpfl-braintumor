@@ -7,8 +7,9 @@ prepared for submission to Intelligent Oncology.
 This repository accompanies the manuscript "Patient-level differential privacy, membership leakage and explanation
 fidelity in federated brain tumour MRI classification" (submitted to Intelligent Oncology). Every number in the paper
 comes from a file listed in `results/FROZEN_MANIFEST.json` (608 runs, 102 hashed files, tag `v0.9.5-results-frozen`);
-`python scripts/freeze.py --check` verifies them. The release `v1.0-submission` is archived on Zenodo, and the DOI
-is given in the paper's data availability statement.
+`python scripts/freeze.py --check` verifies them. The release `v1.0-submission` is archived on Zenodo,
+[doi:10.5281/zenodo.23601090](https://doi.org/10.5281/zenodo.23601090) (all versions:
+[doi:10.5281/zenodo.23601089](https://doi.org/10.5281/zenodo.23601089)).
 
 To regenerate the tables, figures and supplement from the stored runs (CPU only): notebooks 20-figures-labels and
 21-review-analyses on Kaggle, or `scripts/make_figures.py`, `scripts/mia_matched.py`, `scripts/class_sensitivity.py`,

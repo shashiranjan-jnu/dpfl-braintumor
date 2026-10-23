@@ -121,6 +121,9 @@ REFS = {
                  "doi:10.6084/m9.figshare.1512427.v8",
     "sartajdata": "[dataset] Bhuvaji S, Kadam A, Bhumkar P, Dedge S, Kanchan S. Brain tumor classification (MRI). "
                   "Kaggle. Version 3. 2020. doi:10.34740/kaggle/dsv/1183165",
+    "zenodocode": "[dataset] Ranjan S, N P. Code and frozen results for: patient-level differential privacy, membership "
+                  "leakage and explanation fidelity in federated brain tumour MRI classification. Zenodo. Version "
+                  "v1.0-submission. 2026. doi:10.5281/zenodo.23601090",
     "br35hdata": "[dataset] Hamada A. Br35H :: Brain tumor detection 2020. Kaggle. Version 12. Accessed October 1, 2026. "
                  "\\url{https://www.kaggle.com/datasets/ahmedhamada0/brain-tumor-detection}",
 }

@@ -162,3 +162,4 @@
 - 2026-10-23 section introductions, Figure 1 and graphical abstract corrections (D61)
 - 2026-10-23 cover letter regenerated: updated findings, dated, blank reviewer table, blanks for DOI and telephone
 - 2026-10-23 three journal references added (45 references), D62
+- 2026-10-23 Zenodo record 23601090 (v1.0-submission) cited in paper, supplement, cover letter and README (D63)
