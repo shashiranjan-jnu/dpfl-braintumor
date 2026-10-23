@@ -21,18 +21,18 @@
 \node[panel, fill=dataC] (p1) at (0.1,4.45) {};
 \node[head] at ($(p1.north)+(0,-0.08)$) {Clean benchmark};
 \node[body] at ($(p1.north)+(0,-0.62)$) {Figshare, SARTAJ, Br35H\\[2pt]7828 labelled images\\$\downarrow$\\3845 after hashing\\
-  patient-disjoint splits\\[3pt]66 of 813 test images\\are mirrored copies\\$\downarrow$\\747 clean test images};
+  patient-disjoint splits\\[3pt]66 of 813 test images\\have near-copies\\in other splits\\$\downarrow$\\747 clean test images};
 % panel 2
 \node[panel, fill=trainC] (p2) at (3.33,4.45) {};
 \node[head] at ($(p2.north)+(0,-0.08)$) {Private training};
 \node[body] at ($(p2.north)+(0,-0.62)$) {DP-SGD on every client\\image or patient as unit\\[4pt]
   record level, $\varepsilon=8$\\balanced-accuracy cost\\0.076 (FedAvg), 0.130 (central)\\[4pt]
-  patient level needs\\$\varepsilon=64$ to exceed it};
+  patient level needs\\$\varepsilon=64$ to exceed\\record-level $\varepsilon=8$};
 % panel 3
 \node[panel, fill=auditC] (p3) at (6.56,4.45) {};
 \node[head] at ($(p3.north)+(0,-0.08)$) {Leakage audit};
-\node[body] at ($(p3.north)+(0,-0.62)$) {LiRA, 16 shadow models\\[4pt]
-  TPR at 1\% FPR, source-\\and class-matched\\no DP 0.111\\DP 0.010 to 0.015\\[4pt]
+\node[body] at ($(p3.north)+(0,-0.62)$) {LiRA on FedAvg,\\16 shadow models\\[4pt]
+  TPR at 1\% FPR, source-\\and class-matched\\no DP 0.111\\DP 0.010 to 0.015,\\not above chance\\[4pt]
   unclipped weight noise\\patient AUC 0.745};
 % panel 4
 \node[panel, fill=xaiC] (p4) at (9.79,4.45) {};

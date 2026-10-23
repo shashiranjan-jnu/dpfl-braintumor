@@ -27,8 +27,8 @@
 \node[stage] at ($(cl.north)+(0,0.08)$) {(b) Private training};
 % stage 3 audit
 \node[box, fill=auditC, right=0.75cm of cl] (sh) {16 shadow models per\\target configuration};
-\node[box, fill=auditC, below=0.28cm of sh] (lira) {Online LiRA (Alg.~3)};
-\node[box, fill=auditC, below=0.28cm of lira] (mia) {Image and patient\\TPR at low FPR};
+\node[box, fill=auditC, below=0.28cm of sh] (lira) {Online LiRA (Alg.~3),\\matched non-members};
+\node[box, fill=auditC, below=0.28cm of lira] (mia) {Score released model,\\image and patient\\TPR at low FPR};
 \node[stage] at ($(sh.north)+(0,0.08)$) {(c) Leakage audit};
 % stage 4 explanations
 \node[box, fill=xaiC, right=0.55cm of sh] (cam) {Grad-CAM, Grad-CAM++,\\Integrated Gradients};
@@ -47,6 +47,6 @@
 \draw[arr] (loc) -- (cons);
 \draw[arr] (dedup.east) -- ++(0.27,0) |- node[pos=0.25, left, font=\scriptsize]{splits} (cl.west);
 \draw[arr] (model.east) -- (mia.west);
-\draw[arr] (model.south) -- ++(0,-0.3) -| (cons.south);
+\draw[arr] (model.south) -- ++(0,-0.3) -| ($(cam.east)+(0.25,0)$) -- (cam.east);
 \end{tikzpicture}
 \end{document}

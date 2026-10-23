@@ -183,6 +183,10 @@ methods, Section~\ref{sec:results} reports the results, Section~\ref{sec:discuss
 limitations, and Section~\ref{sec:conclusions} concludes.
 
 \section{Material and methods}\label{sec:methods}
+The methods follow the four stages of the study, namely benchmark curation, private training, the membership audit and
+the explanation audit. Section~\ref{sec:threat} first fixes the notation, the threat model and the formal guarantee on
+which every later component relies. The following subsections describe each stage with its algorithm, and the last two
+give the experimental settings and the statistical conventions applied throughout.
 
 \subsection{Problem formulation and threat model}\label{sec:threat}
 Consider $K$ clients, where client $j$ holds a dataset $D_j$ of $n_j$ images grouped into $U_j$ units, and
@@ -497,10 +501,13 @@ against the mean map of each configuration, its seeds are not independent, so th
 configuration and the per-model analysis is reported alongside. Membership rates were compared with the nominal level
 by one-sample $t$-tests over the five targets. Only the SCAFFOLD comparison is corrected for multiplicity, and the
 other intervals and $p$-values are descriptive. Metrics are reported to three decimal places and $p$-values to three
-decimal places or as $p<0.001$. These methods produced the measurements
-reported next, starting with the benchmark itself.
+decimal places or as $p<0.001$.
 
 \section{Results}\label{sec:results}
+The results follow the order of the study goals. The curated benchmark and its contamination check come first,
+followed by the accuracy cost of each privacy unit, the effect of client count and drift correction, the membership
+audit, the explanation audit and the source controls. Unless a passage states otherwise, every value refers to the 747
+clean test images and gives the mean over seeds with its 95\% CI.
 
 \subsection{Curated benchmark}
 Table~\ref{tab:data} shows that deduplication removed more than half of the labelled images, mostly because SARTAJ and
@@ -730,10 +737,13 @@ The source collection was linearly decodable from penultimate features in every 
 separated Figshare from SARTAJ with balanced accuracy 0.913 for the central model without DP and 0.851 at
 $\varepsilon=1$. The ImageNet initialisation reached 0.871 and a random network 0.846, so training added only 0.042
 ($0.913-0.871$). Accuracy on SARTAJ alone, the one source with all four classes, was 0.663 for central models
-without DP on the full test set, against 0.919 pooled (Supplementary Table S5). These measurements raise the question
-of what the privacy budget actually buys, which Section~\ref{sec:discussion} addresses.
+without DP on the full test set, against 0.919 pooled (Supplementary Table S5).
 
 \section{Discussion}\label{sec:discussion}
+The discussion first considers what the privacy budget protected and what it cost, at both privacy units and across
+client counts. It then turns to the change in explanations, to benchmark leakage and source confounding, and finally to
+the limitations of the evaluation. Each subsection relates the findings to prior work and separates measured effects
+from interpretations that the experiments did not test directly.
 
 \subsection{Protection bought by the privacy budget}
 The audit and the accounting agree for the federated models that were attacked. Without DP, a federated model trained
