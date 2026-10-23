@@ -90,7 +90,8 @@ activation mapping \sep Neuro-oncology \sep Dataset contamination
 
 \section{Introduction}
 Artificial intelligence is changing how brain tumours are detected and graded on magnetic resonance imaging (MRI),
-and its clinical value depends on training data drawn from many hospitals.\cite{ahmed2026}\footnote{Abbreviations.
+and deep learning now segments even small brain metastases.\cite{ahmed2026,jung2026} The clinical value of such models
+depends on training data drawn from many hospitals.\footnote{Abbreviations.
 AUC, area under the receiver operating characteristic curve. CI, confidence interval. DP, differential privacy. DP-SGD, differentially
 private stochastic gradient descent. FedAvg, federated averaging. FPR, false-positive rate. Grad-CAM,
 gradient-weighted class activation mapping. IG, Integrated Gradients. IoU, intersection over union. LiRA,
@@ -98,8 +99,9 @@ likelihood-ratio attack. NCC, normalised cross-correlation. ROC, receiver operat
 those hospitals train one shared model without moving scans, and early brain tumour studies showed that
 federated models approach the accuracy of centrally trained ones.\cite{sheller2019,sheller2020,pati2022}
 
-Sharing model updates is not the same as protecting patients, because updates and released models can reveal
-whether a person contributed data.\cite{pati2024,knolle2026} Differential privacy (DP) bounds that risk formally,
+Transparency and privacy preservation are both named as conditions for the clinical use of medical artificial
+intelligence.\cite{cai2025} Sharing model updates is not the same as protecting patients, because updates and released
+models can reveal whether a person contributed data.\cite{pati2024,knolle2026} Differential privacy (DP) bounds that risk formally,
 and its practical form for deep networks, differentially private stochastic gradient descent (DP-SGD), clips each
 example's gradient and adds calibrated Gaussian noise.\cite{abadi2016} Slice-based MRI complicates the guarantee,
 since one Figshare patient contributes a median of 13 slices and a guarantee per image covers that patient only
@@ -207,7 +209,7 @@ means stronger protection, and $\delta=10^{-5}$ lies below $1/N$.
 Every client runs DP-SGD on its own data, so each update it sends is already a private release. The guarantee
 therefore holds against an honest-but-curious server, against other clients and against anyone who sees the released
 model. Client sizes $n_j$ and $U_j$ and the server-held validation split are treated as public, and no secure
-aggregation is used. A unit split across $m$ clients is protected by the composition of $m$ guarantees, and the worst
+aggregation or other cryptographic protection\cite{li2026} is used. A unit split across $m$ clients is protected by the composition of $m$ guarantees, and the worst
 case over units is reported. Client-level DP, which hides the participation of a whole hospital,\cite{mcmahan2018} was
 not evaluated, because with three to 15 clients the noise needed to mask one client would dominate the aggregate.
 

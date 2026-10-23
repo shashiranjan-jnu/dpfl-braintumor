@@ -101,6 +101,13 @@ REFS = {
     "ahmed2026": "Ahmed MM, Adebayo UO, Othman ZK, et al. Artificial intelligence in neuro-oncology imaging: "
                  "advancing brain tumor detection, grading, and treatment response evaluation. \\textit{Intell Oncol}. "
                  "2026;2(3):100071. doi:10.1016/j.intonc.2026.100071",
+    "jung2026": "Jung JH, Sunwoo L, Ji H, Yoo S, Park JE, Lee JG. Deep learning-based segmentation of small-volume brain "
+                "metastases in lung cancer patients. \\textit{Intell Oncol}. 2026;2(2):100049. "
+                "doi:10.1016/j.intonc.2026.100049",
+    "li2026": "Li D, Wei J, L\\\"{u} Q, Le J, Liao X. Privacy-preserving medical image processing based on cryptography "
+              "primitives: a review of methods. \\textit{Intell Oncol}. 2026;2(4):100083. doi:10.1016/j.intonc.2026.100083",
+    "cai2025": "Cai W. DeepSeek AI: transforming medical AI with cost-efficiency, transparency, and privacy preservation. "
+               "\\textit{Intell Oncol}. 2025;1(2):172-175. doi:10.1016/j.intonc.2025.03.006",
     "adnan2022": "Adnan M, Kalra S, Cresswell JC, Taylor GW, Tizhoosh HR. Federated learning and differential privacy "
                  "for medical image analysis. \\textit{Sci Rep}. 2022;12(1):1953. doi:10.1038/s41598-022-05539-7",
     "ziller2021": "Ziller A, Usynin D, Braren R, Makowski M, Rueckert D, Kaissis G. Medical imaging deep learning with "
