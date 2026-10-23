@@ -1,0 +1,16 @@
+{
+  "title": "Code and frozen results for: Patient-level differential privacy, membership leakage and explanation fidelity in federated brain tumour MRI classification",
+  "upload_type": "software",
+  "description": "<p>Code, run configurations, per-run results, frozen tables (results/FROZEN_MANIFEST, SHA-256 hashes), figure data, split and duplicate manifests, Kaggle launcher notebooks and the LaTeX manuscript source for a study of record-level and patient-level differential privacy in federated brain tumour MRI classification on a deduplicated Figshare, SARTAJ and Br35H benchmark, with likelihood-ratio membership inference audits and Grad-CAM explanation evaluation.</p><p>No MRI images are included except small illustrative panels in figures. The images come from the cited public collections, and data_manifest/ records every source file, hash and split needed to rebuild the curated set with notebooks 01 to 03.</p>",
+  "creators": [
+    {"name": "Ranjan, Shashi", "affiliation": "School of Computer and Systems Sciences, Jawaharlal Nehru University, New Delhi, India"},
+    {"name": "N, Poonguzhali", "affiliation": "School of Computer and Systems Sciences, Jawaharlal Nehru University, New Delhi, India"}
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "keywords": ["federated learning", "differential privacy", "membership inference", "Grad-CAM", "brain tumour MRI", "neuro-oncology", "dataset contamination"],
+  "related_identifiers": [
+    {"identifier": "10.6084/m9.figshare.1512427.v8", "relation": "references", "resource_type": "dataset", "scheme": "doi"},
+    {"identifier": "10.34740/kaggle/dsv/1183165", "relation": "references", "resource_type": "dataset", "scheme": "doi"}
+  ]
+}

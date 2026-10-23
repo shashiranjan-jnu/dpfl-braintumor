@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this code or these results, please cite the archived release."
+title: "Code and frozen results for: Patient-level differential privacy, membership leakage and explanation fidelity in federated brain tumour MRI classification"
+type: software
+license: MIT
+repository-code: "https://github.com/shashiranjan-jnu/dpfl-braintumor"
+authors:
+  - family-names: Ranjan
+    given-names: Shashi
+    affiliation: "School of Computer and Systems Sciences, Jawaharlal Nehru University, New Delhi, India"
+  - family-names: N
+    given-names: Poonguzhali
+    affiliation: "School of Computer and Systems Sciences, Jawaharlal Nehru University, New Delhi, India"
+version: v1.0-submission

@@ -3,6 +3,21 @@
 Differentially private federated learning for multi-class brain tumour MRI,
 prepared for submission to Intelligent Oncology.
 
+## Paper and archive
+This repository accompanies the manuscript "Patient-level differential privacy, membership leakage and explanation
+fidelity in federated brain tumour MRI classification" (submitted to Intelligent Oncology). Every number in the paper
+comes from a file listed in `results/FROZEN_MANIFEST.json` (608 runs, 102 hashed files, tag `v0.9.5-results-frozen`);
+`python scripts/freeze.py --check` verifies them. The release `v1.0-submission` is archived on Zenodo, and the DOI
+is given in the paper's data availability statement.
+
+To regenerate the tables, figures and supplement from the stored runs (CPU only): notebooks 20-figures-labels and
+21-review-analyses on Kaggle, or `scripts/make_figures.py`, `scripts/mia_matched.py`, `scripts/class_sensitivity.py`,
+`scripts/xai_mediation.py` and `scripts/make_supplement.py` locally, then `python paper/build.py`.
+
+Code is released under the MIT licence. The MRI panels in figures/ and results/ncc/ show images from Figshare
+(Cheng et al., CC BY 4.0, doi:10.6084/m9.figshare.1512427.v8), SARTAJ (doi:10.34740/kaggle/dsv/1183165) and Br35H,
+and remain under the terms of those collections.
+
 ## Repository layout
 | Folder | Contents |
 | --- | --- |
