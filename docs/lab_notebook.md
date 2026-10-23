@@ -160,3 +160,4 @@
 - 2026-10-23 critical review (D59): matched-composition LiRA, per-class sensitivity and configuration-level explanation statistics computed on CPU; manuscript revised (abstract 249 words, 32 pages, no overfull boxes or undefined references); notebook 21-review-analyses prepared at commit 0ff1642 for the Kaggle copy of the three tables
 - 2026-10-23 notebook 21 (commit 0ff1642, CPU): tests pass, three tables identical to the local run, manifest re-frozen at 102 files (D60)
 - 2026-10-23 section introductions, Figure 1 and graphical abstract corrections (D61)
+- 2026-10-23 cover letter regenerated: updated findings, dated, blank reviewer table, blanks for DOI and telephone

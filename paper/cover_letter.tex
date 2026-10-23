@@ -1,18 +1,20 @@
 % Cover letter, one page. Compiled by paper/build.py to cover_letter.pdf and cover_letter.docx.
+% Every number is taken from main.tex (clean test set, 747 images). Suggested reviewers are left blank for the authors.
 \documentclass[11pt,a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage{mathptmx}
-\usepackage[margin=2.2cm]{geometry}
+\usepackage[margin=2cm]{geometry}
 \usepackage{url}
+\usepackage{array}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt}
+\setlength{\parskip}{5pt}
 \pagestyle{empty}
 \begin{document}
 
 \begin{flushright}
 School of Computer and Systems Sciences\\
 Jawaharlal Nehru University, New Delhi 110067, India\\
-{}[CHECK: date of submission]
+23 October 2026
 \end{flushright}
 
 The Editors\\
@@ -23,16 +25,16 @@ Dear Editors,
 The authors submit the manuscript ``Patient-level differential privacy, membership leakage and explanation fidelity in
 federated brain tumour MRI classification'' for consideration as a full-length research article.
 
-The manuscript addresses a question that affects any multi-hospital artificial intelligence model in neuro-oncology,
-namely what a formal privacy guarantee costs and what it actually protects. On a deduplicated three-source brain
-tumour MRI benchmark, a mirror-aware check found 66 contaminated test images that perceptual hashing had missed.
-In federated models, record-level differential privacy at $\varepsilon=8$ left a likelihood-ratio membership attack
-with no rate significantly above chance once members and non-members were matched in source and class, for a
-balanced-accuracy cost of 0.076, against 0.130 in central training, whereas a per-patient guarantee needed
-$\varepsilon=64$. Without privacy the same attack separated training from test patients with an AUC of 0.805, and an
-unclipped noise mechanism used in prior work still exposed patients. Grad-CAM localisation and cross-seed consistency
-declined with privacy in step with accuracy, and the accuracy lost under privacy fell mainly on meningioma and
-no-tumour sensitivity.
+Multi-hospital artificial intelligence for neuro-oncology needs formal privacy guarantees, yet published federated
+brain tumour classifiers rarely state an accounted budget or the protected unit, and their public benchmarks overlap.
+The manuscript measures what accounted differential privacy costs and what it protects. On a deduplicated
+three-source benchmark, a mirror-aware check found 66 test images with near-copies in other splits that perceptual
+hashing had missed. Record-level differential privacy at $\varepsilon=8$ cost 0.076 in balanced accuracy for federated
+and 0.130 for central training, mainly through meningioma and no-tumour sensitivity, whereas a per-patient guarantee
+needed $\varepsilon=64$. With non-members matched to members by source and class, a likelihood-ratio membership attack
+found 11.1\% of training images at a 1\% false-positive rate without privacy and 1.0\% to 1.5\% under record-level
+privacy, not significantly above chance. An unclipped noise mechanism used in prior work still exposed training
+patients (area under the curve 0.745). Grad-CAM localisation and cross-seed consistency declined in step with accuracy.
 
 The work fits the journal's scope in artificial intelligence for oncology imaging and builds on themes the journal has
 published. Ahmed et al.\ reviewed artificial intelligence for brain tumour detection, grading and response evaluation
@@ -44,16 +46,26 @@ intelligence (Intell Oncol 2025;1(2):172-175, doi:10.1016/j.intonc.2025.03.006).
 papers with a measured privacy, utility and explanation audit for federated neuro-oncology models.
 
 The manuscript is original, has not been published, and is not under consideration elsewhere. All authors approved
-the submission. The authors declare no competing interests, and the work received no specific funding. Code, frozen
-results and figure data are available in a public repository [CHECK: repository visibility and archive DOI].
+the submission. The authors declare no competing interests, and the work received no specific funding. The study used
+only public, de-identified images. Code, frozen results and figure data are available at
+\url{https://github.com/shashiranjan-jnu/dpfl-braintumor}, archived under DOI \rule{4cm}{0.4pt}.
 
-Two potential reviewers are suggested in the submission system [CHECK: names, institutional e-mail addresses, no conflicts].
+Suggested reviewers, with no collaboration with the authors in the past five years:
+
+{\small
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{@{}p{0.2cm}p{3.6cm}p{5.0cm}p{4.6cm}p{3.0cm}@{}}
+ & \textbf{Name} & \textbf{Affiliation} & \textbf{Institutional e-mail} & \textbf{Expertise}\\\hline
+1 & & & & \\\hline
+2 & & & & \\\hline
+3 & & & & \\\hline
+\end{tabular}}
 
 Yours sincerely,
 
 Poonguzhali N (corresponding author)\\
 School of Computer and Systems Sciences, Jawaharlal Nehru University, New Delhi 110067, India\\
-poonguzhali@jnu.ac.in, telephone [CHECK]
+poonguzhali@jnu.ac.in, telephone \rule{4cm}{0.4pt}
 
 On behalf of Shashi Ranjan and Poonguzhali N
 
