@@ -166,3 +166,4 @@
 - 2026-10-23 full-text check of lakshmi2026 and qazi2026, Introduction sentence made specific (D64)
 - 2026-10-23 DOIs clickable (hyperref, hidelinks) in references, data availability, supplement and cover letter; printed AMA form and layout unchanged
 - 2026-10-25 flat Editorial Manager upload set (D65)
+- 2026-10-25 tables_editable.docx rebuilt from the LaTeX tables as real Word tables (grid, header row, CI under each mean, superscript notes); every value checked against main.tex

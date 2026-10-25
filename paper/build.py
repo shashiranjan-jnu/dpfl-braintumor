@@ -264,24 +264,71 @@ def section_text(tex: str, name: str) -> str:
     return m.group(1).strip()
 
 
-def tables_docx(src: str, dst: str):
-    """Copy every table of the Word manuscript, with its caption and note, into a separate editable file."""
-    import copy
+def _plain(t: str) -> str:
+    """LaTeX cell or caption text to plain Word text."""
+    t = re.sub(r"\$\\varepsilon\s*=\s*([^$]*)\$", r"ε = \1", t)
+    t = t.replace("$\\varepsilon$", "ε").replace("$\\sigma$", "σ")
+    t = re.sub(r"\\textsuperscript\{([^}]*)\}", "\x01\\1\x02", t)
+    for g, u in (("alpha", "α"), ("sigma", "σ"), ("delta", "δ"), ("mu", "μ"), ("varepsilon", "ε"), ("ln", "ln")):
+        t = t.replace("\\" + g, u)
+    t = re.sub(r"\{\\scriptsize\s*([^}]*)\}", r"\1", t)
+    t = re.sub(r"\$([^$]*)\$", r"\1", t)
+    t = t.replace("\\times", "×").replace("\\%", "%").replace("~", " ").replace("\\ ", " ")
+    t = re.sub(r"\\(textbf|textit|emph|mathrm)\{([^}]*)\}", r"\2", t)
+    t = re.sub(r"\\[a-zA-Z]+\*?(\[[^]]*\])?(\{[^}]*\})?", "", t)
+    return re.sub(r"\s+", " ", t.replace("{", "").replace("}", "")).strip()
+
+
+def _runs(par, text: str, bold: bool = False, size: float | None = None):
+    """Write text into a Word paragraph, turning \x01x\x02 markers into superscript runs."""
+    from docx.shared import Pt
+    for k, piece in enumerate(re.split("\x01|\x02", text)):
+        if not piece:
+            continue
+        run = par.add_run(piece)
+        run.bold = bold
+        run.font.superscript = k % 2 == 1
+        if size:
+            run.font.size = Pt(size)
+
+
+def tables_docx(tex: str, dst: str):
+    """Tables 1 to N of main.tex as real Word tables (grid, header row, CI under each mean), with captions and notes."""
     import docx
-    d = docx.Document(src)
+    from docx.shared import Pt
     out = docx.Document()
+    st = out.styles["Normal"]
+    st.font.name, st.font.size = "Times New Roman", Pt(10)
     out.add_heading("Tables", level=1)
-    body = list(d.element.body.iterchildren())
-    for i, el in enumerate(body):
-        if el.tag.endswith("}tbl"):
-            prev = body[i - 1]
-            nxt = body[i + 1] if i + 1 < len(body) else None
-            if prev.tag.endswith("}p"):
-                out.element.body.append(copy.deepcopy(prev))
-            out.element.body.append(copy.deepcopy(el))
-            if nxt is not None and nxt.tag.endswith("}p") and not "".join(nxt.itertext()).startswith(("Table", "Fig")):
-                out.element.body.append(copy.deepcopy(nxt))
-            out.add_paragraph("")
+    for n, m in enumerate(re.finditer(r"\\begin\{table\}.*?\\end\{table\}", tex, re.S), 1):
+        t = m.group(0)
+        cm = re.search(r"\\caption\{(.*?)\}\s*(\\label|\n)", t, re.S)
+        cap = _plain(cm.group(1))
+        body = re.search(r"\\toprule(.*?)\\bottomrule", t, re.S).group(1)
+        rows = []
+        for line in re.split(r"\\\\(?:\[[^]]*\])?", body):
+            line = line.replace("\\midrule", "").strip()
+            if not line:
+                continue
+            cells = [_plain(c) for c in line.split("&")]
+            if rows and cells[0] == "" and all(c == "" or c.startswith("(") for c in cells[1:]) and any(cells[1:]):
+                rows[-1] = [r + (" " + c if c else "") for r, c in zip(rows[-1], cells)]
+            else:
+                rows.append(cells)
+        p = out.add_paragraph()
+        p.add_run(f"Table {n}. ").bold = True
+        _runs(p, cap)
+        ncol = max(len(r) for r in rows)
+        tb = out.add_table(rows=len(rows), cols=ncol)
+        tb.style = "Table Grid"
+        for i, r in enumerate(rows):
+            for j in range(ncol):
+                cell = tb.cell(i, j)
+                _runs(cell.paragraphs[0], r[j] if j < len(r) else "", bold=i == 0)
+        note = re.search(r"\\par\\smallskip\{\\scriptsize(.*?)\}\n\\end\{table\}", t, re.S)
+        if note:
+            _runs(out.add_paragraph(), _plain(note.group(1)), size=9)
+        out.add_paragraph("")
     out.save(dst)
 
 
@@ -307,7 +354,7 @@ def em_package(tex: str):
             p = os.path.join(em, f"{name}.{ext}")
             if os.path.exists(p):
                 os.remove(p)
-    tables_docx(os.path.join(OUT, "manuscript.docx"), os.path.join(em, "tables_editable.docx"))
+    tables_docx(tex, os.path.join(em, "tables_editable.docx"))
     for f in ("manuscript.pdf", "cover_letter.pdf", "cover_letter.docx", "highlights.docx",
               "graphical_abstract.png", "supplementary_material.pdf"):
         shutil.copy(os.path.join(OUT, f), em)
