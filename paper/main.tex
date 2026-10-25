@@ -642,13 +642,17 @@ Supplementary Table S11).
 Table~\ref{tab:lira} and Fig.~\ref{fig:lira} show that, without DP, LiRA identified training images and especially
 training patients above chance. At a 1\% FPR it found 10.8\% of training images (TPR 0.108), or 11.1\% with
 composition-matched non-members, and summed over slices it separated training from test patients with AUC 0.805.
+In Table~\ref{tab:lira}, the columns TPR 1\% and TPR 0.1\% give the true-positive rate at those false-positive rates,
+and the matched column gives the TPR at 1\% FPR after non-members were reweighted to the members' source and class mix.
+Bal.\ acc.\ is clean balanced accuracy. The weight-noise row adds unclipped Gaussian noise with $s=0.003$ to client
+weights and carries no formal guarantee, and the diverged row uses the published $s=0.5$, at which training diverged.
 
 \begin{table}[htbp]
 \caption{Online LiRA against FedAvg on the natural partition, mean (95\% CI) over five targets.}\label{tab:lira}
 \footnotesize\setlength{\tabcolsep}{2pt}
 \begin{tabular*}{\linewidth}{@{}p{1.6cm}@{\extracolsep{\fill}}llllll@{}}
 \toprule
-Target & Bal. acc. & Image AUC & TPR, 1\% & Matched\textsuperscript{b} & TPR, 0.1\% & Patient AUC\\
+Target & Bal. acc. & Image AUC & TPR, 1\% & Matched & TPR, 0.1\% & Patient AUC\\
 \midrule
 No DP & 0.841 & 0.666 & 0.108 & 0.111 & 0.033 & 0.805\\
  &  & {\scriptsize (0.642, 0.689)} & {\scriptsize (0.081, 0.135)} & {\scriptsize (0.085, 0.138)} & {\scriptsize (0.019, 0.046)} & {\scriptsize (0.762, 0.848)}\\[2pt]
@@ -658,16 +662,12 @@ $\varepsilon=3$ & 0.674 & 0.545 & 0.015 & 0.013 & 0.003 & 0.567\\
  &  & {\scriptsize (0.522, 0.567)} & {\scriptsize (0.008, 0.023)} & {\scriptsize (0.003, 0.023)} & {\scriptsize (0.002, 0.005)} & {\scriptsize (0.529, 0.605)}\\[2pt]
 $\varepsilon=1$ & 0.525 & 0.479 & 0.010 & 0.010 & 0.003 & 0.457\\
  &  & {\scriptsize (0.469, 0.489)} & {\scriptsize (0.006, 0.015)} & {\scriptsize (0.006, 0.015)} & {\scriptsize (0.000, 0.005)} & {\scriptsize (0.413, 0.500)}\\[2pt]
-Weight noise\textsuperscript{a} & 0.801 & 0.594 & 0.045 & 0.047 & 0.016 & 0.745\\
+Weight noise & 0.801 & 0.594 & 0.045 & 0.047 & 0.016 & 0.745\\
  &  & {\scriptsize (0.572, 0.616)} & {\scriptsize (0.038, 0.051)} & {\scriptsize (0.036, 0.057)} & {\scriptsize (0.012, 0.020)} & {\scriptsize (0.713, 0.778)}\\[2pt]
-Diverged\textsuperscript{c} & 0.254 & 0.474 & 0.038 & 0.024 & 0.003 & 0.518\\
+Diverged & 0.254 & 0.474 & 0.038 & 0.024 & 0.003 & 0.518\\
  &  & {\scriptsize (0.437, 0.511)} & {\scriptsize (0.023, 0.053)} & {\scriptsize (0.010, 0.037)} & {\scriptsize (0.002, 0.003)} & {\scriptsize (0.497, 0.539)}\\[2pt]
 \bottomrule
 \end{tabular*}
-\par\smallskip{\scriptsize TPR columns give the TPR at 1\% or 0.1\% FPR. \textsuperscript{a}Unclipped Gaussian noise
-with $s=0.003$ on client weights, no formal guarantee. \textsuperscript{b}TPR at 1\% FPR with non-members reweighted
-to the members' source and class mix. \textsuperscript{c}Weight noise $s=0.5$, training diverged. Bal. acc., clean
-balanced accuracy.}
 \end{table}
 
 Under DP the TPR at 1\% FPR was 0.010 to 0.017, but the value at $\varepsilon=8$ exceeded the nominal 0.010
