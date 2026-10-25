@@ -367,6 +367,14 @@ def em_package(tex: str):
             z.write(os.path.join(OUT, f), f)
         for f in sorted(os.listdir(os.path.join(OUT, "figures"))):
             z.write(os.path.join(OUT, "figures", f), f)
+        # supplementary material, flattened: tables/<name>.tex becomes suppl_<name>.tex
+        sup = os.path.join(HERE, "supplement")
+        stex = open(os.path.join(sup, "supplement.tex")).read()
+        stex = re.sub(r"\\input\{tables/([^}]*)\.tex\}", r"\\input{suppl_\1.tex}", stex)
+        z.writestr("supplementary_material.tex", stex)
+        for f in sorted(os.listdir(os.path.join(sup, "tables"))):
+            z.write(os.path.join(sup, "tables", f), "suppl_" + f)
+        z.write(os.path.join(ROOT, "results", "ncc", "top_cross_split_pairs.png"), "top_cross_split_pairs.png")
 
 
 def run(cmd, cwd, env=None):
