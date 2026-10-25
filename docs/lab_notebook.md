@@ -165,3 +165,4 @@
 - 2026-10-23 Zenodo record 23601090 (v1.0-submission) cited in paper, supplement, cover letter and README (D63)
 - 2026-10-23 full-text check of lakshmi2026 and qazi2026, Introduction sentence made specific (D64)
 - 2026-10-23 DOIs clickable (hyperref, hidelinks) in references, data availability, supplement and cover letter; printed AMA form and layout unchanged
+- 2026-10-25 flat Editorial Manager upload set (D65)

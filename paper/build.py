@@ -15,6 +15,7 @@ from __future__ import annotations
 import os
 import re
 import shutil
+import zipfile
 import subprocess
 import sys
 
@@ -221,6 +222,106 @@ def write_zip(sup: str) -> None:
         z.write(os.path.join(ROOT, "results", "ncc", montage), f"supplement/{montage}")
 
 
+TITLE_PAGE = r"""\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{8pt}
+\pagestyle{empty}
+\begin{document}
+\section*{Title page}
+\textbf{Title.} TITLE
+
+\textbf{Authors.} AUTHORS
+
+\textsuperscript{a}AFFIL
+
+\textbf{Corresponding author.} CORR, AFFIL. E-mail: CORRMAIL. Telephone: ..............................
+
+\textbf{E-mail addresses.} EMAILS
+\end{document}
+"""
+
+ETHICS = r"""\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage[margin=2.5cm]{geometry}
+\setlength{\parindent}{0pt}
+\pagestyle{empty}
+\begin{document}
+\section*{Ethical statement}
+\textbf{Title.} TITLE
+
+BODY
+\end{document}
+"""
+
+
+def section_text(tex: str, name: str) -> str:
+    m = re.search(r"\\section\*\{" + re.escape(name) + r"\}\n(.*?)(?=\n\\section|\n\\input)", tex, re.S)
+    return m.group(1).strip()
+
+
+def tables_docx(src: str, dst: str):
+    """Copy every table of the Word manuscript, with its caption and note, into a separate editable file."""
+    import copy
+    import docx
+    d = docx.Document(src)
+    out = docx.Document()
+    out.add_heading("Tables", level=1)
+    body = list(d.element.body.iterchildren())
+    for i, el in enumerate(body):
+        if el.tag.endswith("}tbl"):
+            prev = body[i - 1]
+            nxt = body[i + 1] if i + 1 < len(body) else None
+            if prev.tag.endswith("}p"):
+                out.element.body.append(copy.deepcopy(prev))
+            out.element.body.append(copy.deepcopy(el))
+            if nxt is not None and nxt.tag.endswith("}p") and not "".join(nxt.itertext()).startswith(("Table", "Fig")):
+                out.element.body.append(copy.deepcopy(nxt))
+            out.add_paragraph("")
+    out.save(dst)
+
+
+def em_package(tex: str):
+    """Flat folder for Editorial Manager, which rejects zip files with subfolders."""
+    em = os.path.join(OUT, "em_upload")
+    os.makedirs(em)
+    title = re.sub(r"\s+", " ", re.search(r"\\title\{(.*?)\}\n\n", tex, re.S).group(1))
+    names = [re.sub(r"\\corref\{[^}]*\}", "", a) for a in re.findall(r"\\author\[[^]]*\]\{((?:[^{}]|\{[^{}]*\})*)\}", tex)]
+    emails = re.findall(r"\\ead\{([^}]*)\}", tex)
+    corr = [re.sub(r"\\corref\{[^}]*\}", "", a) for a in re.findall(r"\\author\[[^]]*\]\{((?:[^{}]|\{[^{}]*\})*)\}", tex)
+            if "corref" in a][0]
+    affil = "School of Computer and Systems Sciences, Jawaharlal Nehru University, New Delhi 110067, India"
+    tp = (TITLE_PAGE.replace("TITLE", title).replace("AUTHORS", ", ".join(f"{n}\\textsuperscript{{a}}" for n in names))
+          .replace("CORRMAIL", emails[names.index(corr)].replace("_", "\\_")).replace("CORR", corr).replace("AFFIL", affil)
+          .replace("EMAILS", ", ".join(f"{e.replace('_', chr(92) + '_')} ({n})" for n, e in zip(names, emails))))
+    eth = ETHICS.replace("TITLE", title).replace("BODY", section_text(tex, "Ethic statement"))
+    for name, src in (("title_page", tp), ("ethical_statement", eth)):
+        open(os.path.join(em, f"{name}.tex"), "w").write(src)
+        run(["pdflatex", "-interaction=nonstopmode", "-halt-on-error", f"{name}.tex"], em)
+        run(["pandoc", f"{name}.tex", "-f", "latex", "-t", "docx", "-o", f"{name}.docx"], em)
+        for ext in ("aux", "log", "out", "tex"):
+            p = os.path.join(em, f"{name}.{ext}")
+            if os.path.exists(p):
+                os.remove(p)
+    tables_docx(os.path.join(OUT, "manuscript.docx"), os.path.join(em, "tables_editable.docx"))
+    for f in ("manuscript.pdf", "cover_letter.pdf", "cover_letter.docx", "highlights.docx",
+              "graphical_abstract.png", "supplementary_material.pdf"):
+        shutil.copy(os.path.join(OUT, f), em)
+    for f in sorted(os.listdir(os.path.join(OUT, "figures"))):
+        if f.startswith("Figure") and f.endswith(".pdf"):
+            shutil.copy(os.path.join(OUT, "figures", f), em)
+    # LaTeX source as a flat zip (asked for at revision): graphicx finds figures in the same folder
+    with zipfile.ZipFile(os.path.join(em, "latex_source_flat.zip"), "w", zipfile.ZIP_DEFLATED) as z:
+        for f in ("main.tex", "references.tex", "elsarticle.cls", "elsarticle-num.bst"):
+            z.write(os.path.join(OUT, f), f)
+        for f in sorted(os.listdir(os.path.join(OUT, "figures"))):
+            z.write(os.path.join(OUT, "figures", f), f)
+
+
 def run(cmd, cwd, env=None):
     r = subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True, errors="replace")
     if r.returncode:
@@ -282,6 +383,7 @@ def main():
         if f.startswith("main.") and f not in ("main.tex",) or f.startswith("_docx"):
             os.remove(os.path.join(OUT, f))
     write_zip(sup)
+    em_package(tex)
     print(f"{len(order)} references, {len(hl)} highlights")
     print("\n".join(sorted(os.path.relpath(os.path.join(dp, f), OUT) for dp, _, fs in os.walk(OUT) for f in fs)))
 
