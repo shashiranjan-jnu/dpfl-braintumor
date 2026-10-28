@@ -125,9 +125,9 @@ reports every result on a test set cleaned of mirrored duplicates.
 Federated learning for brain tumours began with multi-institutional segmentation, where models trained without
 sharing data matched those trained on pooled data.\cite{sheller2019,sheller2020,pati2022} Later classification
 studies on the merged Figshare, SARTAJ and Br35H collections report accuracies from 94\% to 99.29\% with federated
-averaging (FedAvg),\cite{mcmahan2017} FedProx, SCAFFOLD or transfer learning, and some add Grad-CAM pictures.\cite{albalawi2024,mastoi2025,muntaqim2025,paul2026}
-The present work differs by training on a deduplicated, patient-disjoint benchmark and by attaching an accounted
-privacy guarantee to every private model.
+averaging (FedAvg),\cite{mcmahan2017} FedProx, SCAFFOLD or transfer learning, and some add Grad-CAM
+pictures.\cite{albalawi2024,mastoi2025,muntaqim2025,paul2026} None of these studies states a formal privacy guarantee,
+and none reports a check for duplicates across its training and test splits.
 
 Differential privacy has been applied to medical imaging with dedicated DP-SGD libraries and accounting
 tools.\cite{ziller2021,mironov2017,yousefpour2021} Kaissis et al.\ trained a three-site federated chest radiograph
@@ -135,52 +135,52 @@ model at $\varepsilon=6$ whose accuracy stayed comparable to that of two radiolo
 al.\ studied differentially private federated learning on histopathology with varying numbers of
 providers,\cite{adnan2022} and Tayebi Arasteh et al.\ found that private training lowered accuracy mainly for
 difficult diagnoses.\cite{tayebi2024} Ziller et al.\ showed that large budgets can already block reconstruction
-attacks.\cite{ziller2024} These studies protect single records, whereas the present work compares record-level and
-patient-level guarantees on the same data and audits both empirically.
+attacks.\cite{ziller2024} These studies apply DP-SGD per image, so they do not measure the cost of protecting a whole
+patient, who in slice-based MRI contributes many images.
 
 Membership inference measures privacy empirically, and the likelihood-ratio attack (LiRA) compares a target model's
 confidence on an example with that of shadow models trained with and without it.\cite{carlini2022} Knolle et al.\
-reported that patients with several similar records can face
-near-perfect attack success even when aggregate success looks random.\cite{knolle2026} The closest federated brain
-tumour study adds Gaussian noise with standard deviation 0.5 to client weights without clipping, so its stated
-$\varepsilon$ of about 3.4 cannot be derived from the mechanism.\cite{gupta2026} The present work runs LiRA at the
-image and the patient level against formally private models and against that unclipped mechanism.
+reported that patients with several similar records can face near-perfect attack success even when aggregate success
+looks random.\cite{knolle2026} The closest federated brain tumour study adds Gaussian noise with standard deviation
+0.5 to client weights without clipping, so its stated $\varepsilon$ of about 3.4 cannot be derived from the
+mechanism.\cite{gupta2026} A mechanism without a valid accounting can be assessed only by an empirical attack, and
+the patient-level risk shown by Knolle et al.\ is likely to be large in slice-based MRI, where one patient contributes
+many images.
 
-Private training also changes explanations, since Saifullah et al.\ and Manna and Sett reported that DP alters
+Private training also changes explanations, as Saifullah et al.\ and Manna and Sett reported that DP alters
 attributions across many datasets and methods,\cite{saifullah2024,manna2024} and Adebayo et al.\ showed that some saliency methods
-ignore the learned weights.\cite{adebayo2018} The present work measures Grad-CAM localisation against expert tumour
-masks, its consistency across seeds and a randomisation check, and asks whether privacy affects explanations beyond
-its effect on accuracy.
+ignore the learned weights.\cite{adebayo2018} Neither DP study evaluated brain MRI, so the effect of privacy on how well
+explanations localise brain tumours against expert masks remains unmeasured.
 
-Benchmark contamination is the last theme, and Vangala et al.\ found that 28.8\% of a widely used Kaggle test split
-has a near-twin in training,\cite{vangala2026} and the source collections differ in class
-composition.\cite{chengdata,sartajdata,br35hdata} The present work adds a mirror-aware correlation check, because
-perceptual hashes do not match copies flipped left to right. Taken together, the accuracy cost and the empirical
-leakage of record-level and patient-level DP for federated brain tumour MRI on contamination-checked data, together
-with their effect on explanation fidelity, have not been measured side by side. The individual methods used here are
-established, so the contribution of the present work lies in applying them jointly, with accounted guarantees at two
-privacy units and an attack whose members and non-members are matched in composition.
+For benchmark contamination, Vangala et al.\ found with cross-correlation and file hashes that 28.8\% of a
+widely used Kaggle test split has a near-twin in training,\cite{vangala2026} and the source collections differ in
+class composition.\cite{chengdata,sartajdata,br35hdata} Duplicate checks that compare images only in their stored
+orientation, including perceptual hashing, do not match a copy flipped left to right.
+
+Taken together, the accuracy cost and the empirical leakage of record-level and patient-level DP for federated brain
+tumour MRI on contamination-checked data, together with their effect on explanation fidelity, have not been measured
+side by side.
 
 \subsection{Contributions}
-The study makes five contributions, each answered by the measurements summarised in the abstract.
+The study combines established methods, and its five contributions lie in how these are adapted, combined and
+controlled for federated brain tumour MRI.
 \begin{enumerate}
-\item \textbf{A deduplicated, patient-disjoint benchmark.} Perceptual-hash deduplication reduced 7828 labelled
-images to 3845 images split by patient, and a mirror-aware correlation check found 66 contaminated test images,
-which are excluded from every reported result.
-\item \textbf{An accounted privacy and utility comparison at two privacy units.} Central and federated models were
-trained under record-level and patient-level DP-SGD with R\'enyi accounting and five seeds per setting.
-Record-level $\varepsilon=8$ cost 0.130 in central balanced accuracy, mostly through meningioma and no-tumour
-sensitivity, whereas patient-level DP needed $\varepsilon=64$ to exceed that accuracy.
-\item \textbf{The effect of client count under DP.} Splitting the same images across more clients lowered accuracy
-under DP by 0.096 per unit of $\ln K$ at $\varepsilon=3$, consistent with the aggregated noise scale, and FedProx
-and SCAFFOLD did not recover the loss.
-\item \textbf{An empirical privacy audit.} LiRA with 16 shadow models per setting identified training images and
-patients in non-private federated models, found no rate significantly above chance at 1\% FPR under record-level DP
-once non-members were matched to members by source and class, and still detected patients under an unclipped
-weight-noise mechanism of higher utility.
-\item \textbf{Explanation fidelity under privacy.} Grad-CAM localisation and cross-seed consistency declined as
-$\varepsilon$ decreased, consistency correlated with accuracy at $r=0.838$ across 31 configurations, and the noise
-multiplier added no explanatory power once accuracy was known.
+\item \textbf{A contamination-checked benchmark.} Three public collections are merged by perceptual-hash
+deduplication, split by patient or by groups of near-identical images, and screened by a normalised cross-correlation
+check in both orientations that defines the clean test set used for every evaluation in the main text.
+\item \textbf{Patient-level DP-SGD for federated training.} Each client samples patients instead of images and clips
+each patient's mean gradient. R\'enyi accounting, composition over the clients that hold one patient and size-weighted
+aggregation then allow record-level and patient-level guarantees to be compared at the same budget.
+\item \textbf{An analysis of client count under DP.} The aggregated noise scale of client-side DP-SGD is derived as a
+function of the number of clients and tested by splitting fixed data across three to 15 clients. FedProx and a
+SCAFFOLD variant with size-weighted control variates and a momentum-aware normaliser serve as drift corrections.
+\item \textbf{A composition-matched membership audit.} Online LiRA with 16 shadow models per setting is run at the
+image and the patient level, with non-members reweighted to the members' source and class mix. Diverged models give an
+empirical reference, and the unclipped weight-noise mechanism of prior work is reproduced for comparison.
+\item \textbf{An explanation-fidelity protocol under privacy.} Grad-CAM, Grad-CAM++ and Integrated Gradients are
+scored against expert tumour masks and checked by a randomisation test and a skull-border analysis. Cross-seed
+consistency and a configuration-level regression test whether noise affects explanations beyond its effect on
+accuracy.
 \end{enumerate}
 
 Section~\ref{sec:methods} states the threat model and describes the curation, training, audit and explanation

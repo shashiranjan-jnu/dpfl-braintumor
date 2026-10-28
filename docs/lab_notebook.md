@@ -170,3 +170,4 @@
 - 2026-10-25 Table 5 footnote moved into the Results paragraph that introduces the table; flat upload set and submission_files_all.zip rebuilt
 - 2026-10-25 supplement justified; supplement source (flattened tables) added to latex_source_flat.zip, both documents compile from the zip
 - 2026-10-25 supplement tables inlined into a single supplementary_material.tex in the flat LaTeX zip; output identical to the uploaded PDF
+- 2026-10-28 Related work limited to prior work and contributions made methodological (D66)
