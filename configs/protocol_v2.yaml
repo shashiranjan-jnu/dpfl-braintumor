@@ -42,7 +42,7 @@ slice_cap_mechanism:       # mechanism A, chosen 2026-10-29 (D68)
     arm, including the patient-level arm, so all arms see the same data) removes 393 slices (15.1%, 11 units) at
     k_max = 24, 321 (12.3%, 6 units) at 32, 238 (9.1%, 5 units) at 48. Calibrated sigma for per-patient epsilon
     16 at m = 1, 2, 4, 8 and record level: k_max 24 -> 10.0, 17.7, 24.8, 26.2, 26.2; k_max 32 -> 10.5, 19.7, 31.0,
-    34.8, 34.9; k_max 132 (no cap) -> 10.9, 21.8, 43.5, 86.3, 143.7. Proposed: k_max = 32.
+    34.8, 34.9; k_max 48 -> 10.8, 21.3, 38.6, 51.5, 52.4; k_max 132 (no cap) -> 10.9, 21.8, 43.5, 86.3, 143.7. Proposed: k_max = 32.
   patient_level_arm: >-
     The existing patient-level mechanism (sample patients, clip each patient's mean gradient) at the same
     per-patient targets, rerun on the capped training data.
