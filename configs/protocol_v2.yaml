@@ -1,0 +1,81 @@
+# Phase 7 protocol (Step 7.0, D67, D68). DRAFT: the items marked APPROVE need the supervisor's decision.
+# Once approved, the status line changes to "frozen", the file is hashed into docs/decisions.md, and no value below
+# changes after the first Phase 7 run. Every new grid reads its settings from here.
+status: draft
+date: 2026-10-29
+
+fixed_from_v1:            # unchanged from the submitted study, so new and old results are comparable
+  model: resnet18_frozenbn
+  input: 128
+  rounds_T: 100
+  local_steps_S: 10
+  sample_rate_q: 0.1
+  clip_C: 1.0
+  delta: 1.0e-5
+  seeds_reported: [1, 2, 3, 4, 5]
+  seed_selection: 0
+  splits: data_manifest/splits_v1.csv     # kept unless Gate C fires
+  clean_test: results/ncc/contaminated_test_ids.txt
+
+accounting:                # Step 7.1 and calibration of every new run
+  primary: pld             # dp_accounting 0.6.0 mixture of Gaussians, connect-the-dots, pessimistic, interval 1e-3
+  check: rdp               # numerical Renyi divergence of the mixture, both directions, Opacus 1.6 conversion
+  worst_case_alignment: true
+  wording: tight           # "tight", never "exact"; method after Ganesh (2024) and Schuchardt et al. (2024)
+
+slice_cap_mechanism:       # mechanism A, chosen 2026-10-29 (D68)
+  description: >-
+    Each step Poisson-samples slices at rate q, as record-level DP-SGD does. For every patient with more than m
+    sampled slices, m of them are kept, chosen uniformly at random with a seed independent of the data. Each kept
+    slice gradient is clipped to C, the clipped gradients are summed, Gaussian noise N(0, sigma^2 C^2 I) is added,
+    and the sum is divided by the expected batch size q n_j. A patient therefore shifts the sum by at most
+    min(J, m) C with J ~ Binomial(k, q), and sigma is calibrated with the PLD accountant so that the per-patient
+    epsilon of the largest admissible patient equals the target.
+  m_values: [1, 2, 4, 8]
+  record_level_arm: true   # m >= k_max, record-level DP-SGD calibrated to the same per-patient target
+  per_patient_targets: [8, 16, 32]
+  k_max: APPROVE           # largest patient size admitted to training; see the note below
+  k_max_note: >-
+    Without a cap the largest training unit has 132 slices; such a patient has a sampled slice in almost every
+    step, so subsampling no longer helps and sigma must be large. Measured on splits_v1 training data, capping
+    every unit at k_max slices (uniform random subset, fixed seed, applied once before training to every Phase 7.4
+    arm, including the patient-level arm, so all arms see the same data) removes 393 slices (15.1%, 11 units) at
+    k_max = 24, 321 (12.3%, 6 units) at 32, 238 (9.1%, 5 units) at 48. Calibrated sigma for per-patient epsilon
+    16 at m = 1, 2, 4, 8 and record level: k_max 24 -> 10.0, 17.7, 24.8, 26.2, 26.2; k_max 32 -> 10.5, 19.7, 31.0,
+    34.8, 34.9; k_max 132 (no cap) -> 10.9, 21.8, 43.5, 86.3, 143.7. Proposed: k_max = 32.
+  patient_level_arm: >-
+    The existing patient-level mechanism (sample patients, clip each patient's mean gradient) at the same
+    per-patient targets, rerun on the capped training data.
+
+screening:                 # Step 7.2
+  levels: [L0, L1, L2, L3, L4]
+  L3_ranges: {translation: 0.10, rotation_deg: 10, rotation_step_deg: 2, scale: [0.9, 1.1], crop_min: 0.8}
+  L4_ranges: {gamma: [0.7, 1.5], histogram_equalisation: true, clahe: true}
+  target_false_match_rate: 0.001
+  synthetic_positives_per_level: 1000
+  wording: "screened clean at level l with measured recall"
+
+units:                     # Step 7.3
+  linkage_max_level: L4
+  gate_C_max_test_loss: 0.05
+
+canary_audit:              # Step 7.6
+  n_canaries: 100
+  inclusion_probability: 0.5
+  draw: "seeded draw (seed 2026) from Figshare training units, written to configs/canaries_v2.txt before any run"
+  configs: [no_dp, record_eps8, patient_eps16, weight_noise_0.003]
+  targets_per_config: 5
+  confidence: 0.95
+  wording: '"consistent with" the accounted epsilon, never "validates"'
+
+explanations:              # Step 7.7
+  matching_methods: [early_stopping, data_fraction]
+  matching_tolerance: 0.01
+  tost_margin: APPROVE     # proposed 0.05 absolute on top-15% IoU and on cross-seed consistency IoU
+  checkpoint_average: [1, 5, 10]
+  keep_last_checkpoints: 10
+
+statistics:
+  intervals: t-based 95% over seeds; bootstrap over patients for explanation metrics
+  multiplicity: Holm within families (m arms, client counts, DP against matched controls)
+  wording_pareto: Pareto-optimal

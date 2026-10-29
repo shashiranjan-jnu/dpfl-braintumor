@@ -18,9 +18,8 @@
 \setlength{\emergencystretch}{3em}
 \renewcommand{\algorithmicrequire}{\textbf{Input}}
 \renewcommand{\algorithmicensure}{\textbf{Output}}
-%% Figure 6 is produced on Kaggle (notebook 19); until then a framed note stands in its place.
-\newcommand{\figorplaceholder}[2]{\IfFileExists{figures/#1}{\includegraphics[width=#2]{#1}}%
-  {\fbox{\parbox{#2}{\centering\vspace{2em}[CHECK: run notebook 19 on Kaggle to create #1]\vspace{2em}}}}}
+%% Figure 6 was produced on Kaggle (notebook 19).
+\newcommand{\figorplaceholder}[2]{\includegraphics[width=#2]{#1}}
 
 \journal{Intelligent Oncology}
 
