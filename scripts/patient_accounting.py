@@ -57,16 +57,16 @@ def main():
     rows = []
     for e, s in sig.items():
         for k in sorted(set(range(1, 41)) | set(range(45, kmax, 5)) | {kmax}):
-            pld = pa.pld_epsilon(s, k, None, Q, STEPS, DELTA)
+            pld, method = pa.epsilon(s, [k], None, Q, STEPS, DELTA)
             rdp, order = pa.rdp_epsilon(s, k, None, Q, STEPS, DELTA) if k <= 40 or k % 20 == 0 or k == kmax \
                 else (np.nan, np.nan)
             ge, gd = pa.approx_group_delta(e, DELTA, k)
-            rows.append({"record_eps": e, "sigma": s, "k": k, "eps_pld": pld, "eps_rdp": rdp, "rdp_order": order,
+            rows.append({"record_eps": e, "sigma": s, "k": k, "eps": pld, "eps_method": method, "eps_rdp": rdp, "rdp_order": order,
                          "eps_group_rdp": pa.rdp_group_epsilon(s, k, Q, STEPS, DELTA),
                          "group_eps": ge, "group_delta": gd})
         print(f"central eps {e:g}: done up to k = {kmax}", flush=True)
     byk = pd.DataFrame(rows)
-    byk["tightening_rdp_group"] = byk.eps_group_rdp / byk.eps_pld
+    byk["tightening_rdp_group"] = byk.eps_group_rdp / byk.eps
 
     # 2. every unit in each partition (same accountant, cached by client composition), composed over the clients that hold it
     cache: dict = {}
@@ -77,10 +77,10 @@ def main():
             for e, s in sig.items():
                 key = (tuple(ks), s)
                 if key not in cache:
-                    cache[key] = pa.pld_epsilon_multi(s, ks, None, Q, STEPS, DELTA)
+                    cache[key] = pa.epsilon(s, ks, None, Q, STEPS, DELTA)
                 urows.append({"partition": part, "unit": unit, "source": src[unit], "k": len(g),
                               "n_clients": len(ks), "client_ks": " ".join(map(str, ks)), "record_eps": e,
-                              "sigma": s, "eps_pld": cache[key]})
+                              "sigma": s, "eps": cache[key][0], "eps_method": cache[key][1]})
         print(f"{part}: {tr.unit.nunique()} units done", flush=True)
     units = pd.DataFrame(urows)
 
@@ -88,30 +88,32 @@ def main():
     for (part, e), g in units.groupby(["partition", "record_eps"], sort=False):
         for name, h in (("all units", g), ("Figshare patients", g[g.source == "figshare"])):
             summ.append({"partition": part, "record_eps": e, "units": name, "n": len(h),
-                         "median_k": h.k.median(), "median_eps": h.eps_pld.median(),
-                         "p90_eps": h.eps_pld.quantile(0.9), "max_eps": h.eps_pld.max(),
-                         "share_eps_at_most_2x": float((h.eps_pld <= 2 * e).mean()),
-                         "units_split": int((h.n_clients > 1).sum())})
+                         "median_k": h.k.median(), "median_eps": h.eps.median(),
+                         "p90_eps": h.eps.quantile(0.9), "max_eps": h.eps.max(),
+                         "share_eps_at_most_2x": float((h.eps <= 2 * e).mean()),
+                         "units_split": int((h.n_clients > 1).sum()),
+                         "n_rdp_fallback": int((h.eps_method == "rdp").sum())})
     summ = pd.DataFrame(summ)
 
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     byk.to_csv(a.out + "_by_k.csv", index=False)
     units.to_csv(a.out + "_units.csv", index=False)
     summ.to_csv(a.out + ".csv", index=False)
-    lines = ["| Partition | Record eps | Units | n | Median k | Median eps | 90th pct eps | Max eps | Share <= 2x | Split |",
-             "|---|---|---|---|---|---|---|---|---|---|"]
+    lines = ["| Partition | Record eps | Units | n | Median k | Median eps | 90th pct eps | Max eps | Share <= 2x | Split | RDP fallback |",
+             "|---|---|---|---|---|---|---|---|---|---|---|"]
     for _, r in summ.iterrows():
         lines.append(f"| {r.partition} | {r.record_eps:g} | {r.units} | {r.n} | {r.median_k:g} | {r.median_eps:.2f} | "
-                     f"{r.p90_eps:.2f} | {r.max_eps:.2f} | {r.share_eps_at_most_2x:.3f} | {r.units_split} |")
+                     f"{r.p90_eps:.2f} | {r.max_eps:.2f} | {r.share_eps_at_most_2x:.3f} | {r.units_split} | {r.n_rdp_fallback} |")
     sel = byk[byk.k.isin([1, 2, 5, 13, 24, 32, kmax])]
-    lines += ["", "Central, by patient size k (PLD primary, RDP check, Renyi group bound, (eps, delta) group delta):", "",
-              "| Record eps | k | PLD eps | RDP eps | Renyi group eps | Group delta at k eps |", "|---|---|---|---|---|---|"]
+    lines += ["", "Central, by patient size k (PLD primary with RDP fallback, RDP check, Renyi group bound, (eps, delta) group delta):", "",
+              "| Record eps | k | eps | RDP eps | Renyi group eps | Group delta at k eps |", "|---|---|---|---|---|---|"]
     for _, r in sel.iterrows():
-        lines.append(f"| {r.record_eps:g} | {r.k} | {r.eps_pld:.2f} | {r.eps_rdp:.2f} | {r.eps_group_rdp:.2f} | "
+        lines.append(f"| {r.record_eps:g} | {r.k} | {r.eps:.2f} | {r.eps_rdp:.2f} | {r.eps_group_rdp:.2f} | "
                      f"{r.group_delta:.2e} |")
     md = "\n".join(lines) + (f"\n\nq = {Q}, {STEPS} steps per client, delta = {DELTA:g}; sigma from the frozen runs "
                              f"({', '.join(f'eps {e:g}: {s:.4f}' for e, s in sig.items())}). Worst-case aligned "
-                             "gradients; accounting after Ganesh (2024) and Schuchardt et al. (2024).\n")
+                             "gradients; accounting after Ganesh (2024) and Schuchardt et al. (2024). Where the PLD library "
+                             "overflows, the RDP upper bound is used and counted as RDP fallback.\n")
     open(a.out + ".md", "w").write(md)
     print(md)
 

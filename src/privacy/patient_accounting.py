@@ -12,7 +12,8 @@ random, so the shift becomes min(J, m) * C. m = 1 bounds every patient by C per 
 DP-SGD.
 
 Two independent implementations are provided and must agree:
-  pld_epsilon   privacy loss distribution of the mixture (Google dp_accounting, connect-the-dots, pessimistic)
+  pld_epsilon   privacy loss distribution of the mixture (Google dp_accounting, connect-the-dots, pessimistic);
+                if the library overflows, other discretisation steps are tried, then nan is returned
   rdp_epsilon   numerical Renyi divergence of the mixture on a grid, both directions, converted with the
                 conversion Opacus 1.6 uses (Balle et al. 2020)
 plus the two group-privacy baselines the paper compares against:
@@ -28,7 +29,7 @@ import numpy as np
 from scipy.special import logsumexp
 from scipy.stats import binom
 
-ORDERS = (1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 10.0, 12.0, 14.0, 16.0, 20.0, 24.0,
+ORDERS = (1.05, 1.1, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0, 10.0, 12.0, 14.0, 16.0, 20.0, 24.0,
           28.0, 32.0, 40.0, 48.0, 56.0, 64.0, 80.0, 96.0, 128.0, 160.0, 192.0, 256.0)
 
 
@@ -60,24 +61,32 @@ def pld_epsilon(sigma: float, k: int, m: int | None = None, q: float = 0.1, step
     from dp_accounting.pld import privacy_loss_distribution as pldm
     interval = interval or default_interval(k, m)
     j, p = shift_distribution(k, m, q)
-    pld = pldm.from_mixture_gaussian_mechanism(standard_deviation=sigma, sensitivities=list(j),
-                                               sampling_probs=list(p), value_discretization_interval=interval)
-    return float(pld.self_compose(steps).get_epsilon_for_delta(delta))
+    for iv in (interval, interval * 2, interval / 2, interval * 5):     # retry when the library overflows
+        pld = pldm.from_mixture_gaussian_mechanism(standard_deviation=sigma, sensitivities=list(j),
+                                                   sampling_probs=list(p), value_discretization_interval=iv)
+        e = float(pld.self_compose(steps).get_epsilon_for_delta(delta))
+        if math.isfinite(e):
+            return e
+    return float("nan")
 
 
 def pld_epsilon_multi(sigma: float, ks: list[int], m: int | None = None, q: float = 0.1, steps: int = 1000,
                       delta: float = 1e-5, interval: float | None = None) -> float:
     """Patient spread over several clients with ks[c] slices at client c: compose the per-client guarantees."""
     from dp_accounting.pld import privacy_loss_distribution as pldm
-    total = None
     interval = interval or default_interval(max(ks), m)
-    for k in ks:
-        j, p = shift_distribution(k, m, q)
-        pld = pldm.from_mixture_gaussian_mechanism(standard_deviation=sigma, sensitivities=list(j),
-                                                   sampling_probs=list(p),
-                                                   value_discretization_interval=interval).self_compose(steps)
-        total = pld if total is None else total.compose(pld)
-    return float(total.get_epsilon_for_delta(delta))
+    for iv in (interval, interval * 2, interval / 2, interval * 5):     # retry when the library overflows
+        total = None
+        for k in ks:
+            j, p = shift_distribution(k, m, q)
+            pld = pldm.from_mixture_gaussian_mechanism(standard_deviation=sigma, sensitivities=list(j),
+                                                       sampling_probs=list(p),
+                                                       value_discretization_interval=iv).self_compose(steps)
+            total = pld if total is None else total.compose(pld)
+        e = float(total.get_epsilon_for_delta(delta))
+        if math.isfinite(e):
+            return e
+    return float("nan")
 
 
 @lru_cache(maxsize=4096)
@@ -99,6 +108,23 @@ def rdp_epsilon(sigma: float, k: int, m: int | None = None, q: float = 0.1, step
     orders = np.array(ORDERS)
     rdp = np.array([_rdp_step(sigma, k, m, q, a, n_grid) for a in orders]) * steps
     return _to_eps(rdp, orders, delta)
+
+
+def rdp_epsilon_multi(sigma: float, ks: list[int], m: int | None = None, q: float = 0.1, steps: int = 1000,
+                      delta: float = 1e-5, n_grid: int = 200001) -> tuple[float, float]:
+    """RDP check for a patient spread over clients: Renyi divergences add under composition."""
+    orders = np.array(ORDERS)
+    rdp = sum(np.array([_rdp_step(sigma, k, m, q, a, n_grid) for a in orders]) * steps for k in ks)
+    return _to_eps(rdp, orders, delta)
+
+
+def epsilon(sigma: float, ks: list[int], m: int | None = None, q: float = 0.1, steps: int = 1000,
+            delta: float = 1e-5) -> tuple[float, str]:
+    """Per-patient epsilon with its method: PLD, or the RDP upper bound where the PLD library overflows."""
+    e = pld_epsilon_multi(sigma, ks, m, q, steps, delta) if len(ks) > 1 else pld_epsilon(sigma, ks[0], m, q, steps, delta)
+    if math.isfinite(e):
+        return e, "pld"
+    return rdp_epsilon_multi(sigma, ks, m, q, steps, delta)[0], "rdp"
 
 
 def record_rdp(sigma: float, q: float = 0.1, steps: int = 1000, orders=ORDERS) -> np.ndarray:

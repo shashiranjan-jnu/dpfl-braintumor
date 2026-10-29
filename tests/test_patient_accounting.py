@@ -63,3 +63,10 @@ def test_group_baselines_are_looser():
 def test_calibration_hits_target():
     s = pa.calibrate_sigma(16.0, 13, 2)
     assert pa.pld_epsilon(s, 13, 2) <= 16.0 < pa.pld_epsilon(s * 0.98, 13, 2)
+
+
+def test_overflow_case_falls_back_to_rdp():
+    # dp_accounting 0.6.0 overflows here (found in Step 7.1); the RDP bound must take over and lie between neighbours
+    e, method = pa.epsilon(2.179296875, [22])
+    assert math.isfinite(e) and method in ("pld", "rdp")
+    assert pa.epsilon(2.179296875, [21])[0] < e < pa.rdp_epsilon(2.179296875, 23)[0]
