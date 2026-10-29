@@ -500,6 +500,83 @@ Phase 5 and 6 write a fully new manuscript in the Elsevier CAS LaTeX template in
 | --- | --- | --- | --- | --- |
 |  |  |  |  |  |
 
+## Phase 7 Extended Experiments (Weeks 13 to 17, about 36 GPU quota hours)
+
+**Decision (29 Oct 2026, supervisor).** All new experiments from the contribution notes are completed before the paper's scope and journal are chosen. The submitted-version results (tag v0.9.5-results-frozen, Zenodo 10.5281/zenodo.23601090) stay frozen and untouched. New grids use the prefix week13 onward, write to new tables, and get their own freeze manifest and Zenodo version (v2.0).
+
+**Positioning, fixed before any run.** The per-patient accounting of record-level DP-SGD is an application of published tight group-level accounting (Ganesh 2024, arXiv:2401.10294; Schuchardt et al. 2024, arXiv:2403.04867), not a new accountant. Wording rules: "tight", not "exact"; "screened clean with measured recall", not "certified"; "Pareto-optimal", not "best on all three"; the canary audit lower bound is "consistent with", not "validates".
+
+**Cost basis.** Measured median training time per run: 12.3 to 15.1 minutes for DP runs and 5.0 to 5.7 minutes without DP, on one T4. Two runs share a session on the two T4s, so a DP run costs about 7 quota minutes and a non-DP run about 3.
+
+### Step 7.0 Protocol, literature and code (Week 13, 0 GPU hours)
+
+- [ ] Read Ganesh (2024) and Schuchardt et al. (2024) in full; record exactly what they cover in `docs/decisions.md`
+- [ ] Write `configs/protocol_v2.yaml` and hash it before any new run: transformation ranges per screening level, target false-match rate 0.1%, slice caps m in {1, 2, 4, 8}, per-patient targets in {8, 16, 32}, the 100 canary patients (seeded draw from Figshare training units), matching tolerance ±0.01, equivalence margin for TOST
+- [ ] Define the slice-capped mechanism exactly (slice Poisson sampling, at most m slices per patient per step drawn uniformly, per-slice clip C, noise σC) and its accountant (truncated binomial mixture), and calibrate σ to the worst-case patient size
+- [ ] New modules with tests: `src/screen/` (levels L0 to L4), `src/privacy/patient_accounting.py` (dp_accounting PLD plus an independent numerical RDP check), capped sampler in `src/privacy/`, `src/attacks/canary.py`, matched-control utilities; checkpoints of the last 10 rounds saved by every new run
+- [ ] Remove the unused Figure 6 fallback macro from `paper/main.tex`
+
+### Step 7.1 Per-patient accounting, E2.2 (Week 13, CPU, notebook 22)
+
+- [ ] Per-patient ε of record-level training at ε 1, 3, 8 for every patient size k, median and worst case, with PLD and RDP
+- [ ] Compare with (ε, δ) group privacy and Rényi group privacy; report the tightening ratio
+- [ ] Validation: k = 1 reproduces the Opacus budgets, ε increases with k, both implementations agree
+
+### Step 7.2 Augmentation-invariant screening, E1.1 to E1.5 (Week 13, CPU, notebook 23, needs brain-mri-curated-v1)
+
+- [ ] L0 exact, L1 preprocessing, L2 dihedral group, L3 translation, small rotation, scale and crop, L4 photometric
+- [ ] Thresholds per level from synthetic transformed copies (positives) and different-patient pairs (negatives) at 0.1% false-match rate
+- [ ] Recall per level on injected copies, level-assignment confusion matrix, runtime per level
+- [ ] Contamination profile of the real test and validation sets; re-score every stored model on each screened-clean subset (stored predictions, no training)
+
+### Step 7.3 Units and screened audit, E2.1, E3.1, E3.2 (Week 14, CPU, notebook 24)
+
+- [ ] Units as connected components of matches up to L4 plus Figshare identifiers; size distribution against the current 634 units
+- [ ] **Gate C.** If a component crosses splits, its test images are treated as contaminated and dropped from evaluation; the v1 splits are kept so no baseline is retrained. Only if this removes more than 5% of test images are splits rebuilt (then about 60 extra GPU hours, and the plan is reviewed)
+- [ ] Re-score LiRA from stored logits with screened and composition-matched non-members, and the patient attack on graph units
+
+### Step 7.4 Slice cap m, E2.3 (Weeks 14 to 15, about 14 GPU hours, notebook 25)
+
+- [ ] Central and FedAvg natural; m in {2, 4, 8} and record-level calibrated to per-patient ε in {8, 16, 32}; m = 1 reuses the existing patient-level runs where the budget matches; 5 seeds, seed 0 for learning-rate selection; about 120 runs
+- [ ] **Gate D.** Choose m* as the most accurate cap at per-patient ε 16 on validation data
+
+### Step 7.5 Unit-aware client scaling, E2.4 (Week 15, about 7 GPU hours, notebook 26)
+
+- [ ] K in {3, 5, 10, 15}, Dirichlet over units, per-patient ε 16, units preserved against split (composed ε), weights U_j / U
+- [ ] Learning-rate rule η proportional to 1 / s_agg fitted at K = 3, against learning rates tuned per K, with the composed ε of each tuning reported
+
+### Step 7.6 Patient-level and canary audits, E3.3, E3.4 (Week 16, about 8 GPU hours, notebook 27)
+
+- [ ] 16 shadows and 5 targets for patient-level ε 16 and for m* (42 runs)
+- [ ] One-run audit with the 100 canary patients, each included with probability 1/2: no DP, record ε 8, patient ε 16, weight noise s = 0.003, 5 targets each (20 runs); 95% empirical lower bound on ε
+- [ ] **Gate E.** If the lower bound is near zero for every DP configuration, report it as consistent with the accounted ε and do not expand the audit
+
+### Step 7.7 Explanations and joint analysis, E4.1 to E4.4 (Weeks 16 to 17, about 6 GPU hours, notebook 28)
+
+- [ ] Accuracy-matched non-private controls by (a) early stopping, from per-round checkpoints of 3 non-private runs, and (b) training-data fraction (about 24 runs), for record ε 1, 3, 8, patient ε 16, 32, 64, m*, and FedAvg ε 8
+- [ ] Explanation metrics on screened-clean tumour images; paired bootstrap over patients against matched controls; TOST with the margin fixed in Step 7.0
+- [ ] Checkpoint-averaged Grad-CAM over the last 1, 5 and 10 rounds (free post-processing because every global model is a DP release)
+- [ ] Pareto set over per-patient ε, audited leakage, balanced accuracy, consistency and IoU at budgets 8, 16 and 32
+
+### Step 7.8 Freeze and decision (Week 17, about 1 GPU hour)
+
+- [ ] Holm correction within the primary families (m, K, DP against matched controls)
+- [ ] Regenerate every new table and figure on Kaggle, freeze manifest v2, GitHub release v2.0-results, new Zenodo version
+- [ ] Results review with the supervisor: choose contributions, title and journal, then rewrite
+
+| Step | Notebook | Runs | Quota hours | Week |
+| --- | --- | --- | --- | --- |
+| 7.0 | none | 0 | 0 | 13 |
+| 7.1 | 22 (CPU) | 0 | 0 | 13 |
+| 7.2 | 23 (CPU) | 0 | 0 | 13 |
+| 7.3 | 24 (CPU) | 0 | 0 | 14 |
+| 7.4 | 25 | about 120 | about 14 | 14 to 15 |
+| 7.5 | 26 | about 55 | about 7 | 15 |
+| 7.6 | 27 | about 62 | about 8 | 16 |
+| 7.7 | 28 | about 30 | about 6 | 16 to 17 |
+| 7.8 | 29 (CPU) | 0 | about 1 | 17 |
+| Total | | about 267 | about 36 | 5 weeks |
+
 ## Decision Gates, GPU Ledger, and Storage Policy
 
 Two decision gates can change the plan, the GPU plan totals 83 to 88 quota hours against a weekly ceiling of 30, and every artefact has one fixed storage location.
