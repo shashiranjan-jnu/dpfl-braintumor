@@ -19,4 +19,4 @@ tests/test_patient_accounting.py::test_overflow_case_falls_back_to_rdp
     return math.log((mass_upper - delta) / mass_lower)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-65 passed, 4 warnings in 275.45s (0:04:35)
+65 passed, 4 warnings in 227.69s (0:03:47)
