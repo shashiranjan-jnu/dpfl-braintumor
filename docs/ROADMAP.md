@@ -540,6 +540,9 @@ k_max = 32 and the equivalence margin 0.05 approved on 23 Nov 2026; noise for ev
 
 ### Step 7.4 Slice cap m, E2.3 (Weeks 14 to 15, about 14 GPU hours, notebook 25)
 
+Reduced by the authors on 23 Nov 2026 (D70): 45 central runs, about 5 GPU hours, configs/grids/week14_slicecap.yaml; notebook 25 generated at f82a45b.
+
+
 - [ ] Central and FedAvg natural; m in {2, 4, 8} and record-level calibrated to per-patient ε in {8, 16, 32}; m = 1 reuses the existing patient-level runs where the budget matches; 5 seeds, seed 0 for learning-rate selection; about 120 runs
 - [ ] **Gate D.** Choose m* as the most accurate cap at per-patient ε 16 on validation data
 
