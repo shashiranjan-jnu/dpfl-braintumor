@@ -563,13 +563,13 @@ if __name__ == "__main__":
     ap.add_argument("--ref", required=True)
     ap.add_argument("--grids", nargs="+", required=True)
     ap.add_argument("--title", default="grid run")
-    ap.add_argument("--kind", choices=["grid", "audit", "lira", "recover", "ncc", "figures", "review", "account"], default="grid")
+    ap.add_argument("--kind", choices=["grid", "audit", "lira", "recover", "ncc", "figures", "review", "accounting"], default="grid")
     ap.add_argument("--xai-grids", nargs="*", default=[])
     ap.add_argument("--needs", default="the earlier launchers", help="launcher outputs to attach (audit)")
     a = ap.parse_args()
     for g in a.grids + a.xai_grids:
         assert os.path.exists(os.path.join(ROOT, "configs", "grids", f"{g}.yaml")), g
-    if a.kind == "account":
+    if a.kind == "accounting":
         print(build_account(a.name, a.ref, a.title))
     elif a.kind == "review":
         print(build_review(a.name, a.ref, a.title))
