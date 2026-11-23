@@ -510,15 +510,18 @@ Phase 5 and 6 write a fully new manuscript in the Elsevier CAS LaTeX template in
 
 ### Step 7.0 Protocol, literature and code (Week 13, 0 GPU hours)
 
-- [ ] Read Ganesh (2024) and Schuchardt et al. (2024) in full; record exactly what they cover in `docs/decisions.md`
+k_max = 32 and the equivalence margin 0.05 approved on 23 Nov 2026; noise for every slice-cap arm in configs/sigma_v2.csv (D69). Open before freezing: the Step 7.4 grid and the canary design.
+
+
+- [ ] Read Ganesh (2024) and Schuchardt et al. (2024) in full; record exactly what they cover in `docs/decisions.md` (abstracts checked, D67)
 - [ ] Write `configs/protocol_v2.yaml` and hash it before any new run: transformation ranges per screening level, target false-match rate 0.1%, slice caps m in {1, 2, 4, 8}, per-patient targets in {8, 16, 32}, the 100 canary patients (seeded draw from Figshare training units), matching tolerance ±0.01, equivalence margin for TOST
-- [ ] Define the slice-capped mechanism exactly (slice Poisson sampling, at most m slices per patient per step drawn uniformly, per-slice clip C, noise σC) and its accountant (truncated binomial mixture), and calibrate σ to the worst-case patient size
+- [x] Define the slice-capped mechanism exactly (slice Poisson sampling, at most m slices per patient per step drawn uniformly, per-slice clip C, noise σC) and its accountant (truncated binomial mixture), and calibrate σ to the worst-case patient size
 - [ ] New modules with tests: `src/screen/` (levels L0 to L4), `src/privacy/patient_accounting.py` (dp_accounting PLD plus an independent numerical RDP check), capped sampler in `src/privacy/`, `src/attacks/canary.py`, matched-control utilities; checkpoints of the last 10 rounds saved by every new run
-- [ ] Remove the unused Figure 6 fallback macro from `paper/main.tex`
+- [x] Remove the unused Figure 6 fallback macro from `paper/main.tex`
 
 ### Step 7.1 Per-patient accounting, E2.2 (Week 13, CPU, notebook 22)
 
-- [ ] Per-patient ε of record-level training at ε 1, 3, 8 for every patient size k, median and worst case, with PLD and RDP
+- [ ] (notebook 22 generated, D69) Per-patient ε of record-level training at ε 1, 3, 8 for every patient size k, median and worst case, with PLD and RDP
 - [ ] Compare with (ε, δ) group privacy and Rényi group privacy; report the tightening ratio
 - [ ] Validation: k = 1 reproduces the Opacus budgets, ε increases with k, both implementations agree
 
