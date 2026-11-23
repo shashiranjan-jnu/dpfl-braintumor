@@ -1,0 +1,22 @@
+date 2026-11-23
+code fdd02ebf7b510726c338519ca383103e45dafa21 fdd02ebf7b510726c338519ca383103e45dafa21
+torch 2.11.0+cpu
+returncode 0
+
+.................................................................        [100%]
+=============================== warnings summary ===============================
+tests/test_audit.py::test_audit_parts_on_trained_checkpoint
+tests/test_audit.py::test_audit_parts_on_trained_checkpoint
+  /usr/local/lib/python3.13/dist-packages/sklearn/linear_model/_logistic.py:451: DeprecationWarning: scipy.optimize: The `disp` and `iprint` options of the L-BFGS-B solver are deprecated and will be removed in SciPy 1.18.0.
+    opt_res = optimize.minimize(
+
+tests/test_patient_accounting.py::test_overflow_case_falls_back_to_rdp
+  /usr/local/lib/python3.13/dist-packages/dp_accounting/pld/pld_pmf.py:140: RuntimeWarning: overflow encountered in scalar divide
+    (mass_upper - delta) / mass_lower) >= loss):
+
+tests/test_patient_accounting.py::test_overflow_case_falls_back_to_rdp
+  /usr/local/lib/python3.13/dist-packages/dp_accounting/pld/pld_pmf.py:154: RuntimeWarning: overflow encountered in scalar divide
+    return math.log((mass_upper - delta) / mass_lower)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+65 passed, 4 warnings in 275.45s (0:04:35)
