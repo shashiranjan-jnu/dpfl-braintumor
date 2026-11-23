@@ -155,10 +155,11 @@ def rdp_group_epsilon(sigma: float, k: int, q: float = 0.1, steps: int = 1000, d
 
 def calibrate_sigma(target_eps: float, k: int, m: int | None, q: float = 0.1, steps: int = 1000,
                     delta: float = 1e-5, lo: float = 0.3, hi: float = 500.0, iters: int = 24) -> float:
-    """Smallest sigma (to bisection precision, rounded up) whose PLD per-patient epsilon is at most target_eps."""
+    """Smallest sigma (to bisection precision, rounded up) whose per-patient epsilon is at most target_eps. Uses
+    epsilon(), so a PLD overflow falls back to the RDP bound and can never be read as meeting the target."""
     for _ in range(iters):
         mid = math.sqrt(lo * hi)
-        if pld_epsilon(mid, k, m, q, steps, delta) > target_eps:
+        if not epsilon(mid, [k], m, q, steps, delta)[0] <= target_eps:     # nan or above target: more noise
             lo = mid
         else:
             hi = mid

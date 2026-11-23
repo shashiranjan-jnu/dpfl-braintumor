@@ -70,3 +70,10 @@ def test_overflow_case_falls_back_to_rdp():
     e, method = pa.epsilon(2.179296875, [22])
     assert math.isfinite(e) and method in ("pld", "rdp")
     assert pa.epsilon(2.179296875, [21])[0] < e < pa.rdp_epsilon(2.179296875, 23)[0]
+
+
+def test_calibration_never_accepts_nan(monkeypatch):
+    # a PLD overflow (nan) must not count as meeting the target: calibration then rests on the RDP bound
+    monkeypatch.setattr(pa, "pld_epsilon", lambda *a, **k: float("nan"))
+    s = pa.calibrate_sigma(16.0, 13, 2)
+    assert pa.rdp_epsilon(s, 13, 2)[0] <= 16.0

@@ -34,7 +34,7 @@ slice_cap_mechanism:       # mechanism A, chosen 2026-10-29 (D68)
   m_values: [1, 2, 4, 8]
   record_level_arm: true   # m >= k_max, record-level DP-SGD calibrated to the same per-patient target
   per_patient_targets: [8, 16, 32]
-  k_max: APPROVE           # largest patient size admitted to training; see the note below
+  k_max: 32               # approved 2026-11-23; largest patient size admitted to training, see the note below
   k_max_note: >-
     Without a cap the largest training unit has 132 slices; such a patient has a sampled slice in almost every
     step, so subsampling no longer helps and sigma must be large. Measured on splits_v1 training data, capping
@@ -71,7 +71,7 @@ canary_audit:              # Step 7.6
 explanations:              # Step 7.7
   matching_methods: [early_stopping, data_fraction]
   matching_tolerance: 0.01
-  tost_margin: APPROVE     # proposed 0.05 absolute on top-15% IoU and on cross-seed consistency IoU
+  tost_margin: 0.05        # approved 2026-11-23; absolute, on top-15% IoU and on cross-seed consistency IoU
   checkpoint_average: [1, 5, 10]
   keep_last_checkpoints: 10
 
