@@ -1,0 +1,22 @@
+# Step 7.4, reduced grid (D70). Central training on the k_max = 32 training set (D69), lr 0.02 as every central
+# run (D30), so no learning-rate selection is needed. Noise multipliers are copied at full precision from
+# configs/sigma_v2.csv (scripts/calibrate_v2.py): sigma such that the largest admissible patient (32 slices) has
+# per-patient epsilon equal to the target under the slice cap m (record = no cap). Patient-level arms sample whole
+# patients (dp.unit: unit), calibrated by the Opacus accountant as in week04, on the same trimmed data.
+name: week14_slicecap
+fixed:
+  fl: {mode: central}
+  optim: {lr: 0.02}
+  data: {train_drop: data_manifest/kmax32_dropped_train.csv}
+presets:
+  - {dp: {enabled: false}}                                                     # reference, no DP
+  - {dp: {enabled: true, target_epsilon: 16.0, unit: unit}}                    # patient sampling, per-patient eps 16
+  - {dp: {enabled: true, target_epsilon: 32.0, unit: unit}}                    # patient sampling, per-patient eps 32
+  - {dp: {enabled: true, noise_multiplier: 6.260376441364063, slice_cap: 1}}   # per-patient eps 32, m 1
+  - {dp: {enabled: true, noise_multiplier: 11.733324952404235, slice_cap: 2}}   # per-patient eps 32, m 2
+  - {dp: {enabled: true, noise_multiplier: 18.45426335997478, slice_cap: 4}}   # per-patient eps 32, m 4
+  - {dp: {enabled: true, noise_multiplier: 20.77697217534425, slice_cap: 8}}   # per-patient eps 32, m 8
+  - {dp: {enabled: true, noise_multiplier: 20.81333014117753}}   # per-patient eps 32, record level
+  - {dp: {enabled: true, noise_multiplier: 10.51245359069439, slice_cap: 1}}   # per-patient eps 16, m 1
+axes:
+  train.seed: [1, 2, 3, 4, 5]

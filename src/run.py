@@ -89,7 +89,8 @@ def to_cfg(c: dict, sigma: float) -> Cfg:
                grad_clip=c["optim"].get("grad_clip"), schedule=c["optim"].get("schedule", "none"),
                unit_level=c["dp"].get("unit", "record") == "unit",
                scaffold_c=c["fl"].get("scaffold_c", "uniform"),
-               weight_noise=float(c["fl"].get("weight_noise", 0.0) or 0.0))
+               weight_noise=float(c["fl"].get("weight_noise", 0.0) or 0.0),
+               slice_cap=(int(c["dp"]["slice_cap"]) if c["dp"].get("slice_cap") is not None else None))
 
 
 def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, force=False) -> str:
@@ -129,6 +130,17 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
     else:
         clients = data.clients(cfg["data"]["scenario"])
 
+    # Phase 7 trim (D69): data.train_drop lists training images removed once before training, so that no unit
+    # exceeds k_max slices. Optional key, absent from base.yaml, so earlier run_ids are unchanged.
+    drop_file = cfg["data"].get("train_drop")
+    if drop_file:
+        path = drop_file if os.path.isabs(drop_file) else os.path.join(ROOT, drop_file)
+        dropped = set(pd.read_csv(path).image_id)
+        ids = data.splits.image_id.values
+        clients = [k[~np.isin(ids[k], list(dropped))] for k in clients]
+        if shadow is not None:
+            raise ValueError("train_drop is not defined for shadow models")
+
     # Unit-level DP (D33). The key is optional and absent from base.yaml, so the
     # run_id of every record-level run stays unchanged.
     unit = cfg["dp"].get("unit", "record")
@@ -165,6 +177,9 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
     wn = float(cfg["fl"].get("weight_noise", 0.0) or 0.0)
     if wn > 0 and cfg["dp"]["enabled"]:
         raise ValueError("fl.weight_noise is a comparator for non-DP runs only")
+    cap = cfg["dp"].get("slice_cap")
+    if cap is not None and (unit != "record" or not cfg["dp"]["enabled"]):
+        raise ValueError("dp.slice_cap needs record-level DP")
     extra = {"unit": unit, "units_max_clients": int(m_max),
              "n_units": [int(len(u)) for u in client_units] if client_units else None}
     if wn > 0:
@@ -176,6 +191,18 @@ def main(cfg_in: dict, data_dir: str, out_root: str, data=None, device=None, for
         m_eff = m_max if unit == "unit" else 1
         extra["epsilon_if_k_runs"] = {str(k): dpm.epsilon_opacus(sigma, q, steps * m_eff * k, delta, acc)
                                       for k in (2, 3)}
+        if unit == "record" and (cap is not None or drop_file):
+            # Per-patient epsilon of the worst unit (D68): its slices at each client that holds it, composed over
+            # those clients, with the shift capped at m slices per step.
+            from src.privacy import patient_accounting as pa
+            ks_by_unit = {}
+            for k in clients:
+                for u, n in zip(*np.unique(data.splits.unit.values[k], return_counts=True)):
+                    ks_by_unit.setdefault(u, []).append(int(n))
+            worst = max(ks_by_unit.values(), key=lambda ks: (max(ks), len(ks)))
+            pe, how = pa.epsilon(sigma, worst, None if cap is None else int(cap), q, steps, delta)
+            extra.update({"slice_cap": None if cap is None else int(cap), "k_max_present": int(max(worst)),
+                          "patient_epsilon_worst": pe, "patient_epsilon_method": how})
 
     yaml.safe_dump(cfg, open(os.path.join(rdir, "config.yaml"), "w"), sort_keys=False)
     env = {"run_id": rid, "git_commit": git_commit(), "python": platform.python_version(),

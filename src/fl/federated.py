@@ -17,6 +17,7 @@ import time
 from dataclasses import dataclass, field
 
 import numpy as np
+import pandas as pd
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -50,6 +51,7 @@ class Cfg:
     scaffold_c: str = "uniform"      # uniform (historical runs) | size: weight control variates like the model (D40)
     schedule: str = "none"           # none | cosine, learning rate decayed across rounds
     weight_noise: float = 0.0        # Gupta-style comparator: N(0, s^2) added to client weights, no clipping (D34)
+    slice_cap: int | None = None     # Phase 7.4 (D68, D70): keep at most m sampled slices per patient per step
     eval_batch: int = 256
 
     @property
@@ -82,14 +84,42 @@ def round_lr(cfg: Cfg, t: int) -> float:
     return cfg.lr
 
 
-def _sample(idx, units, cfg: Cfg, gen, dev):
+def cap_per_unit(b: torch.Tensor, row_unit: torch.Tensor, m: int, gen) -> torch.Tensor:
+    """Keep at most m of the sampled rows b of each unit, chosen uniformly at random (D68).
+
+    row_unit[i] is the unit id of row b[i]. The choice uses only the generator, never the data, so it is part of
+    the randomised mechanism. A patient then contributes at most m clipped slice gradients to one step, a shift of
+    at most m * C, which is what src/privacy/patient_accounting.py accounts for.
+    """
+    if len(b) == 0:
+        return b
+    score = torch.rand(len(b), generator=gen, device=b.device)
+    order = torch.argsort(score)
+    order = order[torch.argsort(row_unit[order], stable=True)]          # grouped by unit, random within unit
+    u = row_unit[order]
+    pos = torch.arange(len(u), device=b.device)
+    start = torch.zeros_like(pos)
+    new = torch.ones_like(u, dtype=torch.bool)
+    new[1:] = u[1:] != u[:-1]
+    start[new] = pos[new]
+    start = torch.cummax(start, 0).values
+    keep = order[(pos - start) < m]
+    return b[torch.sort(keep).values]
+
+
+def _sample(idx, units, cfg: Cfg, gen, dev, row_unit=None):
     """One Poisson batch. Returns image indices and, at unit level, the unit sizes.
 
     Record level samples images with rate q. Unit level samples units with
-    rate q and takes every image of each sampled unit, in unit order.
+    rate q and takes every image of each sampled unit, in unit order. With a slice
+    cap, record-level sampling is followed by keeping at most m slices per unit.
     """
     if units is None:
-        return idx[dpm.poisson_mask(len(idx), cfg.sample_rate, gen, dev)], None
+        mask = dpm.poisson_mask(len(idx), cfg.sample_rate, gen, dev)
+        if cfg.slice_cap is not None and cfg.dp:
+            pos = mask.nonzero().flatten()
+            return idx[cap_per_unit(pos, row_unit[pos], cfg.slice_cap, gen)], None
+        return idx[mask], None
     keep = dpm.poisson_mask(len(units), cfg.sample_rate, gen, dev).nonzero().flatten().tolist()
     if not keep:
         return idx[:0], []
@@ -126,7 +156,7 @@ def momentum_step_sum(steps: int, beta: float) -> float:
 
 
 def local_update(model, gparams, x, y, idx, cfg: Cfg, gen, c_glob=None, c_loc=None, lr=None,
-                 units=None):
+                 units=None, row_unit=None):
     lr = cfg.lr if lr is None else lr
     units = units if (cfg.unit_level and cfg.dp) else None
     _load(model, gparams)
@@ -138,7 +168,7 @@ def local_update(model, gparams, x, y, idx, cfg: Cfg, gen, c_glob=None, c_loc=No
     batch_sizes, clip_frac = [], []
     taken = 0                           # optimiser steps actually applied (non-DP skips empty batches)
     for _ in range(cfg.local_steps):
-        b, sizes = _sample(idx, units, cfg, gen, x.device)
+        b, sizes = _sample(idx, units, cfg, gen, x.device, row_unit)
         xb, yb = x[b], y[b]
         if cfg.hflip and len(b):
             flip = torch.rand(len(b), generator=gen, device=x.device) < 0.5
@@ -192,7 +222,10 @@ def local_update(model, gparams, x, y, idx, cfg: Cfg, gen, c_glob=None, c_loc=No
 
 
 def train(data, clients: list[np.ndarray], cfg: Cfg, log=print, client_units=None) -> dict:
-    """Runs federated training and returns history, best/last test reports, predictions."""
+    """Runs federated training and returns history, best/last test reports, predictions.
+
+    With cfg.slice_cap, each client's rows carry their unit id (positions into the client's index array are mapped
+    to dense unit codes) so the sampler can cap slices per patient."""
     dev = data.x.device
     torch.manual_seed(cfg.seed)
     np.random.seed(cfg.seed)
@@ -204,6 +237,12 @@ def train(data, clients: list[np.ndarray], cfg: Cfg, log=print, client_units=Non
         if client_units is None:
             raise ValueError("unit_level DP needs client_units")
         units_t = [[torch.as_tensor(u, device=dev, dtype=torch.long) for u in cu] for cu in client_units]
+    row_units = [None] * len(clients)
+    if cfg.slice_cap is not None and cfg.dp:
+        if cfg.unit_level:
+            raise ValueError("slice_cap applies to record-level sampling only")
+        codes = pd.factorize(data.splits.unit.values)[0]
+        row_units = [torch.as_tensor(codes[c], device=dev, dtype=torch.long) for c in clients]
     sizes = np.array([len(c) for c in clients], dtype=float)
     w = sizes / sizes.sum()
     gens = [torch.Generator(device=dev).manual_seed(cfg.seed * 100003 + j) for j in range(len(clients))]
@@ -221,7 +260,8 @@ def train(data, clients: list[np.ndarray], cfg: Cfg, log=print, client_units=Non
         news, dcs, st = [], [], []
         for j, idx in enumerate(idx_t):
             p, dc, s = local_update(model, gparams, data.x, data.y, idx, cfg, gens[j],
-                                    c_glob, c_loc[j], lr=round_lr(cfg, t), units=units_t[j])
+                                    c_glob, c_loc[j], lr=round_lr(cfg, t), units=units_t[j],
+                                    row_unit=row_units[j])
             if cfg.weight_noise > 0:
                 # Unclipped weight noise on the released client model, as in Gupta et al. (2026).
                 # Sensitivity is unbounded, so no epsilon can be derived for this mechanism.

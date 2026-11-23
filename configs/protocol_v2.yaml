@@ -1,7 +1,7 @@
-# Phase 7 protocol (Step 7.0, D67, D68). DRAFT: the items marked APPROVE need the supervisor's decision.
+# Phase 7 protocol (Step 7.0, D67, D68, D69, D70).
 # Once approved, the status line changes to "frozen", the file is hashed into docs/decisions.md, and no value below
 # changes after the first Phase 7 run. Every new grid reads its settings from here.
-status: draft
+status: frozen for Steps 7.1 to 7.5 (2026-11-23, D70); canary_audit to be amended before Step 7.6
 date: 2026-10-29
 
 fixed_from_v1:            # unchanged from the submitted study, so new and old results are comparable
@@ -33,7 +33,8 @@ slice_cap_mechanism:       # mechanism A, chosen 2026-10-29 (D68)
     epsilon of the largest admissible patient equals the target.
   m_values: [1, 2, 4, 8]
   record_level_arm: true   # m >= k_max, record-level DP-SGD calibrated to the same per-patient target
-  per_patient_targets: [8, 16, 32]
+  per_patient_targets: [8, 16, 32]   # calibrated in configs/sigma_v2.csv; Step 7.4 runs the reduced grid of D70
+  step_7_4_grid: configs/grids/week14_slicecap.yaml   # reduced (D70): central, all arms at 32, m 1 at 16, patient arms at 16 and 32, no-DP reference
   k_max: 32               # approved 2026-11-23; largest patient size admitted to training, see the note below
   k_max_note: >-
     Without a cap the largest training unit has 132 slices; such a patient has a sampled slice in almost every
